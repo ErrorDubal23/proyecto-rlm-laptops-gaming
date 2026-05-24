@@ -248,6 +248,7 @@ ggplot(datos, aes(x = Inches, y = Price_euros)) +
 # --- Relacion entre variables cualitativas y Price (boxplots) ---
 
 # Figura 4: TypeName vs Price_euros
+# Usamos scale_fill_brewer para evitar problemas con numero de categorias
 ggplot(datos, aes(x = TypeName, y = Price_euros, fill = TypeName)) +
   geom_boxplot(
     color = "black",
@@ -256,7 +257,7 @@ ggplot(datos, aes(x = TypeName, y = Price_euros, fill = TypeName)) +
     notchwidth = 0.8,
     outlier.colour = color_acento,
     outlier.size = 2) +
-  scale_fill_manual(values = c("#0047AB", "#4682B4", "#87CEEB", "#5F9EA0", "#2E8B57", "#6B8E23")) +
+  scale_fill_brewer(palette = "Set3") +
   labs(title = "Relacion Precio y Tipo de Laptop",
        y = "Precio (EUR)",
        x = "Tipo de Laptop") +
@@ -269,6 +270,7 @@ ggplot(datos, aes(x = TypeName, y = Price_euros, fill = TypeName)) +
   )
 
 # Figura 5: OpSys vs Price_euros
+# Usamos scale_fill_brewer para evitar problemas con numero de categorias
 ggplot(datos, aes(x = OpSys, y = Price_euros, fill = OpSys)) +
   geom_boxplot(
     color = "black",
@@ -277,7 +279,7 @@ ggplot(datos, aes(x = OpSys, y = Price_euros, fill = OpSys)) +
     notchwidth = 0.8,
     outlier.colour = color_acento,
     outlier.size = 2) +
-  scale_fill_manual(values = c("#0047AB", "#4682B4", "#87CEEB", "#5F9EA0", "#2E8B57", "#6B8E23", "#556B2F", "#8B4513")) +
+  scale_fill_brewer(palette = "Set2") +
   labs(title = "Relacion Precio y Sistema Operativo",
        y = "Precio (EUR)",
        x = "Sistema Operativo") +
