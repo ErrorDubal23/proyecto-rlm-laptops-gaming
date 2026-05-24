@@ -75,18 +75,27 @@ datos_gaming <- datos_gaming[complete.cases(datos_gaming$Price_euros,
 datos_gaming$Log_Price <- log(datos_gaming$Price_euros)
 
 # =============================================================================
-# 3. CORRELACION DE PEARSON
+# 3. CORRELACION DE PEARSON - TABLA COMPLETA
 # =============================================================================
-# Matriz de correlacion de Pearson (variables cuantitativas)
-cormat <- cor(cbind(datos_gaming$Log_Price,
-                    datos_gaming$Ram_GB,
-                    datos_gaming$Weight_kg),
-              method = "pearson")
 
-# Asignar nombres a filas y columnas
-colnames(cormat) <- c("Log_Price", "Ram_GB", "Weight_kg")
-row.names(cormat) <- c("Log_Price", "Ram_GB", "Weight_kg")
+# Variables cuantitativas del dataset de laptops
+cuantitativas <- data.frame(
+  Log_Price   = datos_gaming$Log_Price,
+  Price_euros = datos_gaming$Price_euros,
+  Ram_GB      = datos_gaming$Ram_GB,
+  Weight_kg   = datos_gaming$Weight_kg,
+  Inches      = datos_gaming$Inches
+)
+
+# Matriz de correlacion completa de Pearson
+cormat <- cor(cuantitativas, method = "pearson")
+print("--- MATRIZ DE CORRELACIONES DE PEARSON (completa) ---")
 cormat
+
+# Tabla de correlaciones formateada
+cormat_rounded <- round(cormat, 3)
+print("--- MATRIZ REDONDEADA ---")
+cormat_rounded
 
 # =============================================================================
 # 4. PRUEBA DE CORRELACION (cor.test)
@@ -102,14 +111,66 @@ cor.test(datos_gaming$Ram_GB, datos_gaming$Log_Price, method = "pearson")
 cor.test(datos_gaming$Weight_kg, datos_gaming$Log_Price, method = "pearson")
 # p-value < alpha (0.05) -> Se rechaza Ho
 
+# Correlacion entre Log_Price y Inches
+cor.test(datos_gaming$Inches, datos_gaming$Log_Price, method = "pearson")
+# Informacion adicional
+
+# Correlacion entre Ram_GB y Weight_kg
+cor.test(datos_gaming$Ram_GB, datos_gaming$Weight_kg, method = "pearson")
+
 # =============================================================================
 # 5. GRAFICOS DE RELACION
 # =============================================================================
 
-# Relacion variable Y (Log_Price) y variables numericas (X)
-pairs(datos_gaming$Log_Price ~ datos_gaming$Ram_GB + datos_gaming$Weight_kg,
-      main = "Relaciones entre Variables Numericas",
-      labels = c("Log(Precio)", "RAM (GB)", "Peso (kg)"))
+# --- Pairs con TODAS las variables cuantitativas ---
+pairs(cuantitativas,
+      main = "Matriz de Dispersion - Todas las Variables Cuantitativas",
+      pch = 19, col = "steelblue", gap = 0.5)
+
+# --- Pairs de las variables del modelo (Y vs X numericas) ---
+pairs(Log_Price ~ Ram_GB + Weight_kg,
+      data = datos_gaming,
+      main = "Relaciones: Log(Precio) vs Variables Numericas",
+      labels = c("Log(Precio)", "RAM (GB)", "Peso (kg)"),
+      pch = 19, col = "steelblue")
+
+# --- Diagramas de dispersion con recta de regression ---
+
+# RAM vs Log_Price (con linea de ajuste)
+ggplot(datos_gaming, aes(x = Ram_GB, y = Log_Price)) +
+  geom_point(color = "steelblue", size = 2, alpha = 0.7) +
+  geom_smooth(method = "lm", color = "firebrick", se = TRUE) +
+  labs(title = "Relacion: RAM vs Log(Precio)",
+       subtitle = paste("r =", round(cor(datos_gaming$Ram_GB, datos_gaming$Log_Price), 3)),
+       x = "RAM (GB)", y = "Log(Precio)") +
+  theme_bw()
+
+# Peso vs Log_Price (con linea de ajuste)
+ggplot(datos_gaming, aes(x = Weight_kg, y = Log_Price)) +
+  geom_point(color = "steelblue", size = 2, alpha = 0.7) +
+  geom_smooth(method = "lm", color = "firebrick", se = TRUE) +
+  labs(title = "Relacion: Peso vs Log(Precio)",
+       subtitle = paste("r =", round(cor(datos_gaming$Weight_kg, datos_gaming$Log_Price), 3)),
+       x = "Peso (kg)", y = "Log(Precio)") +
+  theme_bw()
+
+# Pulgadas vs Log_Price (con linea de ajuste) - informativo, no en modelo
+ggplot(datos_gaming, aes(x = Inches, y = Log_Price)) +
+  geom_point(color = "steelblue", size = 2, alpha = 0.7) +
+  geom_smooth(method = "lm", color = "firebrick", se = TRUE) +
+  labs(title = "Relacion: Pulgadas vs Log(Precio)",
+       subtitle = paste("r =", round(cor(datos_gaming$Inches, datos_gaming$Log_Price, use = "complete.obs"), 3)),
+       x = "Pulgadas", y = "Log(Precio)") +
+  theme_bw()
+
+# RAM vs Peso (correlacion entre predictoras)
+ggplot(datos_gaming, aes(x = Ram_GB, y = Weight_kg)) +
+  geom_point(color = "darkgreen", size = 2, alpha = 0.7) +
+  geom_smooth(method = "lm", color = "firebrick", se = TRUE) +
+  labs(title = "Relacion: RAM vs Peso",
+       subtitle = paste("r =", round(cor(datos_gaming$Ram_GB, datos_gaming$Weight_kg), 3)),
+       x = "RAM (GB)", y = "Peso (kg)") +
+  theme_bw()
 
 # Relacion entre Y (Log_Price) y variable cualitativa CPU_Brand
 ggplot(datos_gaming, aes(x = CPU_Brand, y = Log_Price, fill = CPU_Brand)) +
