@@ -452,6 +452,8 @@ Interpretacion: Como el p-valor (0.328) es mayor que 0.05, no se rechaza H0. El 
 
 \subsection{2. Normalidad de Residuos (Shapiro-Wilk)}
 
+\textbf{Nota:} La funcion \texttt{shapiro.test()} en R tiene un limite de $N = 5000$. Como el dataset tiene 7,032 observaciones, se tomo una muestra aleatoria de 5,000 residuos para realizar la prueba.
+
 \begin{table}[H]
 \centering
 \begin{tabular}{lc}
@@ -460,6 +462,7 @@ Interpretacion: Como el p-valor (0.328) es mayor que 0.05, no se rechaza H0. El 
 \midrule
 H0 & Los residuos se distribuyen normalmente \\
 H1 & Los residuos NO se distribuyen normalmente \\
+Muestra utilizada & 5,000 residuos (aleatorios) \\
 Estadistico W & 0.9879 \\
 p-valor & \textless{}0.001 \\
 \bottomrule
