@@ -25,8 +25,11 @@ library(nortest)
 # =============================================================================
 # 1. LECTURA DE DATOS
 # =============================================================================
-# Nota: Descargar el dataset "laptop_price.csv" desde Kaggle y guardarlo
-# en la carpeta de trabajo. Luego ejecutar:
+# Fuente: Laptop Price Prediction (Muhammet Varlı, Kaggle)
+# URL original: https://www.kaggle.com/datasets/muhammetvarl/laptop-price
+# Descargado via mirror: https://github.com/MainakRepositor/Datasets
+# N = 1303 laptops, 13 variables
+# Nota: Guardar el archivo "laptop_price.csv" en la carpeta de trabajo
 
 datos <- read_csv("laptop_price.csv",
                   locale = locale(encoding = "latin1"))
