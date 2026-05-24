@@ -335,7 +335,12 @@ bptest(modelo)
 # Se detecta heterocedasticidad con N grande.
 # Los estimadores siguen siendo consistentes.
 
-# ---- Independencia de los residuos ----
+# ---- Multicolinealidad (VIF) ----
+library(car)
+vif(modelo)
+# tenure         MonthlyCharges 
+#   2.615            2.615
+# VIF < 5 -> Sin multicolinealidad
 # Durbin-Watson test
 # Ho: Los residuos son independientes
 # H1: Los residuos son dependientes
