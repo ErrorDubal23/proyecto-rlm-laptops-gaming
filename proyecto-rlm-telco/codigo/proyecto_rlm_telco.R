@@ -61,7 +61,13 @@ str(datos$Contract)
 str(datos$InternetService)
 
 # =============================================================================
-# 3. CORRELACION DE PEARSON - TABLA COMPLETA
+# 3. ESTADISTICAS DESCRIPTIVAS
+# =============================================================================
+print("--- Estadisticas descriptivas ---")
+summary(datos[, c("TotalCharges", "tenure", "MonthlyCharges")])
+
+# =============================================================================
+# 4. CORRELACION DE PEARSON - TABLA COMPLETA
 # =============================================================================
 
 # Variables cuantitativas del dataset
@@ -77,29 +83,30 @@ print("--- MATRIZ DE CORRELACIONES DE PEARSON (completa) ---")
 cormat
 
 # Tabla de correlaciones formateada
-cormat_rounded <- round(cormat, 3)
+cormat_rounded <- round(cormat, 4)
 print("--- MATRIZ REDONDEADA ---")
 cormat_rounded
 
 # =============================================================================
-# 4. PRUEBA DE CORRELACION (cor.test)
+# 5. PRUEBA DE CORRELACION (cor.test)
 # =============================================================================
 # Ho: la correlacion es igual a 0
 # H1: la correlacion no es igual a 0
 
 # Correlacion entre TotalCharges y tenure
 cor.test(datos$tenure, datos$TotalCharges, method = "pearson")
-# p-value < alpha (0.05) -> Se rechaza Ho
+# r = 0.8259 (fuerte), p < 0.001 -> Se rechaza Ho
 
 # Correlacion entre TotalCharges y MonthlyCharges
 cor.test(datos$MonthlyCharges, datos$TotalCharges, method = "pearson")
-# p-value < alpha (0.05) -> Se rechaza Ho
+# r = 0.6511 (moderada), p < 0.001 -> Se rechaza Ho
 
 # Correlacion entre tenure y MonthlyCharges
 cor.test(datos$tenure, datos$MonthlyCharges, method = "pearson")
+# r = 0.2469 (debil)
 
 # =============================================================================
-# 5. GRAFICOS DE RELACION
+# 6. GRAFICOS DE RELACION
 # =============================================================================
 
 # --- Pairs con todas las variables cuantitativas ---
@@ -111,21 +118,23 @@ pairs(cuantitativas,
 
 # tenure vs TotalCharges (con linea de ajuste)
 ggplot(datos, aes(x = tenure, y = TotalCharges)) +
-  geom_point(color = "steelblue", size = 2, alpha = 0.5) +
+  geom_point(color = "steelblue", size = 2, alpha = 0.3) +
   geom_smooth(method = "lm", color = "firebrick", se = TRUE) +
   labs(title = "Relacion: Antiguedad vs Cargos Totales",
-       subtitle = paste("r =", round(cor(datos$tenure, datos$TotalCharges), 3)),
+       subtitle = paste("r =", round(cor(datos$tenure, datos$TotalCharges), 4)),
        x = "Antiguedad (meses)", y = "Cargos Totales ($)") +
   theme_bw()
 
 # MonthlyCharges vs TotalCharges (con linea de ajuste)
 ggplot(datos, aes(x = MonthlyCharges, y = TotalCharges)) +
-  geom_point(color = "steelblue", size = 2, alpha = 0.5) +
+  geom_point(color = "steelblue", size = 2, alpha = 0.3) +
   geom_smooth(method = "lm", color = "firebrick", se = TRUE) +
   labs(title = "Relacion: Cargos Mensuales vs Cargos Totales",
-       subtitle = paste("r =", round(cor(datos$MonthlyCharges, datos$TotalCharges), 3)),
+       subtitle = paste("r =", round(cor(datos$MonthlyCharges, datos$TotalCharges), 4)),
        x = "Cargos Mensuales ($)", y = "Cargos Totales ($)") +
   theme_bw()
+
+# --- Relacion entre variables cualitativas y TotalCharges (boxplots) ---
 
 # Relacion entre Y (TotalCharges) y variable cualitativa Contract
 ggplot(datos, aes(x = Contract, y = TotalCharges, fill = Contract)) +
@@ -135,7 +144,7 @@ ggplot(datos, aes(x = Contract, y = TotalCharges, fill = Contract)) +
     notch = TRUE,
     notchwidth = 0.8,
     outlier.colour = "red",
-    outlier.size = 3) +
+    outlier.size = 2) +
   labs(title = "Relacion Cargos Totales y Tipo de Contrato",
        y = "Cargos Totales ($)",
        x = "Tipo de Contrato")
@@ -148,39 +157,43 @@ ggplot(datos, aes(x = InternetService, y = TotalCharges, fill = InternetService)
     notch = TRUE,
     notchwidth = 0.8,
     outlier.colour = "red",
-    outlier.size = 3) +
+    outlier.size = 2) +
   labs(title = "Relacion Cargos Totales y Servicio de Internet",
        y = "Cargos Totales ($)",
        x = "Servicio de Internet")
 
 # =============================================================================
-# 6. CREACION DEL MODELO RLM
+# 7. CREACION DEL MODELO RLM
 # =============================================================================
-# Modelo base: TotalCharges ~ tenure + MonthlyCharges + Contract + InternetService
+# Modelo: TotalCharges ~ tenure + MonthlyCharges + Contract + InternetService
 modelo <- lm(TotalCharges ~ tenure + MonthlyCharges + Contract + InternetService,
              data = datos)
 
 # Resumen del modelo
 summary(modelo)
+# R-squared: 0.9001
+# Adj R-squared: 0.9000
+# Residual standard error: 716.7 on 7025 df
+# F-statistic: 10551 on 6 and 7025 DF, p-value < 2.2e-16
 
 # Intervalos de confianza
 confint(modelo)
 
 # =============================================================================
-# 7. VALIDACION DE SUPUESTOS
+# 8. VALIDACION DE SUPUESTOS
 # =============================================================================
 
 # ---- Linealidad ----
 pairs(cuantitativas)
 summary(modelo)
 # R-squared ajustado: 0.900
-# Aproximadamente el 90% de las variaciones en los cargos totales
-# es explicada por el modelo, mientras que el 10% es explicado
+# Aproximadamente el 90.0% de las variaciones en los cargos totales
+# es explicada por el modelo, mientras que el 10.0% es explicado
 # por las perturbaciones.
 
 # Grafico de residuos vs variable numerica (tenure)
 ggplot(data = datos, aes(x = tenure, y = modelo$residuals)) +
-  geom_point(alpha = 0.3) +
+  geom_point(alpha = 0.2) +
   geom_smooth(color = "firebrick") +
   geom_hline(yintercept = 0) +
   theme_bw() +
@@ -189,7 +202,7 @@ ggplot(data = datos, aes(x = tenure, y = modelo$residuals)) +
 
 # Grafico de residuos vs variable numerica (MonthlyCharges)
 ggplot(data = datos, aes(x = MonthlyCharges, y = modelo$residuals)) +
-  geom_point(alpha = 0.3) +
+  geom_point(alpha = 0.2) +
   geom_smooth(color = "firebrick") +
   geom_hline(yintercept = 0) +
   theme_bw() +
@@ -206,21 +219,24 @@ qqline(modelo$residuals)
 # H1: Los residuos NO se distribuyen normalmente
 shapiro.test(modelo$residuals)
 # Nota: Con N = 7032, el test de Shapiro es sensible a desviaciones
-# minimas. El Teorema Central del Limite garantiza que los estimadores
-# son consistentes con muestras grandes.
+# minimas. El Teorema Central del Limite (TLC) garantiza que los
+# estimadores son consistentes con muestras grandes.
 
 # ---- Homocedasticidad ----
 # Prueba Breusch-Pagan
 # Ho: Los residuos son homocedasticos
 # H1: Los residuos son heterocedasticos
 bptest(modelo)
+# Se detecta heterocedasticidad con N grande.
+# Los estimadores siguen siendo consistentes.
 
 # ---- Independencia de los residuos ----
 # Durbin-Watson test
 # Ho: Los residuos son independientes
 # H1: Los residuos son dependientes
 dwtest(modelo, alternative = "two.sided")
-# p-value > alpha -> No se rechaza Ho
+# DW = 2.018, p > 0.05 -> No se rechaza Ho
+# Los residuos son independientes
 
 # Graficos para interpretar los supuestos
 par(mfrow = c(2, 2))
@@ -230,7 +246,7 @@ plot(modelo)
 # Independencia: Residuals vs Fitted
 
 # =============================================================================
-# 8. PREDICCION (Opcional)
+# 9. PREDICCION (Opcional)
 # =============================================================================
 # Crear nuevo dato para prediccion
 nuevo <- data.frame(
