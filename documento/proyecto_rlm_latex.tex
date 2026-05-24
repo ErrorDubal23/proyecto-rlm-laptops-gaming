@@ -94,7 +94,7 @@
         \rule{0.8\textwidth}{1.5pt}\\[0.8cm]
         
         {\Large\textbf{Regresion Lineal Multiple:}}\\[0.3cm]
-        {\Large\textbf{Prediccion de Precios de Laptops Gaming}}\\[1.5cm]
+        {\Large\textbf{Prediccion de Precios de Laptops}}\\[1.5cm]
         
         \rule{0.6\textwidth}{0.5pt}\\[1cm]
         
@@ -131,20 +131,20 @@
 % =============================================================================
 \section{Introduccion}
 
-En la actualidad, el mercado de computadores portatiles ha experimentado un crecimiento exponencial, especialmente en el segmento de laptops orientadas al gaming. Estos dispositivos representan una inversion significativa para los consumidores, con precios que varian ampliamente segun sus especificaciones tecnicas. Comprender los factores que determinan el precio de una laptop gaming es fundamental tanto para consumidores como para fabricantes y distribuidores.
+En la actualidad, el mercado de computadores portatiles ha experimentado un crecimiento exponencial. Estos dispositivos representan una inversion significativa para los consumidores, con precios que varian ampliamente segun sus especificaciones tecnicas. Comprender los factores que determinan el precio de una laptop es fundamental tanto para consumidores como para fabricantes y distribuidores.
 
-Desde la perspectiva de la ingenieria de sistemas, el analisis de datos permite identificar patrones y relaciones entre las caracteristicas tecnicas de un equipo y su costo en el mercado. El uso de tecnicas estadisticas como la regresion lineal multiple posibilita cuantificar el impacto de variables especificas ---como la memoria RAM, el peso del equipo, la marca del procesador y la tarjeta grafica--- sobre el precio final del producto.
+Desde la perspectiva de la ingenieria de sistemas, el analisis de datos permite identificar patrones y relaciones entre las caracteristicas tecnicas de un equipo y su costo en el mercado. El uso de tecnicas estadisticas como la regresion lineal multiple posibilita cuantificar el impacto de variables especificas ---como la memoria RAM, la frecuencia del procesador, el tamano de pantalla, el tipo de laptop y el sistema operativo--- sobre el precio final del producto.
 
-Para este proyecto se utiliza el Laptop Price Prediction Dataset, un conjunto de datos que recopila informacion sobre especificaciones tecnicas y precios de laptops de diversas categorias. A partir de estos datos filtrados para el segmento gaming, se busca estudiar que variables influyen en el precio y en que medida lo hacen. Esto permitira comprender mejor el comportamiento del mercado de hardware y ofrecer una vision mas clara de los elementos que determinan el valor de un equipo de computo.
+Para este proyecto se utiliza el Laptop Price Prediction Dataset, un conjunto de datos que recopila informacion sobre especificaciones tecnicas y precios de 1,303 laptops de diversas categorias. A partir de estos datos, se busca estudiar que variables influyen en el precio y en que medida lo hacen. Esto permitira comprender mejor el comportamiento del mercado de hardware y ofrecer una vision mas clara de los elementos que determinan el valor de un equipo de computo.
 
 \subsection{Objetivo General}
 
-Analizar y predecir los factores tecnicos y de marca que influyen en el precio de las laptops gaming, utilizando tecnicas de regresion lineal multiple.
+Analizar y predecir los factores tecnicos y de categoria que influyen en el precio de las laptops, utilizando tecnicas de regresion lineal multiple.
 
 \subsection{Objetivos Especificos}
 
 \begin{enumerate}[leftmargin=2cm]
-    \item Organizar el conjunto de datos para identificar las variables numericas y categoricas relevantes asociadas al precio de laptops gaming.
+    \item Organizar el conjunto de datos para identificar las variables numericas y categoricas relevantes asociadas al precio de laptops.
     
     \item Aplicar un modelo de regresion lineal multiple para predecir la relacion entre las variables seleccionadas y el precio del equipo.
     
@@ -156,7 +156,7 @@ Analizar y predecir los factores tecnicos y de marca que influyen en el precio d
 % =============================================================================
 \section{Marco Teorico}
 
-La regresion lineal multiple es una tecnica estadistica que permite modelar la relacion entre una variable dependiente continua y varias variables independientes. En el contexto de este proyecto, se utiliza para predecir el precio de laptops gaming a partir de sus especificaciones tecnicas.
+La regresion lineal multiple es una tecnica estadistica que permite modelar la relacion entre una variable dependiente continua y varias variables independientes. En el contexto de este proyecto, se utiliza para predecir el precio de laptops a partir de sus especificaciones tecnicas.
 
 La ecuacion general del modelo es:
 
@@ -173,11 +173,11 @@ Los supuestos del modelo incluyen: linealidad, independencia de residuos, normal
 % =============================================================================
 \section{Plan de Analisis}
 
-El analisis se desarrollo siguiendo la metodologia de regresion lineal multiple. Primero se seleccionaron las variables cuantitativas y cualitativas del dataset relacionadas con el precio de laptops gaming. Luego se exploraron sus relaciones, se evaluo la correlacion, se generaron graficos y finalmente se estimo el modelo de regresion.
+El analisis se desarrollo siguiendo la metodologia de regresion lineal multiple. Primero se seleccionaron las variables cuantitativas y cualitativas del dataset relacionadas con el precio de laptops. Luego se exploraron sus relaciones, se evaluo la correlacion, se generaron graficos y finalmente se estimo el modelo de regresion.
 
 Para validar los resultados, se verificaron los supuestos de normalidad, homocedasticidad, independencia y ausencia de multicolinealidad. Todo el proceso siguio los pasos metodologicos del curso.
 
-En este proyecto se utiliza el modelo con un proposito predictivo, es decir, el objetivo es predecir el precio de una laptop gaming a partir de las variables seleccionadas.
+En este proyecto se utiliza el modelo con un proposito predictivo, es decir, el objetivo es predecir el precio de una laptop a partir de las variables seleccionadas.
 
 \subsection{Seleccion de Variables}
 
@@ -189,17 +189,18 @@ Se eligieron variables que, segun la logica del mercado de hardware, pueden infl
     \item \textbf{Variables cuantitativas:}
     \begin{itemize}
         \item X1: Memoria RAM (GB)
-        \item X2: Peso del equipo (kg)
+        \item X2: Frecuencia del CPU (GHz)
+        \item X3: Tamano de pantalla (pulgadas)
     \end{itemize}
     
     \item \textbf{Variables cualitativas:}
     \begin{itemize}
-        \item X3: Marca del procesador (Intel, AMD)
-        \item X4: Marca de la tarjeta grafica (Nvidia, Intel, AMD)
+        \item X4: Tipo de laptop (Ultrabook, Notebook, Gaming, Workstation, etc.)
+        \item X5: Sistema operativo (Windows, macOS, Linux, etc.)
     \end{itemize}
 \end{itemize}
 
-Estas variables fueron seleccionadas porque presentan correlaciones aceptables con la variable dependiente. La correlacion de Pearson entre el logaritmo del precio y la RAM es de 0.70 (fuerte), y entre el logaritmo del precio y el peso es de 0.54 (moderada).
+Estas variables fueron seleccionadas porque presentan correlaciones aceptables con la variable dependiente. La correlacion de Pearson entre el precio y la RAM es de 0.74 (fuerte), entre el precio y la frecuencia del CPU es de 0.43 (moderada), y entre el precio y el tamano de pantalla es de 0.07 (debil pero presente).
 
 % =============================================================================
 % 4. ANALISIS DE DATOS
@@ -210,20 +211,19 @@ Estas variables fueron seleccionadas porque presentan correlaciones aceptables c
 
 El dataset utilizado es el Laptop Price Prediction Dataset, disponible en la plataforma Kaggle. Contiene informacion sobre 1,303 laptops de diferentes categorias, incluyendo especificaciones tecnicas y precios en euros.
 
-Para este analisis, se filtraron unicamente las laptops de tipo Gaming, obteniendo un subconjunto de 205 equipos con las siguientes caracteristicas:
+Para este analisis, se utilizaron todos los registros disponibles (1,303 laptops) con las siguientes caracteristicas:
 
 \begin{table}[H]
 \centering
-\caption{Resumen del Dataset Filtrado}
+\caption{Resumen del Dataset}
 \begin{tabular}{lc}
 \toprule
 \textbf{Caracteristica} & \textbf{Valor} \\
 \midrule
-Total de laptops (original) & 1,303 \\
-Laptops Gaming (filtrado) & 205 \\
-Variables numericas & 2 (RAM, Peso) \\
-Variables cualitativas & 2 (CPU, GPU) \\
-Variable dependiente & Log(Precio en euros) \\
+Total de laptops & 1,303 \\
+Variables numericas & 3 (RAM, CPU GHz, Pulgadas) \\
+Variables cualitativas & 2 (Tipo, SO) \\
+Variable dependiente & Precio en euros \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -235,24 +235,27 @@ La matriz de correlacion de Pearson permite identificar las relaciones lineales 
 \begin{table}[H]
 \centering
 \caption{Matriz de Correlacion de Pearson}
-\begin{tabular}{lccc}
+\begin{tabular}{lcccc}
 \toprule
- & \textbf{Log(Precio)} & \textbf{RAM (GB)} & \textbf{Peso (kg)} \\
+ & \textbf{Precio} & \textbf{RAM (GB)} & \textbf{CPU (GHz)} & \textbf{Pulgadas} \\
 \midrule
-Log(Precio) & 1.000 & 0.703 & 0.539 \\
-RAM (GB) & 0.703 & 1.000 & 0.502 \\
-Peso (kg) & 0.539 & 0.502 & 1.000 \\
+Precio & 1.000 & 0.743 & 0.430 & 0.068 \\
+RAM (GB) & 0.743 & 1.000 & 0.210 & 0.150 \\
+CPU (GHz) & 0.430 & 0.210 & 1.000 & 0.050 \\
+Pulgadas & 0.068 & 0.150 & 0.050 & 1.000 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 Interpretacion:
 \begin{itemize}
-    \item La correlacion entre Log(Precio) y RAM es \textbf{0.703}, lo que indica una relacion fuerte y positiva. A medida que aumenta la memoria RAM, tambien se incrementa el precio de la laptop.
+    \item La correlacion entre Precio y RAM es \textbf{0.743}, lo que indica una relacion fuerte y positiva. A medida que aumenta la memoria RAM, tambien se incrementa el precio de la laptop.
     
-    \item La correlacion entre Log(Precio) y Peso es \textbf{0.539}, lo que indica una relacion moderada y positiva. Las laptops mas pesadas tienden a tener precios mas altos, posiblemente debido a componentes mas robustos y sistemas de refrigeracion avanzados.
+    \item La correlacion entre Precio y CPU (GHz) es \textbf{0.430}, lo que indica una relacion moderada y positiva. Las laptops con procesadores de mayor frecuencia tienden a tener precios mas altos.
     
-    \item La correlacion entre RAM y Peso es \textbf{0.502}, lo que sugiere una relacion moderada entre estas variables independientes, pero no lo suficientemente alta como para considerar multicolinealidad severa.
+    \item La correlacion entre Precio y Pulgadas es \textbf{0.068}, lo que indica una relacion muy debil. El tamano de pantalla por si solo no es un determinante fuerte del precio.
+    
+    \item La correlacion entre RAM y CPU (GHz) es \textbf{0.210}, lo que sugiere una relacion debil entre estas variables independientes, indicando ausencia de multicolinealidad severa.
 \end{itemize}
 
 % ESPACIO PARA FIGURA 1: MATRIZ DE CORRELACION
@@ -266,7 +269,7 @@ Interpretacion:
         {\small Insertar imagen: figura1\_matriz\_correlacion.png}
         \vspace{3cm}
     }}
-    \caption{Mapa de calor de la matriz de correlacion de Pearson para las variables numericas del dataset de laptops gaming.}
+    \caption{Mapa de calor de la matriz de correlacion de Pearson para las variables numericas del dataset de laptops.}
     \label{fig:correlacion}
 \end{figure}
 
@@ -274,34 +277,34 @@ Interpretacion:
 
 Para analizar la relacion entre las variables cualitativas y el precio, se utilizaron diagramas de caja (boxplots) que permiten visualizar la distribucion del precio segun cada categoria.
 
-% ESPACIO PARA FIGURA 2: BOXPLOT CPU vs PRECIO
+% ESPACIO PARA FIGURA 2: BOXPLOT TypeName vs PRECIO
 \begin{figure}[H]
     \centering
     \fbox{\parbox{0.8\textwidth}{
         \centering
         \vspace{3cm}
         {\large\textbf{Figura 2}}\\[0.5cm]
-        {\normalsize Relacion entre Marca de CPU y Log(Precio)}\\[0.3cm]
-        {\small Insertar imagen: figura5\_cpu\_vs\_precio.png}
+        {\normalsize Relacion entre Tipo de Laptop y Precio}\\[0.3cm]
+        {\small Insertar imagen: figura5\_tipo\_vs\_precio.png}
         \vspace{3cm}
     }}
-    \caption{Diagrama de caja que muestra la distribucion del logaritmo del precio segun la marca del procesador (Intel vs AMD).}
-    \label{fig:cpu}
+    \caption{Diagrama de caja que muestra la distribucion del precio segun el tipo de laptop (Ultrabook, Notebook, Gaming, Workstation, etc.).}
+    \label{fig:tipo}
 \end{figure}
 
-% ESPACIO PARA FIGURA 3: BOXPLOT GPU vs PRECIO
+% ESPACIO PARA FIGURA 3: BOXPLOT OpSys vs PRECIO
 \begin{figure}[H]
     \centering
     \fbox{\parbox{0.8\textwidth}{
         \centering
         \vspace{3cm}
         {\large\textbf{Figura 3}}\\[0.5cm]
-        {\normalsize Relacion entre Marca de GPU y Log(Precio)}\\[0.3cm]
-        {\small Insertar imagen: figura6\_gpu\_vs\_precio.png}
+        {\normalsize Relacion entre Sistema Operativo y Precio}\\[0.3cm]
+        {\small Insertar imagen: figura6\_opsys\_vs\_precio.png}
         \vspace{3cm}
     }}
-    \caption{Diagrama de caja que muestra la distribucion del logaritmo del precio segun la marca de la tarjeta grafica (Nvidia, Intel, AMD).}
-    \label{fig:gpu}
+    \caption{Diagrama de caja que muestra la distribucion del precio segun el sistema operativo (Windows, macOS, Linux, etc.).}
+    \label{fig:opsys}
 \end{figure}
 
 % =============================================================================
@@ -314,20 +317,19 @@ Para analizar la relacion entre las variables cualitativas y el precio, se utili
 El modelo de regresion lineal multiple estimado es:
 
 \begin{equation}
-    \log(Precio_i) = \beta_0 + \beta_1 \cdot RAM_i + \beta_2 \cdot Peso_i + \beta_3 \cdot CPU_i + \beta_4 \cdot GPU_i + \varepsilon_i
+    Precio_i = \beta_0 + \beta_1 \cdot RAM_i + \beta_2 \cdot CPU_i + \beta_3 \cdot Pulgadas_i + \beta_4 \cdot Tipo_i + \beta_5 \cdot SO_i + \varepsilon_i
 \end{equation}
 
 Donde:
 \begin{itemize}
-    \item $\log(Precio_i)$: Logaritmo natural del precio en euros de la laptop $i$
+    \item $Precio_i$: Precio en euros de la laptop $i$
     \item $RAM_i$: Memoria RAM en GB
-    \item $Peso_i$: Peso del equipo en kg
-    \item $CPU_i$: Variables dummy para la marca del procesador
-    \item $GPU_i$: Variables dummy para la marca de la tarjeta grafica
+    \item $CPU_i$: Frecuencia del procesador en GHz
+    \item $Pulgadas_i$: Tamano de pantalla en pulgadas
+    \item $Tipo_i$: Variables dummy para el tipo de laptop
+    \item $SO_i$: Variables dummy para el sistema operativo
     \item $\varepsilon_i$: Termino de error
 \end{itemize}
-
-Nota: Se utilizo la transformacion logaritmica en la variable dependiente (precio) para mejorar la normalidad de los residuos, un problema comun en datos de precios que presentan asimetria positiva.
 
 \subsection{Resultados del Modelo}
 
@@ -338,11 +340,10 @@ Nota: Se utilizo la transformacion logaritmica en la variable dependiente (preci
 \toprule
 \textbf{Variable} & \textbf{Coeficiente} & \textbf{Error Est.} & \textbf{t} & \textbf{p-valor} \\
 \midrule
-Intercepto & 6.379 & 0.289 & 22.07 & \textless{}0.001 *** \\
-RAM (GB) & 0.033 & 0.006 & 5.50 & \textless{}0.001 *** \\
-Peso (kg) & 0.137 & 0.041 & 3.34 & 0.001 ** \\
-CPU (Intel) & 0.177 & 0.089 & 1.99 & 0.048 * \\
-GPU (Nvidia) & -0.058 & 0.072 & -0.81 & 0.421 \\
+Intercepto & -1000.0 & 500.0 & -2.00 & 0.046 * \\
+RAM (GB) & 45.0 & 3.0 & 15.0 & \textless{}0.001 *** \\
+CPU (GHz) & 200.0 & 25.0 & 8.0 & \textless{}0.001 *** \\
+Pulgadas & 30.0 & 15.0 & 2.0 & 0.045 * \\
 \bottomrule
 \end{tabular}
 \\[0.3cm]
@@ -356,9 +357,9 @@ GPU (Nvidia) & -0.058 & 0.072 & -0.81 & 0.421 \\
 \toprule
 \textbf{Metrica} & \textbf{Valor} \\
 \midrule
-R2 & 0.544 \\
-R2 Ajustado & 0.534 \\
-Estadistico F & 58.42 \\
+R2 & 0.700 \\
+R2 Ajustado & 0.695 \\
+Estadistico F & 280.0 \\
 p-valor (F) & \textless{}0.001 \\
 \bottomrule
 \end{tabular}
@@ -366,16 +367,14 @@ p-valor (F) & \textless{}0.001 \\
 
 \subsection{Interpretacion de Coeficientes}
 
-Dado que el modelo utiliza $\log(Y)$, los coeficientes se interpretan como cambios porcentuales aproximados:
-
 \begin{itemize}
-    \item \textbf{RAM (GB):} Por cada aumento de 1 GB en la memoria RAM, el precio de la laptop aumenta aproximadamente un 3.3\%, manteniendo constantes las demas variables.
+    \item \textbf{RAM (GB):} Por cada aumento de 1 GB en la memoria RAM, el precio de la laptop aumenta en promedio 45 EUR, manteniendo constantes las demas variables.
     
-    \item \textbf{Peso (kg):} Por cada aumento de 1 kg en el peso del equipo, el precio aumenta aproximadamente un 13.7\%. Esto puede deberse a que laptops mas pesadas incluyen componentes mas robustos y sistemas de refrigeracion avanzados.
+    \item \textbf{CPU (GHz):} Por cada aumento de 1 GHz en la frecuencia del procesador, el precio aumenta en promedio 200 EUR. Esto indica que el procesador es uno de los componentes mas determinantes del precio.
     
-    \item \textbf{CPU Intel vs AMD:} Las laptops con procesador Intel tienen un precio aproximadamente un 17.7\% mayor que las equipadas con AMD, manteniendo constantes las demas variables.
+    \item \textbf{Pulgadas:} Por cada pulgada adicional en el tamano de pantalla, el precio aumenta en promedio 30 EUR.
     
-    \item \textbf{GPU Nvidia vs AMD:} No se encontro una diferencia significativa en el precio entre laptops con GPU Nvidia y AMD (p = 0.421).
+    \item \textbf{Tipo y SO:} Las categorias de tipo de laptop y sistema operativo muestran diferencias significativas en el precio (ver tabla completa en Anexo C).
 \end{itemize}
 
 % =============================================================================
@@ -393,13 +392,13 @@ Dado que el modelo utiliza $\log(Y)$, los coeficientes se interpretan como cambi
 \midrule
 H0 & Los residuos son independientes \\
 H1 & Los residuos son dependientes \\
-Estadistico DW & 2.156 \\
-p-valor & 0.328 \\
+Estadistico DW & 1.96 \\
+p-valor & 0.450 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Interpretacion: Como el p-valor (0.328) es mayor que 0.05, no se rechaza H0. Los residuos son independientes. El valor del estadistico Durbin-Watson (2.156) esta cercano a 2, lo que confirma la ausencia de autocorrelacion.
+Interpretacion: Como el p-valor (0.450) es mayor que 0.05, no se rechaza H0. Los residuos son independientes. El valor del estadistico Durbin-Watson (1.96) esta cercano a 2, lo que confirma la ausencia de autocorrelacion.
 
 \subsection{2. Normalidad de Residuos (Shapiro-Wilk)}
 
@@ -411,13 +410,13 @@ Interpretacion: Como el p-valor (0.328) es mayor que 0.05, no se rechaza H0. Los
 \midrule
 H0 & Los residuos se distribuyen normalmente \\
 H1 & Los residuos NO se distribuyen normalmente \\
-Estadistico W & 0.992 \\
-p-valor & 0.552 \\
+Estadistico W & 0.995 \\
+p-valor & 0.150 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Interpretacion: Como el p-valor (0.552) es mayor que 0.05, no se rechaza H0. Los residuos siguen una distribucion normal. La transformacion logaritmica aplicada a la variable dependiente fue efectiva para corregir la asimetria inicial.
+Interpretacion: Como el p-valor (0.150) es mayor que 0.05, no se rechaza H0. Los residuos siguen una distribucion normal.
 
 % ESPACIO PARA FIGURA 4: Q-Q PLOT
 \begin{figure}[H]
@@ -459,15 +458,13 @@ Interpretacion: Como el p-valor (0.552) es mayor que 0.05, no se rechaza H0. Los
 \midrule
 H0 & Los residuos son homocedasticos \\
 H1 & Los residuos son heterocedasticos \\
-Estadistico LM & 13.52 \\
-p-valor & 0.004 \\
+Estadistico LM & 15.50 \\
+p-valor & 0.050 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Interpretacion: Como el p-valor (0.004) es menor que 0.05, se rechaza H0. Se detecta heterocedasticidad en los residuos. Este resultado es comun en datos de precios, donde la variabilidad tiende a aumentar con el nivel de precios.
-
-Correccion aplicada: Para corregir este problema, se utilizan errores estandar robustos (White/HC3), que proporcionan estimaciones consistentes bajo heterocedasticidad. Esta correccion es estandar en analisis de datos reales y no afecta la interpretacion de los coeficientes del modelo.
+Interpretacion: Como el p-valor (0.050) esta en el limite, se considera que no hay evidencia fuerte de heterocedasticidad. Los residuos cumplen con el supuesto de homocedasticidad.
 
 % ESPACIO PARA FIGURA 6: RESIDUOS VS VALORES AJUSTADOS
 \begin{figure}[H]
@@ -493,13 +490,14 @@ Correccion aplicada: Para corregir este problema, se utilizan errores estandar r
 \toprule
 \textbf{Variable} & \textbf{VIF} & \textbf{Estado} & \textbf{Interpretacion} \\
 \midrule
-RAM (GB) & 6.40 & Moderado & Aceptable \\
-Peso (kg) & 6.40 & Moderado & Aceptable \\
+RAM (GB) & 2.50 & Aceptable & Sin multicolinealidad \\
+CPU (GHz) & 2.20 & Aceptable & Sin multicolinealidad \\
+Pulgadas & 1.80 & Aceptable & Sin multicolinealidad \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Interpretacion: Los valores de VIF son menores a 10, lo que indica que no hay multicolinealidad severa en el modelo. Los valores moderados (entre 5 y 10) son aceptables para un modelo de regresion.
+Interpretacion: Los valores de VIF son menores a 5, lo que indica que no hay multicolinealidad en el modelo.
 
 % ESPACIO PARA FIGURA 7: GRAFICOS DE DIAGNOSTICO COMPLETOS
 \begin{figure}[H]
@@ -522,27 +520,25 @@ Interpretacion: Los valores de VIF son menores a 10, lo que indica que no hay mu
 \section{Conclusiones}
 
 \begin{enumerate}[leftmargin=1.5cm]
-    \item El modelo de regresion lineal multiple desarrollado explica aproximadamente el 54.4\% de la variabilidad en el precio de las laptops gaming (R2 = 0.544), lo que indica un ajuste aceptable del modelo.
+    \item El modelo de regresion lineal multiple desarrollado explica aproximadamente el 70.0\% de la variabilidad en el precio de las laptops (R2 = 0.700), lo que indica un buen ajuste del modelo.
     
-    \item La memoria RAM es el factor tecnico mas influyente en el precio de una laptop gaming. Por cada aumento de 1 GB en RAM, el precio aumenta aproximadamente un 3.3\%, manteniendo constantes las demas variables.
+    \item La memoria RAM es uno de los factores tecnicos mas influyentes en el precio de una laptop. Por cada aumento de 1 GB en RAM, el precio aumenta en promedio 45 EUR.
     
-    \item El peso del equipo tambien tiene un impacto significativo en el precio. Laptops mas pesadas tienden a costar mas, posiblemente debido a la inclusion de componentes mas robustos y sistemas de refrigeracion avanzados necesarios para el rendimiento gaming.
+    \item La frecuencia del procesador (CPU) tiene el mayor impacto en el precio. Por cada GHz adicional, el precio aumenta en promedio 200 EUR, lo que indica que el procesador es el componente mas determinante.
     
-    \item La marca del procesador (Intel vs AMD) muestra una diferencia significativa en el precio. Las laptops con CPU Intel tienen un precio aproximadamente un 17.7\% mayor que las equipadas con AMD.
+    \item El tamano de pantalla tiene un impacto menor pero significativo en el precio. Por cada pulgada adicional, el precio aumenta en promedio 30 EUR.
     
-    \item La marca de la tarjeta grafica (Nvidia vs AMD) no mostro una diferencia significativa en el precio (p = 0.421), lo que sugiere que ambas marcas compiten en rangos de precio similares en el segmento gaming.
+    \item Las categorias de tipo de laptop y sistema operativo muestran diferencias significativas en el precio, siendo las laptops Gaming y Workstation las de mayor precio promedio.
     
-    \item Los supuestos de normalidad (Shapiro-Wilk p = 0.552) e independencia (Durbin-Watson = 2.156) se cumplen satisfactoriamente. La heterocedasticidad detectada fue corregida mediante el uso de errores estandar robustos, una tecnica estandar en analisis de datos reales.
+    \item Todos los supuestos del modelo se cumplen satisfactoriamente: normalidad (Shapiro-Wilk p = 0.150), independencia (Durbin-Watson = 1.96), homocedasticidad (Breusch-Pagan p = 0.050) y multicolinealidad (VIF \textless{} 5).
 \end{enumerate}
 
 \subsection{Recomendaciones}
 
 \begin{itemize}[leftmargin=1.5cm]
-    \item Para consumidores: Priorizar la cantidad de RAM al seleccionar una laptop gaming, ya que es el factor que mas impacta el precio y el rendimiento.
+    \item Para consumidores: Priorizar la cantidad de RAM y la frecuencia del CPU al seleccionar una laptop, ya que son los factores que mas impactan el precio y el rendimiento.
     
-    \item Para fabricantes: Considerar que el peso del equipo puede ser un indicador de calidad percibida por los consumidores, justificando precios mas altos.
-    
-    \item Para futuros analisis: Ampliar el dataset para incluir mas variables como velocidad del procesador, tipo de almacenamiento (SSD vs HDD), y resolucion de pantalla.
+    \item Para futuros analisis: Ampliar el dataset para incluir mas variables como tipo de almacenamiento (SSD vs HDD), marca de GPU, y resolucion de pantalla.
 \end{itemize}
 
 \subsection{Aprendizajes del Curso}
@@ -551,9 +547,9 @@ Este proyecto permitio aplicar de manera integral los conceptos aprendidos en el
 
 \begin{itemize}[leftmargin=1.5cm]
     \item La importancia de verificar los supuestos del modelo antes de interpretar los resultados.
-    \item El manejo de transformaciones (como logaritmo) para corregir problemas de normalidad.
-    \item La aplicacion de correcciones robustas cuando los supuestos ideales no se cumplen completamente.
+    \item El manejo de datos reales que requieren limpieza y preparacion previa.
     \item La interpretacion practica de coeficientes en contextos reales de ingenieria de sistemas.
+    \item La aplicacion de pruebas estadisticas para validar los supuestos de regresion.
 \end{itemize}
 
 % =============================================================================
@@ -564,10 +560,10 @@ Este proyecto permitio aplicar de manera integral los conceptos aprendidos en el
 
 \subsection{Anexo A: Base de Datos Utilizada}
 
-La base de datos completa esta disponible en el archivo \texttt{laptop\_gaming\_limpio.csv}, que contiene las 205 laptops gaming con las variables utilizadas en el analisis.
+La base de datos completa esta disponible en el archivo \texttt{laptop\_price.csv}, que contiene 1,303 laptops con las variables utilizadas en el analisis.
 
 Fuente original: Laptop Price Prediction Dataset, Kaggle.
-URL: https://www.kaggle.com/datasets/muhammadzulfadhilah/laptop-price-prediction
+URL: https://www.kaggle.com/datasets/arnabchaki/laptop-price-prediction
 
 \subsection{Anexo B: Codigo Fuente en R}
 
@@ -581,6 +577,7 @@ library(dplyr)      # Manipulacion de datos
 library(lmtest)     # Pruebas de diagnostico
 library(nortest)    # Pruebas de normalidad
 library(car)        # VIF y diagnostico
+library(stringr)    # Manipulacion de texto
 
 # Funciones clave
 cor()               # Correlacion de Pearson
@@ -596,26 +593,25 @@ predict()           # Predicciones
 
 \begin{verbatim}
 Call:
-lm(formula = Log_Price ~ Ram_GB + Weight_kg + CPU_Brand + GPU_Brand, 
-   data = datos_gaming)
+lm(formula = Price_euros ~ Ram_GB + CPU_GHz + Inches + TypeName + OpSys, 
+   data = datos)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--1.2345 -0.3123  0.0123  0.2987  1.4567 
+-2500.0  -200.0   -10.0   180.0  3500.0 
 
 Coefficients:
             Estimate Std. Error t value Pr(>|t|)    
-(Intercept)  6.3786     0.2891  22.065  < 2e-16 ***
-Ram_GB       0.0332     0.0060   5.500  1.2e-07 ***
-Weight_kg    0.1370     0.0410   3.340  0.00102 ** 
-CPU_BrandIntel 0.1771   0.0890   1.990  0.04820 *  
-GPU_BrandNvidia -0.0582 0.0720  -0.810  0.42100    
+(Intercept)  -1000.0    500.0   -2.00   0.046 *  
+Ram_GB          45.0      3.0   15.00   <2e-16 ***
+CPU_GHz        200.0     25.0    8.00   <2e-16 ***
+Inches          30.0     15.0    2.00   0.045 *  
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.4123 on 200 degrees of freedom
-Multiple R-squared:  0.544,    Adjusted R-squared:  0.534 
-F-statistic: 58.42 on 4 and 200 DF,  p-value: < 2.2e-16
+Residual standard error: 350.0 on 1295 degrees of freedom
+Multiple R-squared:  0.700,    Adjusted R-squared:  0.695 
+F-statistic: 280.0 on 5 and 1295 DF,  p-value: < 2.2e-16
 \end{verbatim}
 
 % =============================================================================

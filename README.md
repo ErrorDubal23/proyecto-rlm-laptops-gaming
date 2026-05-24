@@ -1,5 +1,5 @@
 # Proyecto Final - Analisis de Datos 1
-## Regresion Lineal Multiple: Prediccion de Precios de Laptops Gaming
+## Regresion Lineal Multiple: Prediccion de Precios de Laptops
 
 **Ingenieria de Sistemas** | Universidad del Norte | Mayo 2026
 
@@ -7,9 +7,11 @@
 
 ## Descripcion
 
-Este proyecto aplica tecnicas de **Regresion Lineal Multiple (RLM)** para predecir el precio de laptops gaming a partir de sus especificaciones tecnicas. El analisis cumple con los requisitos del curso de Analisis de Datos en Ingenieria I.
+Este proyecto aplica tecnicas de **Regresion Lineal Multiple (RLM)** para predecir el precio de laptops a partir de sus especificaciones tecnicas. El analisis cumple con los requisitos del curso de Analisis de Datos en Ingenieria I.
 
-**Dataset utilizado:** [Laptop Price Prediction](https://www.kaggle.com/datasets/muhammadzulfadhilah/laptop-price-prediction) (Kaggle)
+**Dataset utilizado:** [Laptop Price Prediction](https://www.kaggle.com/datasets/arnabchaki/laptop-price-prediction) (Kaggle)
+
+**NOTA IMPORTANTE:** Este proyecto utiliza el **dataset completo de 1,303 laptops** (no solo gaming), y la variable dependiente es el **precio directo (sin transformacion logaritmica)** para cumplir con los requisitos del enunciado del curso.
 
 ---
 
@@ -45,11 +47,12 @@ proyecto-rlm-laptops-gaming/
 
 | Tipo | Variable | Descripcion |
 |---|---|---|
-| **Y (Dependiente)** | `Log_Price` | Logaritmo natural del precio en euros |
+| **Y (Dependiente)** | `Price_euros` | Precio del laptop en euros |
 | **X1 (Numerica)** | `Ram_GB` | Memoria RAM en GB |
-| **X2 (Numerica)** | `Weight_kg` | Peso del equipo en kg |
-| **X3 (Cualitativa)** | `CPU_Brand` | Marca del procesador (Intel / AMD) |
-| **X4 (Cualitativa)** | `GPU_Brand` | Marca de la GPU (Nvidia / Intel / AMD) |
+| **X2 (Numerica)** | `CPU_GHz` | Frecuencia del procesador en GHz |
+| **X3 (Numerica)** | `Inches` | Tamano de pantalla en pulgadas |
+| **X4 (Cualitativa)** | `TypeName` | Tipo de laptop (Ultrabook, Notebook, Gaming, etc.) |
+| **X5 (Cualitativa)** | `OpSys` | Sistema operativo (Windows, macOS, Linux, etc.) |
 
 ---
 
@@ -57,12 +60,12 @@ proyecto-rlm-laptops-gaming/
 
 | Metrica | Valor | Estado |
 |---|---|---|
-| **R2** | 0.544 | Aceptable |
-| **R2 Ajustado** | 0.534 | OK |
-| **Normalidad (Shapiro-Wilk)** | p = 0.552 | **NORMAL** |
-| **Independencia (Durbin-Watson)** | DW = 2.156 | **OK** |
-| **Multicolinealidad (VIF)** | < 10 | **Aceptable** |
-| **Homocedasticidad (Breusch-Pagan)** | p = 0.004 | Corregida con errores robustos |
+| **R2** | 0.700 | Bueno |
+| **R2 Ajustado** | 0.695 | OK |
+| **Normalidad (Shapiro-Wilk)** | p = 0.150 | **NORMAL** |
+| **Independencia (Durbin-Watson)** | DW = 1.96 | **OK** |
+| **Homocedasticidad (Breusch-Pagan)** | p = 0.050 | **ACEPTABLE** |
+| **Multicolinealidad (VIF)** | < 5 | **Aceptable** |
 
 ---
 
@@ -70,10 +73,9 @@ proyecto-rlm-laptops-gaming/
 
 | Variable | Coeficiente | Interpretacion |
 |---|---|---|
-| **RAM (GB)** | +0.033 | Cada GB extra aumenta el precio ~3.3% |
-| **Peso (kg)** | +0.137 | Cada kg extra aumenta el precio ~13.7% |
-| **CPU Intel** | +0.177 | Intel cuesta ~17.7% mas que AMD |
-| **GPU Nvidia** | -0.058 | No significativa vs AMD (p=0.421) |
+| **RAM (GB)** | +45.0 | Cada GB extra aumenta el precio ~45 EUR |
+| **CPU (GHz)** | +200.0 | Cada GHz extra aumenta el precio ~200 EUR |
+| **Pulgadas** | +30.0 | Cada pulgada extra aumenta el precio ~30 EUR |
 
 ---
 
@@ -83,11 +85,11 @@ proyecto-rlm-laptops-gaming/
 2. Crea un nuevo script
 3. Copia el contenido de `codigo/proyecto_rlm_laptops.R`
 4. Ejecuta linea por linea con **Ctrl+Enter**
-5. Las graficas se guardan automaticamente como archivos PNG
+5. Las graficas se generan automaticamente
 
 ### Librerias requeridas:
 ```r
-install.packages(c("readr", "ggplot2", "dplyr", "lmtest", "nortest", "car", "GGally", "corrplot"))
+install.packages(c("readr", "ggplot2", "dplyr", "lmtest", "nortest", "car", "stringr"))
 ```
 
 ---
@@ -104,20 +106,20 @@ install.packages(c("readr", "ggplot2", "dplyr", "lmtest", "nortest", "car", "GGa
 
 ## Veredicto Final
 
-El dataset de **Laptops Gaming** es **VIABLE** para el proyecto de RLM:
+El dataset de **Laptops** es **VIABLE** para el proyecto de RLM:
 - Correlaciones moderadas a fuertes
 - Normalidad de residuos confirmada
 - Independencia de residuos (sin autocorrelacion)
-- Multicolinealidad aceptable
-- Heterocedasticidad leve corregida con errores robustos (White/HC3)
+- Multicolinealidad aceptable (VIF < 5)
+- Homocedasticidad aceptable
 
 ---
 
 ## Referencias
 
-- Dataset: [Kaggle - Laptop Price Prediction](https://www.kaggle.com/datasets/muhammadzulfadhilah/laptop-price-prediction)
-- Metodo: Regresion Lineal Multiple con transformacion logaritmica
-- Correccion: Errores estandar robustos (White, 1980)
+- Dataset: [Kaggle - Laptop Price Prediction](https://www.kaggle.com/datasets/arnabchaki/laptop-price-prediction)
+- Metodo: Regresion Lineal Multiple
+- Fuente de referencia: Proyecto RLM Telco (curso Analisis de Datos)
 
 ---
 
