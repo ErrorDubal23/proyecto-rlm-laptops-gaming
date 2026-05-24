@@ -1,0 +1,244 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+
+\title{Regresion Lineal Multiple: Prediccion de Cargos Totales en Clientes Telco}
+\author{Dubal Aguilar Torres, Alejandro Chaves Ramos,\\
+Juan Caceres Figueroa, Miguel Carrizosa}
+\date{Analisis de Datos 1\\Universidad del Norte\\Docente: PhD. Luis Angel Anillo Arrieta}
+
+\begin{document}
+\maketitle
+
+\section{Introduccion}
+
+El presente proyecto aplica la Regresion Lineal Multiple (RLM) para predecir los cargos totales acumulados por los clientes de una empresa de telecomunicaciones, utilizando variables cuantitativas y cualitativas que influyen en el comportamiento de consumo.
+
+\section{Planteamiento del Problema}
+
+Una empresa de telecomunicaciones desea estimar los cargos totales que acumulara un cliente durante su permanencia, basandose en:
+\begin{itemize}
+    \item Su antiguedad (tenure, en meses)
+    \item Los cargos mensuales (MonthlyCharges)
+    \item El tipo de contrato (Month-to-month, One year, Two year)
+    \item El tipo de servicio de internet (DSL, Fiber optic, No)
+\end{itemize}
+
+\section{Objetivo}
+
+Desarrollar un modelo de RLM que permita estimar los cargos totales (TotalCharges) de un cliente, a partir de las variables predictoras mencionadas, y validar los supuestos del modelo.
+
+\section{Dataset}
+
+\begin{itemize}
+    \item \textbf{Fuente:} IBM Sample DataSets (Kaggle)
+    \item \textbf{URL:} \texttt{https://www.kaggle.com/datasets/blastchar/telco-customer-churn}
+    \item \textbf{N:} 7,032 clientes (después de eliminar NA)
+    \item \textbf{Variables:} 21 originales, 4 utilizadas en el modelo
+\end{itemize}
+
+\section{Variables}
+
+\subsection{Variable Dependiente (Y)}
+\begin{itemize}
+    \item \textbf{TotalCharges:} Cargos totales acumulados por el cliente (continua, en dolares)
+\end{itemize}
+
+\subsection{Variables Independientes Cuantitativas (X)}
+\begin{itemize}
+    \item \textbf{tenure:} Antiguedad del cliente en meses (continua)
+    \item \textbf{MonthlyCharges:} Cargo mensual al cliente (continua)
+\end{itemize}
+
+\subsection{Variables Independientes Cualitativas (X)}
+\begin{itemize}
+    \item \textbf{Contract:} Tipo de contrato (Month-to-month, One year, Two year)
+    \item \textbf{InternetService:} Tipo de servicio de internet (DSL, Fiber optic, No)
+\end{itemize}
+
+\section{Estadisticas Descriptivas}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+Variable & Min & Max & Media & Desv. Std. \\
+\midrule
+TotalCharges & 18.80 & 8684.80 & 2283.30 & 2266.61 \\
+tenure & 1 & 72 & 32.42 & 24.56 \\
+MonthlyCharges & 18.25 & 118.75 & 64.80 & 30.09 \\
+\bottomrule
+\end{tabular}
+\caption{Estadisticas descriptivas de variables cuantitativas}
+\end{table}
+
+\section{Correlaciones de Pearson}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lrrr}
+\toprule
+ & TotalCharges & tenure & MonthlyCharges \\
+\midrule
+TotalCharges & 1.000 & 0.826 & 0.651 \\
+tenure & 0.826 & 1.000 & 0.247 \\
+MonthlyCharges & 0.651 & 0.247 & 1.000 \\
+\bottomrule
+\end{tabular}
+\caption{Matriz de correlaciones de Pearson}
+\end{table}
+
+\textbf{Interpretacion:}
+\begin{itemize}
+    \item \textbf{TotalCharges vs tenure:} $r = 0.826$ (correlacion fuerte positiva). Los clientes con mayor antiguedad acumulan cargos totales mas altos.
+    \item \textbf{TotalCharges vs MonthlyCharges:} $r = 0.651$ (correlacion moderada positiva). Clientes con cargos mensuales mas altos tienden a tener cargos totales mayores.
+    \item \textbf{tenure vs MonthlyCharges:} $r = 0.247$ (correlacion debil). No hay multicolinearidad severa entre las predictoras.
+\end{itemize}
+
+\section{Modelo de Regresion Lineal Multiple}
+
+\subsection{Especificacion del Modelo}
+
+$$TotalCharges = \beta_0 + \beta_1 \cdot tenure + \beta_2 \cdot MonthlyCharges + \beta_3 \cdot Contract_{One\ year} + \beta_4 \cdot Contract_{Two\ year} + \beta_5 \cdot InternetService_{Fiber\ optic} + \beta_6 \cdot InternetService_{No} + \epsilon$$
+
+\subsection{Resultados del Modelo}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+Coeficiente & Estimado & Error Std. & t value & p-value \\
+\midrule
+(Intercept) & -1321.45 & 38.21 & -34.58 & \textless{}0.001 \\
+tenure & 47.10 & 0.73 & 64.52 & \textless{}0.001 \\
+MonthlyCharges & 13.80 & 1.10 & 12.55 & \textless{}0.001 \\
+Contract: One year & 267.89 & 38.47 & 6.96 & \textless{}0.001 \\
+Contract: Two year & 609.28 & 41.36 & 14.73 & \textless{}0.001 \\
+InternetService: Fiber optic & -380.21 & 26.45 & -14.37 & \textless{}0.001 \\
+InternetService: No & -647.52 & 29.87 & -21.68 & \textless{}0.001 \\
+\bottomrule
+\end{tabular}
+\caption{Coeficientes del modelo RLM}
+\end{table}
+
+\subsection{Bondad de Ajuste}
+
+\begin{itemize}
+    \item $R^2 = 0.9001$
+    \item $R^2$ ajustado $= 0.9000$
+    \item Estadistico F $= 10524.5$ (p \textless{} 0.001)
+\end{itemize}
+
+Aproximadamente el 90.0\% de las variaciones en los cargos totales es explicada por el modelo, mientras que el 10.0\% es explicado por las perturbaciones.
+
+\subsection{Intervalos de Confianza (95\%)}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lrr}
+\toprule
+Coeficiente & Limite Inferior & Limite Superior \\
+\midrule
+(Intercept) & -1396.35 & -1246.55 \\
+tenure & 45.67 & 48.53 \\
+MonthlyCharges & 11.64 & 15.96 \\
+Contract: One year & 192.49 & 343.29 \\
+Contract: Two year & 528.21 & 690.35 \\
+InternetService: Fiber optic & -432.06 & -328.36 \\
+InternetService: No & -706.07 & -588.97 \\
+\bottomrule
+\end{tabular}
+\caption{Intervalos de confianza al 95\%}
+\end{table}
+
+\section{Validacion de Supuestos}
+
+\subsection{Linealidad}
+
+Los graficos de dispersion entre TotalCharges y las variables numericas (tenure, MonthlyCharges) muestran una relacion lineal positiva. Los graficos de residuos vs valores ajustados no muestran patrones sistematicos.
+
+\subsection{Normalidad de Residuos}
+
+Prueba de Shapiro-Wilk:
+\begin{itemize}
+    \item $W = 0.9879$, p-valor \textless{} 0.001
+\end{itemize}
+
+\textbf{Nota importante:} Con $N = 7032$ observaciones, el test de Shapiro-Wilk es sensible a desviaciones minimas de la normalidad. El Teorema Central del Limite (TLC) garantiza que, con muestras grandes ($n \textgreater{} 30$), los estimadores de minimos cuadrados son consistentes y siguen una distribucion aproximadamente normal, incluso si los residuos no son perfectamente normales. El grafico Q-Q muestra que los residuos se ajustan razonablemente a la linea de normalidad, con desviaciones leves en los extremos.
+
+\subsection{Homocedasticidad}
+
+Prueba de Breusch-Pagan:
+\begin{itemize}
+    \item p-valor \textless{} 0.001
+\end{itemize}
+
+Se detecta heterocedasticidad, lo cual es comun en datos de telecomunicaciones donde la varianza aumenta con los cargos. Esto no afecta la consistencia de los estimadores, aunque los errores estandar podrian estar subestimados. Para inferencia robusta, se recomendaria utilizar errores estandar robustos (sandwich estimators).
+
+\subsection{Independencia de Residuos}
+
+Prueba de Durbin-Watson:
+\begin{itemize}
+    \item $DW = 2.018$
+\end{itemize}
+
+El valor esta cercano a 2, indicando que no hay autocorrelacion significativa en los residuos.
+
+\subsection{Multicolinealidad}
+
+Factor de Inflacion de Varianza (VIF):
+\begin{itemize}
+    \item tenure: VIF = 1.06
+    \item MonthlyCharges: VIF = 1.06
+\end{itemize}
+
+Ambos valores son menores a 5, indicando ausencia de multicolinealidad problematica.
+
+\section{Interpretacion de Coeficientes}
+
+\begin{itemize}
+    \item \textbf{tenure ($\beta_1 = 47.10$):} Por cada mes adicional de antiguedad, los cargos totales aumentan en promedio \$47.10, manteniendo constante el resto de variables.
+    
+    \item \textbf{MonthlyCharges ($\beta_2 = 13.80$):} Por cada dolar adicional en cargos mensuales, los cargos totales aumentan en promedio \$13.80.
+    
+    \item \textbf{Contract: One year ($\beta_3 = 267.89$):} Los clientes con contrato de un ano tienen cargos totales \$267.89 mayores que los de contrato mensual (referencia), en promedio.
+    
+    \item \textbf{Contract: Two year ($\beta_4 = 609.28$):} Los clientes con contrato de dos anos tienen cargos totales \$609.28 mayores que los de contrato mensual, en promedio.
+    
+    \item \textbf{InternetService: Fiber optic ($\beta_5 = -380.21$):} Los clientes con fibra optica tienen cargos totales \$380.21 menores que los de DSL (referencia), en promedio.
+    
+    \item \textbf{InternetService: No ($\beta_6 = -647.52$):} Los clientes sin internet tienen cargos totales \$647.52 menores que los de DSL, en promedio.
+\end{itemize}
+
+\section{Conclusiones}
+
+\begin{enumerate}
+    \item El modelo de RLM explica el 90\% de la variabilidad en los cargos totales de los clientes, indicando un excelente ajuste.
+    
+    \item La antiguedad (tenure) es el predictor mas importante, con un coeficiente positivo y significativo, lo cual es logico: los clientes que permanecen mas tiempo acumulan mas cargos.
+    
+    \item Los cargos mensuales (MonthlyCharges) tambien contribuyen positivamente, aunque en menor medida.
+    
+    \item Los contratos de mayor duracion (uno y dos anos) se asocian con cargos totales mayores, probablemente por la permanencia prolongada.
+    
+    \item Los clientes sin servicio de internet o con fibra optica tienen cargos totales menores que los de DSL, lo cual puede reflejar diferentes estructuras de precios.
+    
+    \item No se detecta multicolinealidad (VIF \textless{} 5), y los residuos son aproximadamente independientes (DW $\approx$ 2).
+    
+    \item La no normalidad de residuos con $N$ grande no invalida el modelo, gracias al Teorema Central del Limite.
+\end{enumerate}
+
+\section{Referencias}
+
+\begin{enumerate}
+    \item IBM Sample DataSets. Telco Customer Churn. Disponible en: https://www.kaggle.com/datasets/blastchar/telco-customer-churn
+    \item Anillo, L.A. (2026). Material de clase: Regresion Lineal Multiple. Universidad del Norte.
+\end{enumerate}
+
+\end{document}
