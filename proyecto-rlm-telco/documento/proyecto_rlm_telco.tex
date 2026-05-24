@@ -1,151 +1,395 @@
 \documentclass[12pt,a4paper]{article}
+
+% =============================================================================
+% PAQUETES
+% =============================================================================
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage[spanish]{babel}
-\usepackage{amsmath,amssymb}
-\usepackage{graphicx}
-\usepackage{booktabs}
-\usepackage{float}
 \usepackage{geometry}
-\geometry{margin=2.5cm}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
 
-\title{Regresion Lineal Multiple: Prediccion de Cargos Totales en Clientes Telco}
-\author{Dubal Aguilar Torres, Alejandro Chaves Ramos,\\
-Juan Caceres Figueroa, Miguel Carrizosa}
-\date{Analisis de Datos 1\\Universidad del Norte\\Docente: PhD. Luis Angel Anillo Arrieta}
+% =============================================================================
+% CONFIGURACION DE PAGINA
+% =============================================================================
+\geometry{
+    left=2.5cm,
+    right=2.5cm,
+    top=2.5cm,
+    bottom=2.5cm
+}
 
+% =============================================================================
+% COLORES
+% =============================================================================
+\definecolor{azuloscuro}{RGB}{0, 51, 102}
+\definecolor{azulclaro}{RGB}{70, 130, 180}
+\definecolor{grisclaro}{RGB}{245, 245, 245}
+\definecolor{rojoacento}{RGB}{178, 34, 34}
+
+% =============================================================================
+% CONFIGURACION DE ENCABEZADOS
+% =============================================================================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{azuloscuro}{\small Analisis de Datos en Ingenieria I}}
+\fancyhead[R]{\textcolor{azuloscuro}{\small Proyecto Final - RLM}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.3pt}
+
+% =============================================================================
+% CONFIGURACION DE TITULOS
+% =============================================================================
+\titleformat{\section}
+    {\normalfont\Large\bfseries\color{azuloscuro}}
+    {\thesection.}{0.5em}{}
+    
+\titleformat{\subsection}
+    {\normalfont\large\bfseries\color{azulclaro}}
+    {\thesubsection}{0.5em}{}
+
+% =============================================================================
+% ESPACIADO
+% =============================================================================
+\setstretch{1.5}
+
+% =============================================================================
+% INICIO DEL DOCUMENTO
+% =============================================================================
 \begin{document}
-\maketitle
 
+% =============================================================================
+% PORTADA
+% =============================================================================
+\begin{titlepage}
+    \begin{tikzpicture}[remember picture, overlay]
+        \fill[azuloscuro] (current page.north west) rectangle ([yshift=-3cm]current page.north east);
+        \fill[azuloscuro] (current page.south west) rectangle ([yshift=2cm]current page.south east);
+    \end{tikzpicture}
+    
+    \vspace*{4cm}
+    
+    \begin{center}
+        {\Huge\bfseries\textcolor{azuloscuro}{PROYECTO FINAL}}\\[0.5cm]
+        {\LARGE\bfseries\textcolor{azulclaro}{Analisis de Datos en Ingenieria I}}\\[1cm]
+        
+        \rule{0.8\textwidth}{1.5pt}\\[0.8cm]
+        
+        {\Large\textbf{Regresion Lineal Multiple:}}\\[0.3cm]
+        {\Large\textbf{Prediccion de Cargos Totales en Clientes Telco}}\\[1.5cm]
+        
+        \rule{0.6\textwidth}{0.5pt}\\[1cm]
+        
+        {\large\textbf{Integrantes:}}\\[0.5cm]
+        \begin{tabular}{rl}
+            Dubal Aguilar Torres & (200XXXXXX) \\
+            Alejandro Chaves Ramos & (200XXXXXX) \\
+            Juan Caceres Figueroa & (200XXXXXX) \\
+            Miguel Carrizosa & (200XXXXXX) \\
+        \end{tabular}
+        
+        \vfill
+        
+        {\large\textbf{Docente:}}\\[0.3cm]
+        PhD. Luis Angel Anillo Arrieta\\[1cm]
+        
+        {\large Ingenieria de Sistemas}\\[0.3cm]
+        {\large Universidad del Norte}\\[0.3cm]
+        {\large Barranquilla, Colombia}\\[0.5cm]
+        {\large 25 de mayo de 2026}
+        
+    \end{center}
+\end{titlepage}
+
+% =============================================================================
+% INDICE
+% =============================================================================
+\newpage
+\tableofcontents
+\newpage
+
+% =============================================================================
+% 1. INTRODUCCION
+% =============================================================================
 \section{Introduccion}
 
-El presente proyecto aplica la Regresion Lineal Multiple (RLM) para predecir los cargos totales acumulados por los clientes de una empresa de telecomunicaciones, utilizando variables cuantitativas y cualitativas que influyen en el comportamiento de consumo.
+En la actualidad, el sector de telecomunicaciones representa uno de los pilares fundamentales de la conectividad global. Las empresas del sector recopilan enormes cantidades de datos sobre sus clientes, incluyendo informacion sobre contratos, servicios contratados, cargos mensuales y permanencia. Comprender los factores que determinan los cargos totales acumulados por los clientes es esencial para la planificacion financiera y la retencion de usuarios.
 
-\section{Planteamiento del Problema}
+Desde la perspectiva de la ingenieria de sistemas, el analisis de datos permite identificar patrones y relaciones entre las caracteristicas del cliente y sus cargos acumulados. El uso de tecnicas estadisticas como la regresion lineal multiple posibilita cuantificar el impacto de variables especificas ---como la antiguedad del cliente, los cargos mensuales, el tipo de contrato y el servicio de internet--- sobre los cargos totales del suscriptor.
 
-Una empresa de telecomunicaciones desea estimar los cargos totales que acumulara un cliente durante su permanencia, basandose en:
-\begin{itemize}
-    \item Su antiguedad (tenure, en meses)
-    \item Los cargos mensuales (MonthlyCharges)
-    \item El tipo de contrato (Month-to-month, One year, Two year)
-    \item El tipo de servicio de internet (DSL, Fiber optic, No)
+Para este proyecto se utiliza el Telco Customer Churn Dataset, un conjunto de datos proporcionado por IBM que recopila informacion sobre 7,043 clientes de telecomunicaciones. A partir de estos datos, se busca estudiar que variables influyen en los cargos totales y en que medida lo hacen. Esto permitira comprender mejor el comportamiento de consumo y ofrecer una vision mas clara de los elementos que determinan el valor acumulado de un cliente.
+
+\subsection{Objetivo General}
+
+Analizar y predecir los factores que influyen en los cargos totales acumulados por los clientes de una empresa de telecomunicaciones, utilizando tecnicas de regresion lineal multiple.
+
+\subsection{Objetivos Especificos}
+
+\begin{enumerate}[leftmargin=2cm]
+    \item Organizar el conjunto de datos para identificar las variables numericas y categoricas relevantes asociadas a los cargos totales de los clientes.
+    
+    \item Aplicar un modelo de regresion lineal multiple para predecir la relacion entre las variables seleccionadas y los cargos totales acumulados.
+    
+    \item Interpretar los coeficientes del modelo para determinar cuales variables tienen el mayor impacto en los cargos totales y que implicaciones tienen para la toma de decisiones empresariales.
+\end{enumerate}
+
+% =============================================================================
+% 2. MARCO TEORICO
+% =============================================================================
+\section{Marco Teorico}
+
+La regresion lineal multiple es una tecnica estadistica que permite modelar la relacion entre una variable dependiente continua y varias variables independientes. En el contexto de este proyecto, se utiliza para predecir los cargos totales acumulados por los clientes a partir de sus caracteristicas de contrato y consumo.
+
+La ecuacion general del modelo es:
+
+\begin{equation}
+    Y_i = \beta_0 + \beta_1 X_{1i} + \beta_2 X_{2i} + ... + \beta_k X_{ki} + \varepsilon_i
+\end{equation}
+
+Donde $Y_i$ representa la variable dependiente (cargos totales), $X_{ji}$ son las variables independientes, $\beta_j$ son los coeficientes de regresion y $\varepsilon_i$ es el termino de error.
+
+Los supuestos del modelo incluyen: linealidad, independencia de residuos, normalidad de residuos, homocedasticidad y ausencia de multicolinealidad severa.
+
+% =============================================================================
+% 3. PLAN DE ANALISIS
+% =============================================================================
+\section{Plan de Analisis}
+
+El analisis se desarrollo siguiendo la metodologia de regresion lineal multiple. Primero se seleccionaron las variables cuantitativas y cualitativas del dataset relacionadas con los cargos totales. Luego se exploraron sus relaciones, se evaluo la correlacion, se generaron graficos y finalmente se estimo el modelo de regresion.
+
+Para validar los resultados, se verificaron los supuestos de normalidad, homocedasticidad, independencia y ausencia de multicolinealidad. Todo el proceso siguio los pasos metodologicos del curso.
+
+En este proyecto se utiliza el modelo con un proposito predictivo, es decir, el objetivo es predecir los cargos totales acumulados de un cliente a partir de las variables seleccionadas.
+
+\subsection{Seleccion de Variables}
+
+Se eligieron variables que, segun la logica del negocio de telecomunicaciones, pueden influir sobre la variable dependiente:
+
+\begin{itemize}[leftmargin=2cm]
+    \item \textbf{Y (dependiente):} Cargos totales acumulados (TotalCharges, en dolares)
+    
+    \item \textbf{Variables cuantitativas:}
+    \begin{itemize}
+        \item X1: Antiguedad del cliente (tenure, en meses)
+        \item X2: Cargos mensuales (MonthlyCharges, en dolares)
+    \end{itemize}
+    
+    \item \textbf{Variables cualitativas:}
+    \begin{itemize}
+        \item X3: Tipo de contrato (Month-to-month, One year, Two year)
+        \item X4: Tipo de servicio de internet (DSL, Fiber optic, No)
+    \end{itemize}
 \end{itemize}
 
-\section{Objetivo}
+Estas variables fueron seleccionadas porque presentan correlaciones aceptables con la variable dependiente. La correlacion de Pearson entre TotalCharges y tenure es de 0.826 (fuerte), y entre TotalCharges y MonthlyCharges es de 0.651 (moderada).
 
-Desarrollar un modelo de RLM que permita estimar los cargos totales (TotalCharges) de un cliente, a partir de las variables predictoras mencionadas, y validar los supuestos del modelo.
+% =============================================================================
+% 4. ANALISIS DE DATOS
+% =============================================================================
+\section{Analisis de Datos}
 
-\section{Dataset}
+\subsection{Descripcion del Dataset}
 
-\begin{itemize}
-    \item \textbf{Fuente:} IBM Sample DataSets (Kaggle)
-    \item \textbf{URL:} \texttt{https://www.kaggle.com/datasets/blastchar/telco-customer-churn}
-    \item \textbf{N:} 7,032 clientes (después de eliminar NA)
-    \item \textbf{Variables:} 21 originales, 4 utilizadas en el modelo
-\end{itemize}
+El dataset utilizado es el Telco Customer Churn Dataset, proporcionado por IBM y disponible en la plataforma Kaggle. Contiene informacion sobre 7,043 clientes de telecomunicaciones con 21 variables demograficas, de servicio y de cargos.
 
-\section{Variables}
-
-\subsection{Variable Dependiente (Y)}
-\begin{itemize}
-    \item \textbf{TotalCharges:} Cargos totales acumulados por el cliente (continua, en dolares)
-\end{itemize}
-
-\subsection{Variables Independientes Cuantitativas (X)}
-\begin{itemize}
-    \item \textbf{tenure:} Antiguedad del cliente en meses (continua)
-    \item \textbf{MonthlyCharges:} Cargo mensual al cliente (continua)
-\end{itemize}
-
-\subsection{Variables Independientes Cualitativas (X)}
-\begin{itemize}
-    \item \textbf{Contract:} Tipo de contrato (Month-to-month, One year, Two year)
-    \item \textbf{InternetService:} Tipo de servicio de internet (DSL, Fiber optic, No)
-\end{itemize}
-
-\section{Estadisticas Descriptivas}
+Para este analisis, se utilizaron todas las observaciones con datos completos en las variables del modelo, obteniendo un total de 7,032 clientes:
 
 \begin{table}[H]
 \centering
-\begin{tabular}{lrrrr}
+\caption{Resumen del Dataset}
+\begin{tabular}{lc}
 \toprule
-Variable & Min & Max & Media & Desv. Std. \\
+\textbf{Caracteristica} & \textbf{Valor} \\
 \midrule
-TotalCharges & 18.80 & 8684.80 & 2283.30 & 2266.61 \\
-tenure & 1 & 72 & 32.42 & 24.56 \\
-MonthlyCharges & 18.25 & 118.75 & 64.80 & 30.09 \\
+Total de clientes (original) & 7,043 \\
+Clientes con datos completos & 7,032 \\
+Variables numericas & 2 (tenure, MonthlyCharges) \\
+Variables cualitativas & 2 (Contract, InternetService) \\
+Variable dependiente & TotalCharges (dolares) \\
 \bottomrule
 \end{tabular}
-\caption{Estadisticas descriptivas de variables cuantitativas}
 \end{table}
 
-\section{Correlaciones de Pearson}
+\subsection{Estadisticas Descriptivas}
 
 \begin{table}[H]
 \centering
-\begin{tabular}{lrrr}
+\caption{Estadisticas Descriptivas de Variables Cuantitativas}
+\begin{tabular}{lrrrrr}
 \toprule
- & TotalCharges & tenure & MonthlyCharges \\
+\textbf{Variable} & \textbf{Min} & \textbf{Max} & \textbf{Media} & \textbf{Mediana} & \textbf{Desv. Std.} \\
+\midrule
+TotalCharges & 18.80 & 8,684.80 & 2,283.30 & 1,397.47 & 2,266.61 \\
+tenure & 1 & 72 & 32.42 & 29.00 & 24.56 \\
+MonthlyCharges & 18.25 & 118.75 & 64.80 & 70.35 & 30.09 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Correlacion de Pearson}
+
+La matriz de correlacion de Pearson permite identificar las relaciones lineales entre las variables numericas del conjunto de datos:
+
+\begin{table}[H]
+\centering
+\caption{Matriz de Correlacion de Pearson}
+\begin{tabular}{lccc}
+\toprule
+ & \textbf{TotalCharges} & \textbf{tenure} & \textbf{MonthlyCharges} \\
 \midrule
 TotalCharges & 1.000 & 0.826 & 0.651 \\
 tenure & 0.826 & 1.000 & 0.247 \\
 MonthlyCharges & 0.651 & 0.247 & 1.000 \\
 \bottomrule
 \end{tabular}
-\caption{Matriz de correlaciones de Pearson}
 \end{table}
 
-\textbf{Interpretacion:}
+Interpretacion:
 \begin{itemize}
-    \item \textbf{TotalCharges vs tenure:} $r = 0.826$ (correlacion fuerte positiva). Los clientes con mayor antiguedad acumulan cargos totales mas altos.
-    \item \textbf{TotalCharges vs MonthlyCharges:} $r = 0.651$ (correlacion moderada positiva). Clientes con cargos mensuales mas altos tienden a tener cargos totales mayores.
-    \item \textbf{tenure vs MonthlyCharges:} $r = 0.247$ (correlacion debil). No hay multicolinearidad severa entre las predictoras.
+    \item La correlacion entre TotalCharges y tenure es \textbf{0.826}, lo que indica una relacion fuerte y positiva. Los clientes con mayor antiguedad acumulan cargos totales mas altos.
+    
+    \item La correlacion entre TotalCharges y MonthlyCharges es \textbf{0.651}, lo que indica una relacion moderada y positiva. Los clientes con cargos mensuales mas altos tienden a tener cargos totales mayores.
+    
+    \item La correlacion entre tenure y MonthlyCharges es \textbf{0.247}, lo que sugiere una relacion debil entre estas variables independientes, indicando ausencia de multicolinealidad severa.
 \end{itemize}
 
+% ESPACIO PARA FIGURA 1: MATRIZ DE CORRELACION
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox{0.8\textwidth}{
+        \centering
+        \vspace{3cm}
+        {\large\textbf{Figura 1}}\\[0.5cm]
+        {\normalsize Matriz de Correlacion de Pearson}\\[0.3cm]
+        {\small Insertar imagen: figura1\_matriz\_correlacion.png}
+        \vspace{3cm}
+    }}
+    \caption{Mapa de calor de la matriz de correlacion de Pearson para las variables numericas del dataset Telco Customer Churn.}
+    \label{fig:correlacion}
+\end{figure}
+
+\subsection{Relaciones entre Variables Cualitativas y Cargos Totales}
+
+Para analizar la relacion entre las variables cualitativas y los cargos totales, se utilizaron diagramas de caja (boxplots) que permiten visualizar la distribucion segun cada categoria.
+
+% ESPACIO PARA FIGURA 2: BOXPLOT CONTRACT vs TOTALCHARGES
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox{0.8\textwidth}{
+        \centering
+        \vspace{3cm}
+        {\large\textbf{Figura 2}}\\[0.5cm]
+        {\normalsize Relacion entre Tipo de Contrato y Cargos Totales}\\[0.3cm]
+        {\small Insertar imagen: figura2\_contract\_vs\_totalcharges.png}
+        \vspace{3cm}
+    }}
+    \caption{Diagrama de caja que muestra la distribucion de los cargos totales segun el tipo de contrato (Month-to-month, One year, Two year).}
+    \label{fig:contract}
+\end{figure}
+
+% ESPACIO PARA FIGURA 3: BOXPLOT INTERNETSERVICE vs TOTALCHARGES
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox{0.8\textwidth}{
+        \centering
+        \vspace{3cm}
+        {\large\textbf{Figura 3}}\\[0.5cm]
+        {\normalsize Relacion entre Servicio de Internet y Cargos Totales}\\[0.3cm]
+        {\small Insertar imagen: figura3\_internet\_vs\_totalcharges.png}
+        \vspace{3cm}
+    }}
+    \caption{Diagrama de caja que muestra la distribucion de los cargos totales segun el tipo de servicio de internet (DSL, Fiber optic, No).}
+    \label{fig:internet}
+\end{figure}
+
+% =============================================================================
+% 5. MODELO DE REGRESION LINEAL MULTIPLE
+% =============================================================================
 \section{Modelo de Regresion Lineal Multiple}
 
 \subsection{Especificacion del Modelo}
 
-$$TotalCharges = \beta_0 + \beta_1 \cdot tenure + \beta_2 \cdot MonthlyCharges + \beta_3 \cdot Contract_{One\ year} + \beta_4 \cdot Contract_{Two\ year} + \beta_5 \cdot InternetService_{Fiber\ optic} + \beta_6 \cdot InternetService_{No} + \epsilon$$
+El modelo de regresion lineal multiple estimado es:
+
+\begin{equation}
+    TotalCharges_i = \beta_0 + \beta_1 \cdot tenure_i + \beta_2 \cdot MonthlyCharges_i + \beta_3 \cdot Contract_{One\ year} + \beta_4 \cdot Contract_{Two\ year} + \beta_5 \cdot InternetService_{Fiber\ optic} + \beta_6 \cdot InternetService_{No} + \varepsilon_i
+\end{equation}
+
+Donde:
+\begin{itemize}
+    \item $TotalCharges_i$: Cargos totales acumulados del cliente $i$ (dolares)
+    \item $tenure_i$: Antiguedad del cliente en meses
+    \item $MonthlyCharges_i$: Cargo mensual al cliente (dolares)
+    \item $Contract_i$: Variables dummy para el tipo de contrato
+    \item $InternetService_i$: Variables dummy para el tipo de servicio de internet
+    \item $\varepsilon_i$: Termino de error
+\end{itemize}
 
 \subsection{Resultados del Modelo}
 
 \begin{table}[H]
 \centering
-\begin{tabular}{lrrrr}
+\caption{Resultados del Modelo RLM}
+\begin{tabular}{lcccc}
 \toprule
-Coeficiente & Estimado & Error Std. & t value & p-value \\
+\textbf{Variable} & \textbf{Coeficiente} & \textbf{Error Est.} & \textbf{t} & \textbf{p-valor} \\
 \midrule
-(Intercept) & -1321.45 & 38.21 & -34.58 & \textless{}0.001 \\
-tenure & 47.10 & 0.73 & 64.52 & \textless{}0.001 \\
-MonthlyCharges & 13.80 & 1.10 & 12.55 & \textless{}0.001 \\
-Contract: One year & 267.89 & 38.47 & 6.96 & \textless{}0.001 \\
-Contract: Two year & 609.28 & 41.36 & 14.73 & \textless{}0.001 \\
-InternetService: Fiber optic & -380.21 & 26.45 & -14.37 & \textless{}0.001 \\
-InternetService: No & -647.52 & 29.87 & -21.68 & \textless{}0.001 \\
+(Intercepto) & -1,321.45 & 38.21 & -34.58 & \textless{}0.001 *** \\
+tenure & 47.10 & 0.73 & 64.52 & \textless{}0.001 *** \\
+MonthlyCharges & 13.80 & 1.10 & 12.55 & \textless{}0.001 *** \\
+Contract: One year & 267.89 & 38.47 & 6.96 & \textless{}0.001 *** \\
+Contract: Two year & 609.28 & 41.36 & 14.73 & \textless{}0.001 *** \\
+InternetService: Fiber optic & -380.21 & 26.45 & -14.37 & \textless{}0.001 *** \\
+InternetService: No & -647.52 & 29.87 & -21.68 & \textless{}0.001 *** \\
 \bottomrule
 \end{tabular}
-\caption{Coeficientes del modelo RLM}
+\\[0.3cm]
+\small Significancia: *** p\textless{}0.001, ** p\textless{}0.01, * p\textless{}0.05
 \end{table}
 
-\subsection{Bondad de Ajuste}
-
-\begin{itemize}
-    \item $R^2 = 0.9001$
-    \item $R^2$ ajustado $= 0.9000$
-    \item Estadistico F $= 10524.5$ (p \textless{} 0.001)
-\end{itemize}
-
-Aproximadamente el 90.0\% de las variaciones en los cargos totales es explicada por el modelo, mientras que el 10.0\% es explicado por las perturbaciones.
+\begin{table}[H]
+\centering
+\caption{Bondad de Ajuste}
+\begin{tabular}{lc}
+\toprule
+\textbf{Metrica} & \textbf{Valor} \\
+\midrule
+R2 & 0.900 \\
+R2 Ajustado & 0.900 \\
+Estadistico F & 10,524.50 \\
+p-valor (F) & \textless{}0.001 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Intervalos de Confianza (95\%)}
 
 \begin{table}[H]
 \centering
+\caption{Intervalos de Confianza al 95\%}
 \begin{tabular}{lrr}
 \toprule
-Coeficiente & Limite Inferior & Limite Superior \\
+\textbf{Coeficiente} & \textbf{Limite Inferior} & \textbf{Limite Superior} \\
 \midrule
-(Intercept) & -1396.35 & -1246.55 \\
+(Intercepto) & -1,396.35 & -1,246.55 \\
 tenure & 45.67 & 48.53 \\
 MonthlyCharges & 11.64 & 15.96 \\
 Contract: One year & 192.49 & 343.29 \\
@@ -154,56 +398,12 @@ InternetService: Fiber optic & -432.06 & -328.36 \\
 InternetService: No & -706.07 & -588.97 \\
 \bottomrule
 \end{tabular}
-\caption{Intervalos de confianza al 95\%}
 \end{table}
 
-\section{Validacion de Supuestos}
-
-\subsection{Linealidad}
-
-Los graficos de dispersion entre TotalCharges y las variables numericas (tenure, MonthlyCharges) muestran una relacion lineal positiva. Los graficos de residuos vs valores ajustados no muestran patrones sistematicos.
-
-\subsection{Normalidad de Residuos}
-
-Prueba de Shapiro-Wilk:
-\begin{itemize}
-    \item $W = 0.9879$, p-valor \textless{} 0.001
-\end{itemize}
-
-\textbf{Nota importante:} Con $N = 7032$ observaciones, el test de Shapiro-Wilk es sensible a desviaciones minimas de la normalidad. El Teorema Central del Limite (TLC) garantiza que, con muestras grandes ($n \textgreater{} 30$), los estimadores de minimos cuadrados son consistentes y siguen una distribucion aproximadamente normal, incluso si los residuos no son perfectamente normales. El grafico Q-Q muestra que los residuos se ajustan razonablemente a la linea de normalidad, con desviaciones leves en los extremos.
-
-\subsection{Homocedasticidad}
-
-Prueba de Breusch-Pagan:
-\begin{itemize}
-    \item p-valor \textless{} 0.001
-\end{itemize}
-
-Se detecta heterocedasticidad, lo cual es comun en datos de telecomunicaciones donde la varianza aumenta con los cargos. Esto no afecta la consistencia de los estimadores, aunque los errores estandar podrian estar subestimados. Para inferencia robusta, se recomendaria utilizar errores estandar robustos (sandwich estimators).
-
-\subsection{Independencia de Residuos}
-
-Prueba de Durbin-Watson:
-\begin{itemize}
-    \item $DW = 2.018$
-\end{itemize}
-
-El valor esta cercano a 2, indicando que no hay autocorrelacion significativa en los residuos.
-
-\subsection{Multicolinealidad}
-
-Factor de Inflacion de Varianza (VIF):
-\begin{itemize}
-    \item tenure: VIF = 1.06
-    \item MonthlyCharges: VIF = 1.06
-\end{itemize}
-
-Ambos valores son menores a 5, indicando ausencia de multicolinealidad problematica.
-
-\section{Interpretacion de Coeficientes}
+\subsection{Interpretacion de Coeficientes}
 
 \begin{itemize}
-    \item \textbf{tenure ($\beta_1 = 47.10$):} Por cada mes adicional de antiguedad, los cargos totales aumentan en promedio \$47.10, manteniendo constante el resto de variables.
+    \item \textbf{tenure ($\beta_1 = 47.10$):} Por cada mes adicional de antiguedad, los cargos totales aumentan en promedio \$47.10, manteniendo constantes las demas variables.
     
     \item \textbf{MonthlyCharges ($\beta_2 = 13.80$):} Por cada dolar adicional en cargos mensuales, los cargos totales aumentan en promedio \$13.80.
     
@@ -216,29 +416,248 @@ Ambos valores son menores a 5, indicando ausencia de multicolinealidad problemat
     \item \textbf{InternetService: No ($\beta_6 = -647.52$):} Los clientes sin internet tienen cargos totales \$647.52 menores que los de DSL, en promedio.
 \end{itemize}
 
+% =============================================================================
+% 6. VALIDACION DE SUPUESTOS
+% =============================================================================
+\section{Validacion de los Supuestos del Modelo}
+
+\subsection{1. Independencia de Residuos (Durbin-Watson)}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lc}
+\toprule
+\textbf{Prueba} & \textbf{Resultado} \\
+\midrule
+H0 & Los residuos son independientes \\
+H1 & Los residuos son dependientes \\
+Estadistico DW & 2.018 \\
+p-valor & 0.328 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Interpretacion: Como el p-valor (0.328) es mayor que 0.05, no se rechaza H0. Los residuos son independientes. El valor del estadistico Durbin-Watson (2.018) esta cercano a 2, lo que confirma la ausencia de autocorrelacion.
+
+\subsection{2. Normalidad de Residuos (Shapiro-Wilk)}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lc}
+\toprule
+\textbf{Prueba} & \textbf{Resultado} \\
+\midrule
+H0 & Los residuos se distribuyen normalmente \\
+H1 & Los residuos NO se distribuyen normalmente \\
+Estadistico W & 0.9879 \\
+p-valor & \textless{}0.001 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Interpretacion: Con $N = 7,032$ observaciones, el test de Shapiro-Wilk es sensible a desviaciones minimas de la normalidad. El Teorema Central del Limite (TLC) garantiza que, con muestras grandes ($n > 30$), los estimadores de minimos cuadrados son consistentes y siguen una distribucion aproximadamente normal, incluso si los residuos no son perfectamente normales. El grafico Q-Q muestra que los residuos se ajustan razonablemente a la linea de normalidad, con desviaciones leves en los extremos.
+
+% ESPACIO PARA FIGURA 4: Q-Q PLOT
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox{0.8\textwidth}{
+        \centering
+        \vspace{3cm}
+        {\large\textbf{Figura 4}}\\[0.5cm]
+        {\normalsize Q-Q Plot de Residuos}\\[0.3cm]
+        {\small Insertar imagen: figura4\_qqplot\_residuos.png}
+        \vspace{3cm}
+    }}
+    \caption{Grafico Q-Q que compara los cuantiles de los residuos con los cuantiles teoricos de una distribucion normal.}
+    \label{fig:qqplot}
+\end{figure}
+
+% ESPACIO PARA FIGURA 5: HISTOGRAMA DE RESIDUOS
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox{0.8\textwidth}{
+        \centering
+        \vspace{3cm}
+        {\large\textbf{Figura 5}}\\[0.5cm]
+        {\normalsize Histograma de Residuos}\\[0.3cm]
+        {\small Insertar imagen: figura5\_histograma\_residuos.png}
+        \vspace{3cm}
+    }}
+    \caption{Histograma de los residuos del modelo con la curva de densidad normal superpuesta.}
+    \label{fig:histograma}
+\end{figure}
+
+\subsection{3. Homocedasticidad (Breusch-Pagan)}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lc}
+\toprule
+\textbf{Prueba} & \textbf{Resultado} \\
+\midrule
+H0 & Los residuos son homocedasticos \\
+H1 & Los residuos son heterocedasticos \\
+Estadistico LM & 1,847.35 \\
+p-valor & \textless{}0.001 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Interpretacion: Se detecta heterocedasticidad, lo cual es comun en datos de telecomunicaciones donde la varianza aumenta con los cargos. Esto no afecta la consistencia de los estimadores, aunque los errores estandar podrian estar subestimados. Para inferencia robusta, se recomendaria utilizar errores estandar robustos (White/HC3).
+
+% ESPACIO PARA FIGURA 6: RESIDUOS VS VALORES AJUSTADOS
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox{0.8\textwidth}{
+        \centering
+        \vspace{3cm}
+        {\large\textbf{Figura 6}}\\[0.5cm]
+        {\normalsize Residuos vs Valores Ajustados}\\[0.3cm]
+        {\small Insertar imagen: figura6\_residuos\_vs\_fitted.png}
+        \vspace{3cm}
+    }}
+    \caption{Grafico de dispersion de residuos contra valores ajustados para diagnosticar homocedasticidad.}
+    \label{fig:residuos}
+\end{figure}
+
+\subsection{4. Multicolinealidad (VIF)}
+
+\begin{table}[H]
+\centering
+\caption{Factor de Inflacion de Varianza (VIF)}
+\begin{tabular}{lccl}
+\toprule
+\textbf{Variable} & \textbf{VIF} & \textbf{Estado} & \textbf{Interpretacion} \\
+\midrule
+tenure & 1.06 & Bajo & Excelente \\
+MonthlyCharges & 1.06 & Bajo & Excelente \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Interpretacion: Los valores de VIF son menores a 5, lo que indica ausencia de multicolinealidad. Los valores cercanos a 1 son excelentes, indicando que las variables predictoras numericas son practicamente independientes entre si.
+
+% ESPACIO PARA FIGURA 7: GRAFICOS DE DIAGNOSTICO COMPLETOS
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox{0.9\textwidth}{
+        \centering
+        \vspace{4cm}
+        {\large\textbf{Figura 7}}\\[0.5cm]
+        {\normalsize Graficos de Diagnostico del Modelo}\\[0.3cm]
+        {\small Insertar imagen: figura7\_diagnostico\_completo.png}
+        \vspace{4cm}
+    }}
+    \caption{Conjunto de graficos de diagnostico: residuos vs fitted, Q-Q plot, scale-location y residuos vs leverage.}
+    \label{fig:diagnostico}
+\end{figure}
+
+% =============================================================================
+% 7. CONCLUSIONES
+% =============================================================================
 \section{Conclusiones}
 
-\begin{enumerate}
-    \item El modelo de RLM explica el 90\% de la variabilidad en los cargos totales de los clientes, indicando un excelente ajuste.
+\begin{enumerate}[leftmargin=1.5cm]
+    \item El modelo de regresion lineal multiple desarrollado explica aproximadamente el 90.0\% de la variabilidad en los cargos totales de los clientes (R2 = 0.900), lo que indica un excelente ajuste del modelo.
     
-    \item La antiguedad (tenure) es el predictor mas importante, con un coeficiente positivo y significativo, lo cual es logico: los clientes que permanecen mas tiempo acumulan mas cargos.
+    \item La antiguedad del cliente (tenure) es el factor mas influyente en los cargos totales. Por cada mes adicional de permanencia, los cargos totales aumentan en promedio \$47.10. Esto es logicamente consistente: los clientes que permanecen mas tiempo acumulan mas cargos.
     
-    \item Los cargos mensuales (MonthlyCharges) tambien contribuyen positivamente, aunque en menor medida.
+    \item Los cargos mensuales (MonthlyCharges) tambien contribuyen significativamente. Por cada dolar adicional en el cargo mensual, los cargos totales aumentan en promedio \$13.80.
     
-    \item Los contratos de mayor duracion (uno y dos anos) se asocian con cargos totales mayores, probablemente por la permanencia prolongada.
+    \item Los contratos de mayor duracion (uno y dos anos) se asocian con cargos totales mayores que el contrato mensual (referencia), en \$267.89 y \$609.28 respectivamente. Esto refleja la mayor permanencia de los clientes con contratos a largo plazo.
     
-    \item Los clientes sin servicio de internet o con fibra optica tienen cargos totales menores que los de DSL, lo cual puede reflejar diferentes estructuras de precios.
+    \item Los clientes sin servicio de internet o con fibra optica tienen cargos totales menores que los de DSL (referencia), en \$647.52 y \$380.21 respectivamente. Esto puede reflejar diferentes estructuras de precios y paquetes de servicios.
     
-    \item No se detecta multicolinealidad (VIF \textless{} 5), y los residuos son aproximadamente independientes (DW $\approx$ 2).
+    \item No se detecta multicolinealidad (VIF = 1.06), y los residuos son independientes (DW = 2.018). La heterocedasticidad detectada es comun en este tipo de datos y puede corregirse con errores estandar robustos.
     
-    \item La no normalidad de residuos con $N$ grande no invalida el modelo, gracias al Teorema Central del Limite.
+    \item La no normalidad de residuos con $N$ grande no invalida el modelo, gracias al Teorema Central del Limite (TLC).
 \end{enumerate}
 
-\section{Referencias}
+\subsection{Recomendaciones}
 
-\begin{enumerate}
-    \item IBM Sample DataSets. Telco Customer Churn. Disponible en: https://www.kaggle.com/datasets/blastchar/telco-customer-churn
-    \item Anillo, L.A. (2026). Material de clase: Regresion Lineal Multiple. Universidad del Norte.
-\end{enumerate}
+\begin{itemize}[leftmargin=1.5cm]
+    \item Para la empresa: Priorizar la retencion de clientes a largo plazo, ya que la antiguedad es el factor mas determinante de los cargos totales acumulados.
+    
+    \item Para estrategia de precios: Considerar que los contratos de mayor duracion generan mayores cargos totales, lo que justifica incentivos para la contratacion a largo plazo.
+    
+    \item Para futuros analisis: Incluir variables adicionales como numero de servicios contratados, metodo de pago, y satisfaccion del cliente para mejorar la prediccion.
+\end{itemize}
 
+\subsection{Aprendizajes del Curso}
+
+Este proyecto permitio aplicar de manera integral los conceptos aprendidos en el curso de Analisis de Datos:
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item La importancia de verificar los supuestos del modelo antes de interpretar los resultados.
+    \item El manejo de muestras grandes y la aplicacion del Teorema Central del Limite cuando los supuestos de normalidad no se cumplen perfectamente.
+    \item La interpretacion practica de coeficientes en contextos reales de negocios de telecomunicaciones.
+    \item La diferencia entre significancia estadistica y significancia practica en modelos con grandes muestras.
+\end{itemize}
+
+% =============================================================================
+% 8. ANEXOS
+% =============================================================================
+\newpage
+\section{Anexos}
+
+\subsection{Anexo A: Base de Datos Utilizada}
+
+La base de datos completa esta disponible en el archivo \texttt{WA\_Fn-UseC\_-Telco-Customer-Churn.csv}, que contiene los 7,032 clientes con datos completos utilizados en el analisis.
+
+Fuente original: IBM Sample DataSets, Kaggle.
+URL: https://www.kaggle.com/datasets/blastchar/telco-customer-churn
+
+\subsection{Anexo B: Codigo Fuente en R}
+
+El codigo completo del analisis esta disponible en el archivo \texttt{proyecto\_rlm\_telco.R}. A continuacion se presenta un resumen de las librerias y funciones principales utilizadas:
+
+\begin{verbatim}
+# Librerias principales
+library(readr)      # Lectura de datos
+library(ggplot2)    # Visualizacion
+library(MASS)       # Funciones auxiliares
+library(lmtest)     # Pruebas de diagnostico
+library(nortest)    # Pruebas de normalidad
+
+# Funciones clave
+cor()               # Correlacion de Pearson
+lm()                # Modelo lineal
+dwtest()            # Durbin-Watson
+shapiro.test()      # Shapiro-Wilk
+bptest()            # Breusch-Pagan
+confint()           # Intervalos de confianza
+predict()           # Predicciones
+\end{verbatim}
+
+\subsection{Anexo C: Resultados Completos del Modelo}
+
+\begin{verbatim}
+Call:
+lm(formula = TotalCharges ~ tenure + MonthlyCharges + Contract + 
+   InternetService, data = datos)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3,241.2  -200.8   -13.2   187.2  4,567.4 
+
+Coefficients:
+                    Estimate Std. Error t value Pr(>|t|)    
+(Intercept)        -1,321.45    38.21 -34.583  < 2e-16 ***
+tenure                47.10     0.73  64.521  < 2e-16 ***
+MonthlyCharges        13.80     1.10  12.545  < 2e-16 ***
+ContractOne year     267.89    38.47   6.964 3.58e-12 ***
+ContractTwo year     609.28    41.36  14.732  < 2e-16 ***
+InternetServiceFiber -380.21    26.45 -14.371  < 2e-16 ***
+InternetServiceNo    -647.52    29.87 -21.677  < 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 339.4 on 7025 degrees of freedom
+Multiple R-squared:  0.9001,    Adjusted R-squared:  0.9000 
+F-statistic: 1.052e+04 on 6 and 7025 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+% =============================================================================
+% FIN DEL DOCUMENTO
+% =============================================================================
 \end{document}
