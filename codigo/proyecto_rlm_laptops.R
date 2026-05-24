@@ -1,11 +1,15 @@
 # =============================================================================
-# PROYECTO FINAL - ANÁLISIS DE DATOS 1
-# REGRESIÓN LINEAL MÚLTIPLE: PREDICCIÓN DE PRECIOS DE LAPTOPS GAMING
-# Ingeniería de Sistemas
+# PROYECTO FINAL - ANALISIS DE DATOS 1
+# REGRESION LINEAL MULTIPLE: PREDICCION DE PRECIOS DE LAPTOPS GAMING
+# Ingenieria de Sistemas
+# Universidad del Norte
+# Integrantes: Dubal Aguilar Torres, Alejandro Chaves Ramos,
+#              Juan Caceres Figueroa, Miguel Carrizosa
+# Docente: PhD. Luis Angel Anillo Arrieta
 # =============================================================================
 
 # -----------------------------------------------------------------------------
-# 1. INSTALACIÓN Y CARGA DE PAQUETES
+# 1. INSTALACION Y CARGA DE PAQUETES
 # -----------------------------------------------------------------------------
 # Descomentar si es necesario instalar
 # install.packages("readr")
@@ -16,7 +20,6 @@
 # install.packages("car")
 # install.packages("GGally")
 # install.packages("corrplot")
-# install.packages("knitr")
 
 library(readr)
 library(ggplot2)
@@ -42,16 +45,16 @@ head(datos, 10)
 cat("Dimensiones del dataset:", nrow(datos), "filas x", ncol(datos), "columnas\n")
 
 # -----------------------------------------------------------------------------
-# 3. LIMPIEZA Y PREPARACIÓN DE DATOS
+# 3. LIMPIEZA Y PREPARACION DE DATOS
 # -----------------------------------------------------------------------------
 datos <- datos %>%
   mutate(
-    # Extraer valores numéricos de textos
+    # Extraer valores numericos de textos
     Ram_GB = as.numeric(gsub("GB", "", Ram)),
     Weight_kg = as.numeric(gsub("kg", "", Weight)),
     Inches = as.numeric(Inches),
     Price_euros = as.numeric(Price_euros),
-    
+
     # Crear variables cualitativas limpias
     CPU_Brand = as.factor(case_when(
       grepl("Intel", Cpu) ~ "Intel",
@@ -72,7 +75,7 @@ datos_gaming <- datos %>%
   filter(TypeName == "Gaming") %>%
   drop_na(Price_euros, Ram_GB, Weight_kg) %>%
   mutate(
-    # Transformación logarítmica del precio para mejorar normalidad
+    # Transformacion logaritmica del precio para mejorar normalidad
     Log_Price = log(Price_euros)
   )
 
@@ -82,54 +85,55 @@ cat("Dataset filtrado (Gaming):", nrow(datos_gaming), "laptops\n")
 write.csv(datos_gaming, "laptop_gaming_limpio.csv", row.names = FALSE)
 
 # -----------------------------------------------------------------------------
-# 4. DEFINICIÓN DE VARIABLES
+# 4. DEFINICION DE VARIABLES
 # -----------------------------------------------------------------------------
 # Variable dependiente (Y): Log_Price (logaritmo del precio en euros)
-# Variables numéricas independientes (X): Ram_GB, Weight_kg
+# Variables numericas independientes (X): Ram_GB, Weight_kg
 # Variables cualitativas: CPU_Brand, GPU_Brand
 
 cat("\n=== VARIABLES DEL MODELO ===\n")
 cat("Y (dependiente): Log_Price = log(Precio en euros)\n")
-cat("X1 (numérica): Ram_GB (Memoria RAM en GB)\n")
-cat("X2 (numérica): Weight_kg (Peso en kg)\n")
+cat("X1 (numerica): Ram_GB (Memoria RAM en GB)\n")
+cat("X2 (numerica): Weight_kg (Peso en kg)\n")
 cat("X3 (cualitativa): CPU_Brand (Intel / AMD)\n")
 cat("X4 (cualitativa): GPU_Brand (Nvidia / Intel / AMD)\n")
 
 # -----------------------------------------------------------------------------
-# 5. ANÁLISIS EXPLORATORIO - CORRELACIÓN DE PEARSON
+# 5. ANALISIS EXPLORATORIO - CORRELACION DE PEARSON
 # -----------------------------------------------------------------------------
-cat("\n=== CORRELACIÓN DE PEARSON ===\n")
+cat("\n=== CORRELACION DE PEARSON ===\n")
 
-# Matriz de correlación (variables numéricas)
-vars_numericas <- datos_gaming %>% select(Log_Price, Ram_GB, Weight_kg)
+# Matriz de correlacion (variables numericas)
+# Usar dplyr::select para evitar conflictos con MASS::select
+vars_numericas <- datos_gaming %>% dplyr::select(Log_Price, Ram_GB, Weight_kg)
 cormat <- cor(vars_numericas, method = "pearson")
 print(round(cormat, 4))
 
-# Visualización de la matriz de correlación
+# Visualizacion de la matriz de correlacion
 png("figura1_matriz_correlacion.png", width = 800, height = 600)
-corrplot(cormat, method = "color", type = "upper", 
+corrplot(cormat, method = "color", type = "upper",
          addCoef.col = "black", tl.col = "black", tl.srt = 45,
-         title = "Matriz de Correlación de Pearson - Laptops Gaming",
+         title = "Matriz de Correlacion de Pearson - Laptops Gaming",
          mar = c(0, 0, 2, 0))
 dev.off()
 
-# Correlación individual: Log_Price vs Ram_GB
+# Correlacion individual: Log_Price vs Ram_GB
 cor_test_ram <- cor.test(datos_gaming$Ram_GB, datos_gaming$Log_Price, method = "pearson")
-cat("\nCorrelación Log_Price vs Ram_GB:\n")
+cat("\nCorrelacion Log_Price vs Ram_GB:\n")
 print(cor_test_ram)
 
-# Correlación individual: Log_Price vs Weight_kg
+# Correlacion individual: Log_Price vs Weight_kg
 cor_test_weight <- cor.test(datos_gaming$Weight_kg, datos_gaming$Log_Price, method = "pearson")
-cat("\nCorrelación Log_Price vs Weight_kg:\n")
+cat("\nCorrelacion Log_Price vs Weight_kg:\n")
 print(cor_test_weight)
 
 # -----------------------------------------------------------------------------
-# 6. GRÁFICOS DE RELACIÓN (VARIABLES NUMÉRICAS)
+# 6. GRAFICOS DE RELACION (VARIABLES NUMERICAS)
 # -----------------------------------------------------------------------------
-# Pairs plot (relaciones entre variables numéricas)
+# Pairs plot (relaciones entre variables numericas)
 png("figura2_pairs_numericas.png", width = 800, height = 600)
 pairs(datos_gaming$Log_Price ~ datos_gaming$Ram_GB + datos_gaming$Weight_kg,
-      main = "Relaciones entre Variables Numéricas",
+      main = "Relaciones entre Variables Numericas",
       labels = c("Log(Precio)", "RAM (GB)", "Peso (kg)"))
 dev.off()
 
@@ -137,7 +141,7 @@ dev.off()
 p1 <- ggplot(datos_gaming, aes(x = Ram_GB, y = Log_Price)) +
   geom_point(color = "steelblue", alpha = 0.6, size = 3) +
   geom_smooth(method = "lm", color = "red", se = TRUE) +
-  labs(title = "Relación entre RAM y Log(Precio)",
+  labs(title = "Relacion entre RAM y Log(Precio)",
        x = "RAM (GB)", y = "Log(Precio en euros)") +
   theme_minimal()
 ggsave("figura3_ram_vs_precio.png", p1, width = 8, height = 6, dpi = 150)
@@ -146,18 +150,18 @@ ggsave("figura3_ram_vs_precio.png", p1, width = 8, height = 6, dpi = 150)
 p2 <- ggplot(datos_gaming, aes(x = Weight_kg, y = Log_Price)) +
   geom_point(color = "steelblue", alpha = 0.6, size = 3) +
   geom_smooth(method = "lm", color = "red", se = TRUE) +
-  labs(title = "Relación entre Peso y Log(Precio)",
+  labs(title = "Relacion entre Peso y Log(Precio)",
        x = "Peso (kg)", y = "Log(Precio en euros)") +
   theme_minimal()
 ggsave("figura4_peso_vs_precio.png", p2, width = 8, height = 6, dpi = 150)
 
 # -----------------------------------------------------------------------------
-# 7. GRÁFICOS DE RELACIÓN (VARIABLES CUALITATIVAS)
+# 7. GRAFICOS DE RELACION (VARIABLES CUALITATIVAS)
 # -----------------------------------------------------------------------------
 # Boxplot: CPU_Brand vs Log_Price
 p3 <- ggplot(datos_gaming, aes(x = CPU_Brand, y = Log_Price, fill = CPU_Brand)) +
   geom_boxplot(color = "black", alpha = 0.7, outlier.colour = "red", outlier.size = 3) +
-  labs(title = "Relación entre Marca de CPU y Log(Precio)",
+  labs(title = "Relacion entre Marca de CPU y Log(Precio)",
        x = "Marca de CPU", y = "Log(Precio en euros)") +
   theme_minimal() +
   theme(legend.position = "none")
@@ -166,18 +170,18 @@ ggsave("figura5_cpu_vs_precio.png", p3, width = 8, height = 6, dpi = 150)
 # Boxplot: GPU_Brand vs Log_Price
 p4 <- ggplot(datos_gaming, aes(x = GPU_Brand, y = Log_Price, fill = GPU_Brand)) +
   geom_boxplot(color = "black", alpha = 0.7, outlier.colour = "red", outlier.size = 3) +
-  labs(title = "Relación entre Marca de GPU y Log(Precio)",
+  labs(title = "Relacion entre Marca de GPU y Log(Precio)",
        x = "Marca de GPU", y = "Log(Precio en euros)") +
   theme_minimal() +
   theme(legend.position = "none")
 ggsave("figura6_gpu_vs_precio.png", p4, width = 8, height = 6, dpi = 150)
 
 # -----------------------------------------------------------------------------
-# 8. CREACIÓN DEL MODELO RLM
+# 8. CREACION DEL MODELO RLM
 # -----------------------------------------------------------------------------
-cat("\n=== MODELO DE REGRESIÓN LINEAL MÚLTIPLE ===\n")
+cat("\n=== MODELO DE REGRESION LINEAL MULTIPLE ===\n")
 
-# Modelo con transformación logarítmica en Y
+# Modelo con transformacion logaritmica en Y
 modelo <- lm(Log_Price ~ Ram_GB + Weight_kg + CPU_Brand + GPU_Brand, data = datos_gaming)
 
 # Resumen del modelo
@@ -188,9 +192,9 @@ cat("\n=== INTERVALOS DE CONFIANZA (95%) ===\n")
 confint(modelo)
 
 # -----------------------------------------------------------------------------
-# 9. VALIDACIÓN DE SUPUESTOS DEL MODELO
+# 9. VALIDACION DE SUPUESTOS DEL MODELO
 # -----------------------------------------------------------------------------
-cat("\n=== VALIDACIÓN DE SUPUESTOS ===\n")
+cat("\n=== VALIDACION DE SUPUESTOS ===\n")
 
 # Extraer residuos y valores ajustados
 datos_modelo <- model.frame(modelo)
@@ -206,9 +210,9 @@ dw_test <- dwtest(modelo, alternative = "two.sided")
 print(dw_test)
 
 if (dw_test$p.value > 0.05) {
-  cat("✅ NO se rechaza H0 → Residuos INDEPENDIENTES\n")
+  cat("[OK] NO se rechaza H0 -> Residuos INDEPENDIENTES\n")
 } else {
-  cat("❌ Se rechaza H0 → Residuos DEPENDIENTES\n")
+  cat("[X] Se rechaza H0 -> Residuos DEPENDIENTES\n")
 }
 
 # --- 9.2 NORMALIDAD DE RESIDUOS (Shapiro-Wilk) ---
@@ -220,9 +224,9 @@ sw_test <- shapiro.test(residuals(modelo))
 print(sw_test)
 
 if (sw_test$p.value > 0.05) {
-  cat("✅ NO se rechaza H0 → Residuos con DISTRIBUCIÓN NORMAL\n")
+  cat("[OK] NO se rechaza H0 -> Residuos con DISTRIBUCION NORMAL\n")
 } else {
-  cat("❌ Se rechaza H0 → Residuos NO normales\n")
+  cat("[X] Se rechaza H0 -> Residuos NO normales\n")
 }
 
 # Q-Q Plot de residuos
@@ -238,27 +242,27 @@ hist(residuals(modelo), breaks = 25, freq = FALSE,
      xlab = "Residuos", ylab = "Densidad", col = "steelblue", border = "black")
 curve(dnorm(x, mean = mean(residuals(modelo)), sd = sd(residuals(modelo))),
       col = "red", lwd = 2, add = TRUE)
-legend("topright", legend = c("Residuos", "Normal teórica"),
+legend("topright", legend = c("Residuos", "Normal teorica"),
        col = c("steelblue", "red"), lwd = c(5, 2))
 dev.off()
 
 # --- 9.3 HOMOCEDASTICIDAD (Breusch-Pagan) ---
 cat("\n--- 3. PRUEBA DE HOMOCEDASTICIDAD (Breusch-Pagan) ---\n")
-cat("H0: Los residuos son homocedásticos (varianza constante)\n")
-cat("H1: Los residuos son heterocedásticos\n")
+cat("H0: Los residuos son homocedasticos (varianza constante)\n")
+cat("H1: Los residuos son heterocedasticos\n")
 
 bp_test <- bptest(modelo)
 print(bp_test)
 
 if (bp_test$p.value > 0.05) {
-  cat("✅ NO se rechaza H0 → HOMOCEDASTICIDAD confirmada\n")
+  cat("[OK] NO se rechaza H0 -> HOMOCEDASTICIDAD confirmada\n")
 } else {
-  cat("⚠️ Se rechaza H0 → HETEROCEDASTICIDAD detectada\n")
-  cat("   CORRECCIÓN: Se utilizan errores estándar robustos (White/HC3)\n")
-  cat("   que son consistentes bajo heterocedasticidad.\n")
+  cat("[!] Se rechaza H0 -> HETEROCEDASTICIDAD detectada\n")
+  cat("    Correccion: Se utilizan errores estandar robustos (White/HC3)\n")
+  cat("    que son consistentes bajo heterocedasticidad.\n")
 }
 
-# Gráfico de residuos vs valores ajustados
+# Grafico de residuos vs valores ajustados
 p5 <- ggplot(datos_modelo, aes(x = valores_ajustados, y = residuos)) +
   geom_point(color = "steelblue", alpha = 0.6, size = 2) +
   geom_hline(yintercept = 0, color = "red", linetype = "dashed", linewidth = 1) +
@@ -277,16 +281,16 @@ print(vif_values)
 
 for (i in seq_along(vif_values)) {
   if (vif_values[i] >= 10) {
-    cat("❌", names(vif_values)[i], ": VIF =", round(vif_values[i], 2), "→ ALTA multicolinealidad\n")
+    cat("[X]", names(vif_values)[i], ": VIF =", round(vif_values[i], 2), "-> ALTA multicolinealidad\n")
   } else if (vif_values[i] >= 5) {
-    cat("⚠️ ", names(vif_values)[i], ": VIF =", round(vif_values[i], 2), "→ Moderada\n")
+    cat("[!]", names(vif_values)[i], ": VIF =", round(vif_values[i], 2), "-> Moderada\n")
   } else {
-    cat("✅", names(vif_values)[i], ": VIF =", round(vif_values[i], 2), "→ Aceptable\n")
+    cat("[OK]", names(vif_values)[i], ": VIF =", round(vif_values[i], 2), "-> Aceptable\n")
   }
 }
 
 # -----------------------------------------------------------------------------
-# 10. GRÁFICOS DE DIAGNÓSTICO COMPLETOS
+# 10. GRAFICOS DE DIAGNOSTICO COMPLETOS
 # -----------------------------------------------------------------------------
 png("figura10_diagnostico_completo.png", width = 1000, height = 800)
 par(mfrow = c(2, 2))
@@ -295,9 +299,9 @@ par(mfrow = c(1, 1))
 dev.off()
 
 # -----------------------------------------------------------------------------
-# 11. PREDICCIÓN PARA UNA NUEVA OBSERVACIÓN (OPCIONAL)
+# 11. PREDICCION PARA UNA NUEVA OBSERVACION
 # -----------------------------------------------------------------------------
-cat("\n=== PREDICCIÓN PARA NUEVA OBSERVACIÓN ===\n")
+cat("\n=== PREDICCION PARA NUEVA OBSERVACION ===\n")
 
 # Crear nuevo dato
 nuevo <- data.frame(
@@ -307,14 +311,14 @@ nuevo <- data.frame(
   GPU_Brand = factor("Nvidia", levels = levels(datos_gaming$GPU_Brand))
 )
 
-# Predicción puntual
+# Prediccion puntual
 pred_puntual <- predict(modelo, newdata = nuevo)
-cat("Predicción puntual (Log_Price):", pred_puntual, "\n")
-cat("Predicción puntual (Precio en euros):", exp(pred_puntual), "\n")
+cat("Prediccion puntual (Log_Price):", pred_puntual, "\n")
+cat("Prediccion puntual (Precio en euros):", exp(pred_puntual), "\n")
 
-# Predicción por intervalo
+# Prediccion por intervalo
 pred_intervalo <- predict(modelo, newdata = nuevo, interval = "prediction", level = 0.95)
-cat("\nIntervalo de predicción (95%):\n")
+cat("\nIntervalo de prediccion (95%):\n")
 print(pred_intervalo)
 cat("\nIntervalo en euros:\n")
 print(exp(pred_intervalo))
@@ -332,21 +336,21 @@ cat("Variable dependiente: Log(Price_euros)\n")
 cat("Variables independientes: Ram_GB, Weight_kg, CPU_Brand, GPU_Brand\n\n")
 
 cat("RESULTADOS:\n")
-cat("  R² =", round(summary(modelo)$r.squared, 4), "\n")
-cat("  R² ajustado =", round(summary(modelo)$adj.r.squared, 4), "\n")
+cat("  R2 =", round(summary(modelo)$r.squared, 4), "\n")
+cat("  R2 ajustado =", round(summary(modelo)$adj.r.squared, 4), "\n")
 cat("  Durbin-Watson =", round(dw_test$statistic, 4), "(p =", round(dw_test$p.value, 4), ")\n")
 cat("  Shapiro-Wilk =", round(sw_test$statistic, 4), "(p =", round(sw_test$p.value, 4), ")\n")
 cat("  Breusch-Pagan =", round(bp_test$statistic, 4), "(p =", round(bp_test$p.value, 4), ")\n\n")
 
 cat("VEREDICTO:\n")
-cat("  ✅ Correlaciones moderadas a fuertes\n")
-cat("  ✅ Normalidad de residuos (Shapiro p > 0.05)\n")
-cat("  ✅ Independencia de residuos (DW ~ 2)\n")
-cat("  ✅ Multicolinealidad aceptable (VIF < 10)\n")
+cat("  [OK] Correlaciones moderadas a fuertes\n")
+cat("  [OK] Normalidad de residuos (Shapiro p > 0.05)\n")
+cat("  [OK] Independencia de residuos (DW ~ 2)\n")
+cat("  [OK] Multicolinealidad aceptable (VIF < 10)\n")
 if (bp_test$p.value > 0.05) {
-  cat("  ✅ Homocedasticidad confirmada\n")
+  cat("  [OK] Homocedasticidad confirmada\n")
 } else {
-  cat("  ⚠️  Heterocedasticidad leve detectada (corregida con errores robustos)\n")
+  cat("  [!] Heterocedasticidad leve detectada (corregida con errores robustos)\n")
 }
-cat("\n>>> DATASET VIABLE PARA EL PROYECTO DE RLM ✅\n")
+cat("\n>>> DATASET VIABLE PARA EL PROYECTO DE RLM [OK]\n")
 cat("================================================================================\n")
