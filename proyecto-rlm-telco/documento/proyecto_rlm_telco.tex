@@ -261,37 +261,52 @@ Interpretacion:
     \item TotalCharges vs MonthlyCharges: $r = 0.6511$, p-valor $\textless{} 0.001$ --- Rechazar $H_0$ (correlacion significativa)
 \end{itemize}
 
-\subsection{Relaciones entre Variables Cualitativas y Cargos Totales}
-
-Para analizar la relacion entre las variables cualitativas y los cargos totales, se utilizaron diagramas de caja (boxplots).
-
-% ESPACIO PARA FIGURA 1: BOXPLOT CONTRACT vs TOTALCHARGES
+% ESPACIO PARA FIGURA 1: MATRIZ DE DISPERSION (pairs)
 \begin{figure}[H]
     \centering
     \fbox{\parbox{0.8\textwidth}{
         \centering
         \vspace{3cm}
         {\large\textbf{Figura 1}}\\[0.5cm]
-        {\normalsize Relacion entre Tipo de Contrato y Cargos Totales}\\[0.3cm]
-        {\small Insertar imagen: figura1\_contract\_vs\_totalcharges.png}
+        {\normalsize Matriz de Dispersion - Variables Cuantitativas}\\[0.3cm]
+        {\small Insertar imagen: figura1\_pairs\_cuantitativas.png}
         \vspace{3cm}
     }}
-    \caption{Diagrama de caja que muestra la distribucion de los cargos totales segun el tipo de contrato.}
-    \label{fig:contract}
+    \caption{Matriz de dispersion que muestra las relaciones entre TotalCharges, tenure y MonthlyCharges.}
+    \label{fig:pairs}
 \end{figure}
 
-% ESPACIO PARA FIGURA 2: BOXPLOT INTERNETSERVICE vs TOTALCHARGES
+\subsection{Relaciones entre Variables Cualitativas y Cargos Totales}
+
+Para analizar la relacion entre las variables cualitativas y los cargos totales, se utilizaron diagramas de caja (boxplots).
+
+% ESPACIO PARA FIGURA 2: BOXPLOT CONTRACT vs TOTALCHARGES
 \begin{figure}[H]
     \centering
     \fbox{\parbox{0.8\textwidth}{
         \centering
         \vspace{3cm}
         {\large\textbf{Figura 2}}\\[0.5cm]
-        {\normalsize Relacion entre Servicio de Internet y Cargos Totales}\\[0.3cm]
-        {\small Insertar imagen: figura2\_internet\_vs\_totalcharges.png}
+        {\normalsize Relacion entre Tipo de Contrato y Cargos Totales}\\[0.3cm]
+        {\small Insertar imagen: figura2\_contract\_vs\_totalcharges.png}
         \vspace{3cm}
     }}
-    \caption{Diagrama de caja que muestra la distribucion de los cargos totales segun el tipo de servicio de internet.}
+    \caption{Diagrama de caja que muestra la distribucion de los cargos totales segun el tipo de contrato (Month-to-month, One year, Two year).}
+    \label{fig:contract}
+\end{figure}
+
+% ESPACIO PARA FIGURA 3: BOXPLOT INTERNETSERVICE vs TOTALCHARGES
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox{0.8\textwidth}{
+        \centering
+        \vspace{3cm}
+        {\large\textbf{Figura 3}}\\[0.5cm]
+        {\normalsize Relacion entre Servicio de Internet y Cargos Totales}\\[0.3cm]
+        {\small Insertar imagen: figura3\_internet\_vs\_totalcharges.png}
+        \vspace{3cm}
+    }}
+    \caption{Diagrama de caja que muestra la distribucion de los cargos totales segun el tipo de servicio de internet (DSL, Fiber optic, No).}
     \label{fig:internet}
 \end{figure}
 
@@ -420,6 +435,21 @@ p-valor & 0.328 \\
 
 Interpretacion: Como el p-valor (0.328) es mayor que 0.05, no se rechaza H0. El valor DW = 2.018 esta cercano a 2, confirmando la independencia de los residuos.
 
+% ESPACIO PARA FIGURA 4: RESIDUOS VS VALORES AJUSTADOS
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox{0.8\textwidth}{
+        \centering
+        \vspace{3cm}
+        {\large\textbf{Figura 4}}\\[0.5cm]
+        {\normalsize Residuos vs Valores Ajustados}\\[0.3cm]
+        {\small Insertar imagen: figura4\_residuos\_vs\_fitted.png}
+        \vspace{3cm}
+    }}
+    \caption{Grafico de dispersion de residuos contra valores ajustados para diagnosticar linealidad e independencia.}
+    \label{fig:resfitted}
+\end{figure}
+
 \subsection{2. Normalidad de Residuos (Shapiro-Wilk)}
 
 \begin{table}[H]
@@ -437,6 +467,21 @@ p-valor & \textless{}0.001 \\
 \end{table}
 
 Interpretacion: Con $N = 7,032$ observaciones, el test de Shapiro-Wilk es sensible a desviaciones minimas de la normalidad. El Teorema Central del Limite (TLC) garantiza que los estimadores de minimos cuadrados son consistentes y siguen una distribucion aproximadamente normal con muestras grandes ($n \textgreater{} 30$), incluso si los residuos no son perfectamente normales.
+
+% ESPACIO PARA FIGURA 5: Q-Q PLOT
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox{0.8\textwidth}{
+        \centering
+        \vspace{3cm}
+        {\large\textbf{Figura 5}}\\[0.5cm]
+        {\normalsize Q-Q Plot de Residuos}\\[0.3cm]
+        {\small Insertar imagen: figura5\_qqplot\_residuos.png}
+        \vspace{3cm}
+    }}
+    \caption{Grafico Q-Q que compara los cuantiles de los residuos con los cuantiles teoricos de una distribucion normal.}
+    \label{fig:qqplot}
+\end{figure}
 
 \subsection{3. Homocedasticidad (Breusch-Pagan)}
 
@@ -456,6 +501,21 @@ p-valor & \textless{}0.001 \\
 
 Interpretacion: Se detecta heterocedasticidad, lo cual es comun en datos de telecomunicaciones con gran variabilidad. Esto no afecta la consistencia de los estimadores, aunque los errores estandar podrian estar subestimados.
 
+% ESPACIO PARA FIGURA 6: SCALE-LOCATION
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox{0.8\textwidth}{
+        \centering
+        \vspace{3cm}
+        {\large\textbf{Figura 6}}\\[0.5cm]
+        {\normalsize Scale-Location}\\[0.3cm]
+        {\small Insertar imagen: figura6\_scalelocation.png}
+        \vspace{3cm}
+    }}
+    \caption{Grafico scale-location que muestra la raiz de los residuos estandarizados vs valores ajustados para diagnosticar homocedasticidad.}
+    \label{fig:scalelocation}
+\end{figure}
+
 \subsection{4. Multicolinealidad (VIF)}
 
 \begin{table}[H]
@@ -472,6 +532,22 @@ MonthlyCharges & 2.62 & Bajo & Excelente \\
 \end{table}
 
 Interpretacion: Los valores de VIF son menores a 5, indicando ausencia de multicolinealidad problematica.
+
+% ESPACIO PARA FIGURA 7: GRAFICOS DE DIAGNOSTICO COMPLETOS (2x2)
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox{0.9\textwidth}{
+        \centering
+        \vspace{4cm}
+        {\large\textbf{Figura 7}}\\[0.5cm]
+        {\normalsize Graficos de Diagnostico del Modelo}\\[0.3cm]
+        {\small Insertar imagen: figura7\_diagnostico\_completo.png}\\[0.3cm]
+        {\scriptsize (a) Residuos vs Fitted | (b) Q-Q Plot | (c) Scale-Location | (d) Residuos vs Leverage}
+        \vspace{4cm}
+    }}
+    \caption{Conjunto de graficos de diagnostico generados con par(mfrow=c(2,2)): (a) Residuos vs valores ajustados, (b) Q-Q plot de normalidad, (c) Scale-Location para homocedasticidad, y (d) Residuos vs Leverage.}
+    \label{fig:diagnostico}
+\end{figure}
 
 % =============================================================================
 % 7. CONCLUSIONES

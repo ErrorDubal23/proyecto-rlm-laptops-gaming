@@ -14,6 +14,8 @@
 # install.packages("MASS")
 # install.packages("lmtest")
 # install.packages("nortest")
+# install.packages("ggfortify")
+# install.packages("gridExtra")
 
 # Cargar las librerias de los paquetes
 library(readr)
@@ -21,6 +23,18 @@ library(MASS)
 library(ggplot2)
 library(lmtest)
 library(nortest)
+library(ggfortify)
+library(gridExtra)
+
+# =============================================================================
+# PALETA DE COLORES PROFESIONAL
+# =============================================================================
+# Paleta inspirada en el ejemplo del profe Anillo
+color_principal   <- "#0047AB"    # Azul oscuro profundo
+color_secundario  <- "#4682B4"    # Azul acero
+color_acento      <- "#B22222"    # Rojo ladrillo para outliers
+ncolor_fondo      <- "#F5F5F5"    # Gris muy claro
+color_texto       <- "#2F4F4F"    # Gris oscuro
 
 # =============================================================================
 # 1. LECTURA DE DATOS
@@ -106,61 +120,92 @@ cor.test(datos$tenure, datos$MonthlyCharges, method = "pearson")
 # r = 0.2469 (debil)
 
 # =============================================================================
-# 6. GRAFICOS DE RELACION
+# 6. GRAFICOS DE RELACION CON PALETA DE COLORES
 # =============================================================================
 
-# --- Pairs con todas las variables cuantitativas ---
+# --- Pairs con todas las variables cuantitativas (colores profesionales) ---
 pairs(cuantitativas,
       main = "Matriz de Dispersion - Variables Cuantitativas Telco",
-      pch = 19, col = "steelblue", gap = 0.5)
+      pch = 19, col = color_principal, gap = 0.5,
+      cex.main = 1.2, col.main = color_principal)
 
-# --- Diagramas de dispersion con recta de regression ---
+# --- Diagramas de dispersion con recta de regression (ggplot) ---
 
-# tenure vs TotalCharges (con linea de ajuste)
+# Figura 1: tenure vs TotalCharges
 ggplot(datos, aes(x = tenure, y = TotalCharges)) +
-  geom_point(color = "steelblue", size = 2, alpha = 0.3) +
-  geom_smooth(method = "lm", color = "firebrick", se = TRUE) +
+  geom_point(color = color_principal, size = 2, alpha = 0.3) +
+  geom_smooth(method = "lm", color = color_acento, se = TRUE, 
+              fill = "#FFCCCC", size = 1.2) +
   labs(title = "Relacion: Antiguedad vs Cargos Totales",
        subtitle = paste("r =", round(cor(datos$tenure, datos$TotalCharges), 4)),
        x = "Antiguedad (meses)", y = "Cargos Totales ($)") +
-  theme_bw()
+  theme_bw() +
+  theme(
+    plot.title = element_text(color = color_principal, size = 14, face = "bold"),
+    plot.subtitle = element_text(color = color_secundario, size = 11),
+    axis.title = element_text(color = color_texto, size = 12),
+    panel.grid.major = element_line(color = "gray90"),
+    panel.grid.minor = element_line(color = "gray95")
+  )
 
-# MonthlyCharges vs TotalCharges (con linea de ajuste)
+# Figura 2: MonthlyCharges vs TotalCharges
 ggplot(datos, aes(x = MonthlyCharges, y = TotalCharges)) +
-  geom_point(color = "steelblue", size = 2, alpha = 0.3) +
-  geom_smooth(method = "lm", color = "firebrick", se = TRUE) +
+  geom_point(color = color_principal, size = 2, alpha = 0.3) +
+  geom_smooth(method = "lm", color = color_acento, se = TRUE,
+              fill = "#FFCCCC", size = 1.2) +
   labs(title = "Relacion: Cargos Mensuales vs Cargos Totales",
        subtitle = paste("r =", round(cor(datos$MonthlyCharges, datos$TotalCharges), 4)),
        x = "Cargos Mensuales ($)", y = "Cargos Totales ($)") +
-  theme_bw()
+  theme_bw() +
+  theme(
+    plot.title = element_text(color = color_principal, size = 14, face = "bold"),
+    plot.subtitle = element_text(color = color_secundario, size = 11),
+    axis.title = element_text(color = color_texto, size = 12),
+    panel.grid.major = element_line(color = "gray90"),
+    panel.grid.minor = element_line(color = "gray95")
+  )
 
 # --- Relacion entre variables cualitativas y TotalCharges (boxplots) ---
 
-# Relacion entre Y (TotalCharges) y variable cualitativa Contract
+# Figura 3: Contract vs TotalCharges
 ggplot(datos, aes(x = Contract, y = TotalCharges, fill = Contract)) +
   geom_boxplot(
     color = "black",
-    alpha = 0.5,
+    alpha = 0.7,
     notch = TRUE,
     notchwidth = 0.8,
-    outlier.colour = "red",
+    outlier.colour = color_acento,
     outlier.size = 2) +
+  scale_fill_manual(values = c("#0047AB", "#4682B4", "#87CEEB")) +
   labs(title = "Relacion Cargos Totales y Tipo de Contrato",
        y = "Cargos Totales ($)",
-       x = "Tipo de Contrato")
+       x = "Tipo de Contrato") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(color = color_principal, size = 14, face = "bold"),
+    axis.title = element_text(color = color_texto, size = 12),
+    legend.position = "none"
+  )
 
-# Relacion entre Y (TotalCharges) y variable cualitativa InternetService
+# Figura 4: InternetService vs TotalCharges
 ggplot(datos, aes(x = InternetService, y = TotalCharges, fill = InternetService)) +
   geom_boxplot(
     color = "black",
-    alpha = 0.5,
+    alpha = 0.7,
     notch = TRUE,
     notchwidth = 0.8,
-    outlier.colour = "red",
+    outlier.colour = color_acento,
     outlier.size = 2) +
+  scale_fill_manual(values = c("#0047AB", "#4682B4", "#87CEEB")) +
   labs(title = "Relacion Cargos Totales y Servicio de Internet",
        y = "Cargos Totales ($)",
-       x = "Servicio de Internet")
+       x = "Servicio de Internet") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(color = color_principal, size = 14, face = "bold"),
+    axis.title = element_text(color = color_texto, size = 12),
+    legend.position = "none"
+  )
 
 # =============================================================================
 # 7. CREACION DEL MODELO RLM
@@ -169,50 +214,69 @@ ggplot(datos, aes(x = InternetService, y = TotalCharges, fill = InternetService)
 modelo <- lm(TotalCharges ~ tenure + MonthlyCharges + Contract + InternetService,
              data = datos)
 
-# Resumen del modelo
+# Resumen del modelo con R2, R2 ajustado, Fisher, p-valor
 summary(modelo)
 # R-squared: 0.9001
 # Adj R-squared: 0.9000
 # Residual standard error: 716.7 on 7025 df
 # F-statistic: 10551 on 6 and 7025 DF, p-value < 2.2e-16
 
-# Intervalos de confianza
+# Intervalos de confianza al 95%
 confint(modelo)
 
 # =============================================================================
-# 8. VALIDACION DE SUPUESTOS
+# 8. VALIDACION DE SUPUESTOS - GRAFICAS PROFESIONALES
 # =============================================================================
 
 # ---- Linealidad ----
 pairs(cuantitativas)
 summary(modelo)
-# R-squared ajustado: 0.900
-# Aproximadamente el 90.0% de las variaciones en los cargos totales
-# es explicada por el modelo, mientras que el 10.0% es explicado
-# por las perturbaciones.
 
-# Grafico de residuos vs variable numerica (tenure)
+# Grafico de residuos vs tenure (colores personalizados)
 ggplot(data = datos, aes(x = tenure, y = modelo$residuals)) +
-  geom_point(alpha = 0.2) +
-  geom_smooth(color = "firebrick") +
-  geom_hline(yintercept = 0) +
+  geom_point(alpha = 0.3, color = color_principal) +
+  geom_smooth(color = color_acento, se = FALSE, size = 1.2) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
   theme_bw() +
   labs(title = "Residuos vs Antiguedad",
-       x = "Antiguedad (meses)", y = "Residuos")
+       x = "Antiguedad (meses)", y = "Residuos") +
+  theme(
+    plot.title = element_text(color = color_principal, size = 14, face = "bold"),
+    axis.title = element_text(color = color_texto, size = 12)
+  )
 
-# Grafico de residuos vs variable numerica (MonthlyCharges)
+# Grafico de residuos vs MonthlyCharges (colores personalizados)
 ggplot(data = datos, aes(x = MonthlyCharges, y = modelo$residuals)) +
-  geom_point(alpha = 0.2) +
-  geom_smooth(color = "firebrick") +
-  geom_hline(yintercept = 0) +
+  geom_point(alpha = 0.3, color = color_principal) +
+  geom_smooth(color = color_acento, se = FALSE, size = 1.2) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
   theme_bw() +
   labs(title = "Residuos vs Cargos Mensuales",
-       x = "Cargos Mensuales ($)", y = "Residuos")
+       x = "Cargos Mensuales ($)", y = "Residuos") +
+  theme(
+    plot.title = element_text(color = color_principal, size = 14, face = "bold"),
+    axis.title = element_text(color = color_texto, size = 12)
+  )
 
-# ---- Normalidad de residuos ----
-par(mfrow = c(1, 1))
-qqnorm(modelo$residuals)
-qqline(modelo$residuals)
+# ---- Figura 5: Q-Q Plot de Residuos (con colores profesionales) ----
+qq_data <- data.frame(
+  teorico = qqnorm(modelo$residuals, plot.it = FALSE)$x,
+  muestra = qqnorm(modelo$residuals, plot.it = FALSE)$y
+)
+
+ggplot(qq_data, aes(x = teorico, y = muestra)) +
+  geom_point(color = color_principal, alpha = 0.5, size = 2) +
+  geom_abline(intercept = 0, slope = 1, color = color_acento, 
+              linetype = "dashed", size = 1.2) +
+  labs(title = "Q-Q Plot de Residuos",
+       subtitle = "Prueba de Normalidad",
+       x = "Cuantiles Teoricos", y = "Cuantiles Muestra") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(color = color_principal, size = 14, face = "bold"),
+    plot.subtitle = element_text(color = color_secundario, size = 11),
+    axis.title = element_text(color = color_texto, size = 12)
+  )
 
 # Prueba de Shapiro-Wilks
 # Ho: Los residuos se distribuyen normalmente
@@ -221,6 +285,42 @@ shapiro.test(modelo$residuals)
 # Nota: Con N = 7032, el test de Shapiro es sensible a desviaciones
 # minimas. El Teorema Central del Limite (TLC) garantiza que los
 # estimadores son consistentes con muestras grandes.
+
+# ---- Figura 6: Residuos vs Valores Ajustados (diagnostico) ----
+residuos_df <- data.frame(
+  fitted = modelo$fitted.values,
+  residuos = modelo$residuals
+)
+
+ggplot(residuos_df, aes(x = fitted, y = residuos)) +
+  geom_point(alpha = 0.3, color = color_principal) +
+  geom_smooth(color = color_acento, se = FALSE, size = 1.2) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
+  theme_bw() +
+  labs(title = "Residuos vs Valores Ajustados",
+       subtitle = "Diagnostico de Independencia y Linealidad",
+       x = "Valores Ajustados", y = "Residuos") +
+  theme(
+    plot.title = element_text(color = color_principal, size = 14, face = "bold"),
+    plot.subtitle = element_text(color = color_secundario, size = 11),
+    axis.title = element_text(color = color_texto, size = 12)
+  )
+
+# ---- Figura 7: Scale-Location (Raiz de residuos estandarizados) ----
+residuos_df$sqrt_std_resid <- sqrt(abs(rstandard(modelo)))
+
+ggplot(residuos_df, aes(x = fitted, y = sqrt_std_resid)) +
+  geom_point(alpha = 0.3, color = color_principal) +
+  geom_smooth(color = color_acento, se = FALSE, size = 1.2) +
+  theme_bw() +
+  labs(title = "Scale-Location",
+       subtitle = "Raiz de Residuos Estandarizados vs Valores Ajustados",
+       x = "Valores Ajustados", y = "sqrt(|Residuos Estandarizados|)") +
+  theme(
+    plot.title = element_text(color = color_principal, size = 14, face = "bold"),
+    plot.subtitle = element_text(color = color_secundario, size = 11),
+    axis.title = element_text(color = color_texto, size = 12)
+  )
 
 # ---- Homocedasticidad ----
 # Prueba Breusch-Pagan
@@ -238,12 +338,36 @@ dwtest(modelo, alternative = "two.sided")
 # DW = 2.018, p > 0.05 -> No se rechaza Ho
 # Los residuos son independientes
 
-# Graficos para interpretar los supuestos
-par(mfrow = c(2, 2))
-plot(modelo)
-# Normalidad: Normal Q-Q
-# Homocedasticidad: Scale-Location
-# Independencia: Residuals vs Fitted
+# ---- Figura 8: Graficos de Diagnostico Completos (2x2) ----
+# Los 4 graficos clasicos de diagnostico con par(mfrow=c(2,2))
+par(mfrow = c(2, 2), mar = c(4, 4, 3, 1))
+
+# 1. Residuals vs Fitted
+plot(modelo, which = 1,
+     main = "Residuos vs Valores Ajustados",
+     col = color_principal, pch = 20,
+     cex.main = 1.1, col.main = color_principal)
+
+# 2. Normal Q-Q
+plot(modelo, which = 2,
+     main = "Q-Q Plot de Residuos",
+     col = color_principal, pch = 20,
+     cex.main = 1.1, col.main = color_principal)
+
+# 3. Scale-Location
+plot(modelo, which = 3,
+     main = "Scale-Location",
+     col = color_principal, pch = 20,
+     cex.main = 1.1, col.main = color_principal)
+
+# 4. Residuals vs Leverage
+plot(modelo, which = 5,
+     main = "Residuos vs Leverage",
+     col = color_principal, pch = 20,
+     cex.main = 1.1, col.main = color_principal)
+
+# Restaurar par(mfrow)
+par(mfrow = c(1, 1))
 
 # =============================================================================
 # 9. PREDICCION (Opcional)
