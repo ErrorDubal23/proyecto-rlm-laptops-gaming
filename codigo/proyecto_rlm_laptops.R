@@ -12,7 +12,7 @@
 # Instalamos los paquetes solo si no los tienes ya instalados
 paquetes <- c("readr", "ggplot2", "MASS", "lmtest", "nortest",
               "ggfortify", "gridExtra", "car", "dplyr", "stringr",
-              "knitr", "rmarkdown", "GGally")
+              "knitr", "rmarkdown", "GGally", "tseries")
 for (p in paquetes) {
   if (!require(p, character.only = TRUE, quietly = TRUE)) {
     install.packages(p)
