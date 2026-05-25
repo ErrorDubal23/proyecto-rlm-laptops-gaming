@@ -1,4 +1,4 @@
-# =============================================================================
+# ============================================================================
 # PROYECTO FINAL - ANALISIS DE DATOS 1
 # REGRESION LINEAL MULTIPLE: PREDICCION DE PRECIOS DE LAPTOPS
 # Ingenieria de Sistemas
@@ -7,37 +7,23 @@
 #              Juan Caceres Figueroa, Miguel Carrizosa
 # Docente: PhD. Luis Angel Anillo Arrieta
 # Fecha: 25 de mayo de 2026
-# =============================================================================
+# ============================================================================
 
-# ---- Instalar paquetes (descomentar si es necesario) ----
-# install.packages("readr")
-# install.packages("ggplot2")
-# install.packages("MASS")
-# install.packages("lmtest")
-# install.packages("nortest")
-# install.packages("ggfortify")
-# install.packages("gridExtra")
-# install.packages("car")
-# install.packages("dplyr")
-# install.packages("stringr")
-# install.packages("knitr")
-# install.packages("rmarkdown")
+# Instalamos los paquetes solo si no los tienes ya instalados
+paquetes <- c("readr", "ggplot2", "MASS", "lmtest", "nortest",
+              "ggfortify", "gridExtra", "car", "dplyr", "stringr",
+              "knitr", "rmarkdown", "GGally")
+for (p in paquetes) {
+  if (!require(p, character.only = TRUE, quietly = TRUE)) {
+    install.packages(p)
+    library(p, character.only = TRUE)
+  }
+}
 
-# Cargar las librerias de los paquetes
-library(readr)
-library(dplyr)
-library(stringr)
-library(MASS)
-library(ggplot2)
-library(lmtest)
-library(nortest)
-library(ggfortify)
-library(gridExtra)
-library(car)
 
-# =============================================================================
+# -------------------------------------------------
 # CONFIGURACION DE PALETA DE COLORES
-# =============================================================================
+# -------------------------------------------------
 
 color_principal   <- "#0047AB"    # Azul oscuro profundo
 color_secundario  <- "#4682B4"    # Azul acero
@@ -45,87 +31,74 @@ color_acento      <- "#B22222"    # Rojo ladrillo para outliers
 color_fondo       <- "#F5F5F5"    # Gris muy claro
 color_texto       <- "#2F4F4F"    # Gris oscuro
 
-# =============================================================================
-# 1. LECTURA DE DATOS
-# =============================================================================
-# Fuente: Laptop Price Prediction Dataset (Kaggle)
-# URL: https://www.kaggle.com/datasets/arnabchaki/laptop-price-prediction
-# N = 1303 laptops, 13 variables
-# Nota: Guardar el archivo "laptop_price.csv" en la carpeta de trabajo
 
-datos <- read_csv("laptop_price.csv",
+# -------------------------------------------------
+# 1. LECTURA DE DATOS
+# -------------------------------------------------
+# Fuente: Laptop Price Prediction Dataset (Kaggle)
+# N = 1303 laptops, 13 variables
+# Asegurate de tener el CSV en Desktop/Final/
+
+datos <- read_csv("Desktop/Final/laptop_price.csv",
                   locale = locale(encoding = "UTF-8"))
 
-# Imprimiendo las primeras 6 observaciones
-cat("--- Primeras 6 filas del dataset ---\n")
+# Primer vistazo
+cat("--- Primeras 6 filas ---\n")
 head(datos)
 
-# Variables de la base de datos
-cat("\n--- Nombres de las variables ---\n")
+cat("\n--- Variables del dataset ---\n")
 names(datos)
 
-# Observando la estructura de los datos
 cat("\n--- Estructura de los datos ---\n")
 str(datos)
 
-# =============================================================================
+
+# -------------------------------------------------
 # 2. LIMPIEZA Y PREPARACION DE DATOS
-# =============================================================================
+# -------------------------------------------------
 
-cat("\n--- LIMPIEZA DE DATOS ---\n")
+cat("\n--- Limpiando datos ---\n")
 
-# Extraer RAM en GB (eliminar "GB" y convertir a numerico)
+# Extraemos los numeros del texto (RAM, peso, CPU, etc.)
+# Y creamos factores limpios para CPU, GPU y consolidamos OpSys
 datos$Ram_GB <- as.numeric(gsub("GB", "", datos$Ram))
-
-# Extraer peso en kg (eliminar "kg" y convertir a numerico)
 datos$Weight_kg <- as.numeric(gsub("kg", "", datos$Weight))
-
-# Extraer frecuencia del CPU en GHz
 datos$CPU_GHz <- as.numeric(str_extract(datos$Cpu, "\\d+\\.?\\d*(?=GHz)"))
-
-# Tamano de pantalla (ya es numerico)
 datos$Inches <- as.numeric(datos$Inches)
-
-# Precio en euros (ya es numerico)
 datos$Price_euros <- as.numeric(datos$Price_euros)
 
-# Extraer resolucion de pantalla (ancho x alto)
+# Resolucion de pantalla
 datos$Res_Width <- as.numeric(str_extract(datos$ScreenResolution, "\\d+(?=x)"))
 datos$Res_Height <- as.numeric(str_extract(datos$ScreenResolution, "(?<=x)\\d+"))
 
-# Crear variable cualitativa: Marca del CPU
+# Marca del CPU
 datos$CPU_Brand <- ifelse(grepl("Intel", datos$Cpu), "Intel",
                    ifelse(grepl("AMD", datos$Cpu), "AMD", "Other"))
 
-# Crear variable cualitativa: Marca de la GPU
+# Marca de la GPU
 datos$GPU_Brand <- ifelse(grepl("Nvidia|NVIDIA", datos$Gpu), "Nvidia",
                    ifelse(grepl("Intel", datos$Gpu), "Intel",
                    ifelse(grepl("AMD", datos$Gpu), "AMD", "Other")))
 
-# CORRECCION IMPORTANTE: Consolidar categorias de OpSys con pocas observaciones
-# Categorias originales: Windows 10(1072), No OS(66), Linux(62), Windows 7(45), 
-#                        Chrome OS(27), macOS(13), Mac OS X(8), Windows 10 S(8), Android(2)
-# Consolidamos las que tienen < 15 observaciones para evitar inestabilidad
-
+# Consolidamos categorias de OpSys con menos de 15 observaciones
+# para evitar inestabilidad en el modelo
 datos$OpSys_Consolidado <- datos$OpSys
 
-# Consolidar categorias con menos de 15 observaciones
 levels_to_group <- names(table(datos$OpSys)[table(datos$OpSys) < 15])
-cat("Categorias de OpSys consolidadas (menos de 15 obs):", 
+cat("Categorias de OpSys consolidadas (menos de 15 obs):",
     paste(levels_to_group, collapse = ", "), "\n")
 
 datos$OpSys_Consolidado[datos$OpSys %in% levels_to_group] <- "Otros"
 datos$OpSys_Consolidado <- factor(datos$OpSys_Consolidado)
 
-# Convirtiendo variables cualitativas a factor
+# Convertimos a factor y filtramos filas completas
+# Variables del modelo: Price_euros, Ram_GB, CPU_GHz, Inches, TypeName, OpSys_Consolidado
 datos$CPU_Brand <- factor(datos$CPU_Brand)
 datos$GPU_Brand <- factor(datos$GPU_Brand)
 datos$TypeName <- factor(datos$TypeName)
 datos$Company <- factor(datos$Company)
 datos$OpSys <- factor(datos$OpSys)
 
-# Filtrar solo filas completas para las variables del modelo
-# Variables del modelo: Price_euros, Ram_GB, CPU_GHz, Inches, TypeName, OpSys_Consolidado
 datos <- datos[complete.cases(
   datos$Price_euros,
   datos$Ram_GB,
@@ -136,16 +109,17 @@ datos <- datos[complete.cases(
 ), ]
 
 cat(paste("Registros despues de limpieza:", nrow(datos), "\n"))
-cat("\n--- Frecuencia de OpSys consolidado ---\n")
+cat("\n--- OpSys consolidado ---\n")
 print(table(datos$OpSys_Consolidado))
 
-# =============================================================================
+
+# -------------------------------------------------
 # 3. ESTADISTICA DESCRIPTIVA
-# =============================================================================
+# -------------------------------------------------
 
-cat("\n--- ESTADISTICAS DESCRIPTIVAS ---\n")
+cat("\n--- Estadisticas descriptivas ---\n")
 
-# Variables cuantitativas del dataset
+# Variables cuantitativas
 cuantitativas <- data.frame(
   Price_euros = datos$Price_euros,
   Ram_GB      = datos$Ram_GB,
@@ -157,7 +131,7 @@ cuantitativas <- data.frame(
 
 summary(cuantitativas)
 
-# Detectar outliers en precio (metodo IQR)
+# Detectamos outliers en precio con IQR
 Q1 <- quantile(datos$Price_euros, 0.25, na.rm = TRUE)
 Q3 <- quantile(datos$Price_euros, 0.75, na.rm = TRUE)
 IQR <- Q3 - Q1
@@ -165,19 +139,20 @@ limite_inferior <- Q1 - 1.5 * IQR
 limite_superior <- Q3 + 1.5 * IQR
 outliers_precio <- datos$Price_euros < limite_inferior | datos$Price_euros > limite_superior
 
-cat("\n--- DETECCION DE OUTLIERS EN PRECIO ---\n")
+cat("\n--- Outliers en precio ---\n")
 cat(paste("Limite inferior:", round(limite_inferior, 2), "EUR\n"))
 cat(paste("Limite superior:", round(limite_superior, 2), "EUR\n"))
-cat(paste("Numero de outliers:", sum(outliers_precio), "(", 
+cat(paste("Outliers:", sum(outliers_precio), "(",
           round(sum(outliers_precio)/nrow(datos)*100, 1), "%)\n"))
 
-# =============================================================================
-# 4. CORRELACION DE PEARSON Y TABLAS
-# =============================================================================
 
-cat("\n--- MATRIZ DE CORRELACIONES DE PEARSON ---\n")
+# -------------------------------------------------
+# 4. CORRELACION DE PEARSON
+# -------------------------------------------------
 
-# Matriz de correlacion completa de Pearson (solo variables numericas del modelo)
+cat("\n--- Matriz de correlaciones de Pearson ---\n")
+
+# Correlaciones entre las variables numericas del modelo
 vars_num_modelo <- data.frame(
   Price_euros = datos$Price_euros,
   Ram_GB      = datos$Ram_GB,
@@ -186,47 +161,53 @@ vars_num_modelo <- data.frame(
 )
 
 cormat <- cor(vars_num_modelo, method = "pearson", use = "complete.obs")
-cat("--- MATRIZ DE CORRELACIONES DE PEARSON ---\n")
+cat("--- Matriz de correlaciones de Pearson ---\n")
 print(round(cormat, 4))
 
-# =============================================================================
-# 5. PRUEBA DE CORRELACION
-# =============================================================================
 
-cat("\n--- PRUEBAS DE CORRELACION ---\n")
+# -------------------------------------------------
+# 5. PRUEBA DE CORRELACION
+# -------------------------------------------------
+
+cat("\n--- Pruebas de correlacion ---\n")
 # Ho: la correlacion es igual a 0
 # H1: la correlacion no es igual a 0
 
-# Correlacion entre Price_euros y Ram_GB
+# Price vs RAM
 cat("\n=== Correlacion Price vs Ram_GB ===\n")
 cor.test(datos$Ram_GB, datos$Price_euros, method = "pearson")
 
-# Correlacion entre Price_euros y CPU_GHz
+# Price vs CPU
 cat("\n=== Correlacion Price vs CPU_GHz ===\n")
 cor.test(datos$CPU_GHz, datos$Price_euros, method = "pearson")
 
-# Correlacion entre Price_euros e Inches
+# Price vs Inches
 cat("\n=== Correlacion Price vs Inches ===\n")
 cor.test(datos$Inches, datos$Price_euros, method = "pearson")
 
-# =============================================================================
+
+# -------------------------------------------------
 # 6. GRAFICOS DE RELACION
-# =============================================================================
+# -------------------------------------------------
 
-cat("\n--- GENERANDO GRAFICOS DE CORRELACION ---\n")
+cat("\n--- Generando graficos de correlacion ---\n")
 
-# --- Pairs con variables cuantitativas seleccionadas ---
-pairs(vars_num_modelo,
-      main = "Matriz de Dispersion - Variables del Modelo",
-      pch = 19, col = color_principal, gap = 0.5,
-      cex.main = 1.2, col.main = color_principal)
+# --- Matriz de dispersion con rectas de regresion rojas ---
+# Usamos ggpairs para que cada panel muestre la recta roja como los plots individuales
+ggpairs(vars_num_modelo,
+        columnLabels = c("Precio (EUR)", "RAM (GB)", "CPU (GHz)", "Pulgadas"),
+        lower = list(continuous = wrap("smooth", method = "lm", colour = "red", se = TRUE)),
+        upper = list(continuous = wrap("cor", size = 6)),
+        diag = list(continuous = wrap("barDiag", fill = color_principal))) +
+  ggtitle("Matriz de Dispersion - Variables del Modelo") +
+  theme_minimal()
 
-# --- Diagramas de dispersion con recta de regression (ggplot) ---
+# --- Scatter plots individuales con recta de regresion roja ---
 
 # Figura 1: Ram_GB vs Price_euros
 ggplot(datos, aes(x = Ram_GB, y = Price_euros)) +
   geom_point(color = color_principal, size = 2, alpha = 0.4) +
-  geom_smooth(method = "lm", color = color_acento, se = TRUE, 
+  geom_smooth(method = "lm", color = "red", se = TRUE,
               fill = "#FFCCCC", size = 1.2) +
   labs(title = "Relacion: RAM vs Precio del Laptop",
        subtitle = paste("r =", round(cor(datos$Ram_GB, datos$Price_euros), 4)),
@@ -243,7 +224,7 @@ ggplot(datos, aes(x = Ram_GB, y = Price_euros)) +
 # Figura 2: CPU_GHz vs Price_euros
 ggplot(datos, aes(x = CPU_GHz, y = Price_euros)) +
   geom_point(color = color_principal, size = 2, alpha = 0.4) +
-  geom_smooth(method = "lm", color = color_acento, se = TRUE,
+  geom_smooth(method = "lm", color = "red", se = TRUE,
               fill = "#FFCCCC", size = 1.2) +
   labs(title = "Relacion: Frecuencia CPU vs Precio del Laptop",
        subtitle = paste("r =", round(cor(datos$CPU_GHz, datos$Price_euros, use = "complete.obs"), 4)),
@@ -260,7 +241,7 @@ ggplot(datos, aes(x = CPU_GHz, y = Price_euros)) +
 # Figura 3: Inches vs Price_euros
 ggplot(datos, aes(x = Inches, y = Price_euros)) +
   geom_point(color = color_principal, size = 2, alpha = 0.4) +
-  geom_smooth(method = "lm", color = color_acento, se = TRUE,
+  geom_smooth(method = "lm", color = "red", se = TRUE,
               fill = "#FFCCCC", size = 1.2) +
   labs(title = "Relacion: Tamano de Pantalla vs Precio del Laptop",
        subtitle = paste("r =", round(cor(datos$Inches, datos$Price_euros, use = "complete.obs"), 4)),
@@ -274,7 +255,7 @@ ggplot(datos, aes(x = Inches, y = Price_euros)) +
     panel.grid.minor = element_line(color = "gray95")
   )
 
-# --- Relacion entre variables cualitativas y Price (boxplots) ---
+# --- Boxplots: variables cualitativas vs Precio ---
 
 # Figura 4: TypeName vs Price_euros
 ggplot(datos, aes(x = TypeName, y = Price_euros, fill = TypeName)) +
@@ -318,35 +299,38 @@ ggplot(datos, aes(x = OpSys_Consolidado, y = Price_euros, fill = OpSys_Consolida
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
 
-# =============================================================================
-# 7. CREACION DEL MODELO RLM
-# =============================================================================
 
-cat("\n--- CREACION DEL MODELO RLM ---\n")
+# -------------------------------------------------
+# 7. CREACION DEL MODELO RLM
+# -------------------------------------------------
+
+cat("\n--- Creando modelo RLM ---\n")
 
 # Modelo: Price_euros ~ Ram_GB + CPU_GHz + Inches + TypeName + OpSys_Consolidado
-# NOTA: Se usa Price_euros directamente (SIN transformacion logaritmica)
-# para cumplir con los requisitos del enunciado
+# Usamos Price_euros directamente (sin transformacion logaritmica)
+# tal como lo pide el enunciado
 
 modelo <- lm(Price_euros ~ Ram_GB + CPU_GHz + Inches + TypeName + OpSys_Consolidado, data = datos)
 
-# Resumen del modelo con R2, R2 ajustado, Fisher, p-valor
-cat("\n--- RESUMEN DEL MODELO ---\n")
+# Resumen del modelo (R2, R2 ajustado, F, p-valor)
+cat("\n--- Resumen del modelo ---\n")
 summary(modelo)
 
 # Intervalos de confianza al 95%
-cat("\n--- INTERVALOS DE CONFIANZA (95%) ---\n")
+cat("\n--- Intervalos de confianza (95%) ---\n")
 confint(modelo)
 
-# =============================================================================
+
+# -------------------------------------------------
 # 8. VALIDACION DE SUPUESTOS
-# =============================================================================
+# -------------------------------------------------
 
-cat("\n--- VALIDACION DE SUPUESTOS ---\n")
+cat("\n--- Validacion de supuestos ---\n")
 
-# ---- Linealidad ----
-cat("\n--- LINEALIDAD ---\n")
+# --- Linealidad ---
+cat("\n--- Linealidad ---\n")
 
+# Graficos de residuos vs variables
 # Grafico de residuos vs Ram_GB
 ggplot(data = datos, aes(x = Ram_GB, y = modelo$residuals)) +
   geom_point(alpha = 0.3, color = color_principal) +
@@ -373,10 +357,10 @@ ggplot(data = datos, aes(x = CPU_GHz, y = modelo$residuals)) +
     axis.title = element_text(color = color_texto, size = 12)
   )
 
-# ---- Normalidad ----
-cat("\n--- NORMALIDAD DE RESIDUOS ---\n")
+# --- Normalidad ---
+cat("\n--- Normalidad de residuos ---\n")
 
-# Figura 6: Q-Q Plot de Residuos (con colores profesionales)
+# Q-Q Plot de residuos
 qq_data <- data.frame(
   teorico = qqnorm(modelo$residuals, plot.it = FALSE)$x,
   muestra = qqnorm(modelo$residuals, plot.it = FALSE)$y
@@ -384,7 +368,7 @@ qq_data <- data.frame(
 
 ggplot(qq_data, aes(x = teorico, y = muestra)) +
   geom_point(color = color_principal, alpha = 0.5, size = 2) +
-  geom_abline(intercept = 0, slope = 1, color = color_acento, 
+  geom_abline(intercept = 0, slope = 1, color = color_acento,
               linetype = "dashed", size = 1.2) +
   labs(title = "Q-Q Plot de Residuos",
        subtitle = "Prueba de Normalidad",
@@ -396,11 +380,9 @@ ggplot(qq_data, aes(x = teorico, y = muestra)) +
     axis.title = element_text(color = color_texto, size = 12)
   )
 
-# Prueba de Shapiro-Wilks
-# Ho: Los residuos se distribuyen normalmente
-# H1: Los residuos NO se distribuyen normalmente
-# NOTA: shapiro.test() solo acepta maximo N = 5000
-# Tomamos una muestra aleatoria de 5000 residuos si N > 5000
+# Prueba de Shapiro-Wilk
+# Nota: shapiro.test() solo acepta maximo N = 5000
+# Tomamos muestra aleatoria si N > 5000
 if(length(modelo$residuals) > 5000) {
   set.seed(123)
   residuos_muestra <- sample(modelo$residuals, 5000)
@@ -414,10 +396,10 @@ shapiro.test(residuos_muestra)
 cat("\n--- Prueba Jarque-Bera ---\n")
 jarque.bera.test(modelo$residuals)
 
-# ---- Independencia ----
-cat("\n--- INDEPENDENCIA ---\n")
+# --- Independencia ---
+cat("\n--- Independencia ---\n")
 
-# Figura 7: Residuos vs Valores Ajustados
+# Residuos vs Valores Ajustados
 residuos_df <- data.frame(
   fitted = modelo$fitted.values,
   residuos = modelo$residuals
@@ -437,16 +419,14 @@ ggplot(residuos_df, aes(x = fitted, y = residuos)) +
     axis.title = element_text(color = color_texto, size = 12)
   )
 
-# Durbin-Watson test
-# Ho: Los residuos son independientes
-# H1: Los residuos son dependientes
+# Prueba Durbin-Watson
 cat("\n--- Prueba Durbin-Watson ---\n")
 dwtest(modelo, alternative = "two.sided")
 
-# ---- Homocedasticidad ----
-cat("\n--- HOMOCEDASTICIDAD ---\n")
+# --- Homocedasticidad ---
+cat("\n--- Homocedasticidad ---\n")
 
-# Figura 8: Scale-Location
+# Scale-Location
 residuos_df$sqrt_std_resid <- sqrt(abs(rstandard(modelo)))
 
 ggplot(residuos_df, aes(x = fitted, y = sqrt_std_resid)) +
@@ -463,32 +443,30 @@ ggplot(residuos_df, aes(x = fitted, y = sqrt_std_resid)) +
   )
 
 # Prueba Breusch-Pagan
-# Ho: Los residuos son homocedasticos
-# H1: Los residuos son heterocedasticos
 cat("\n--- Prueba Breusch-Pagan ---\n")
 bptest(modelo)
 
-# ---- Multicolinealidad (VIF) ----
-cat("\n--- MULTICOLINEALIDAD (VIF) ---\n")
+# --- Multicolinealidad (VIF) ---
+cat("\n--- Multicolinealidad (VIF) ---\n")
 
-# IMPORTANTE: vif() en el paquete car usa vif(lm) para modelos
-# Cuando hay factores, devuelve GVIF (Generalized VIF)
+# vif() con factores devuelve GVIF (Generalized VIF)
 # GVIF^(1/(2*df)) es el equivalente al VIF estandar
 vif_result <- vif(modelo)
 print(vif_result)
 
-cat("\n--- INTERPRETACION VIF ---\n")
+cat("\n--- Interpretacion VIF ---\n")
 cat("VIF < 5: Sin multicolinealidad problematica\n")
 cat("VIF 5-10: Multicolinealidad moderada\n")
 cat("VIF > 10: Multicolinealidad severa\n")
 
-# =============================================================================
+
+# -------------------------------------------------
 # 9. GRAFICOS DE DIAGNOSTICO COMPLETOS
-# =============================================================================
+# -------------------------------------------------
 
-cat("\n--- GRAFICOS DE DIAGNOSTICO (2x2) ---\n")
+cat("\n--- Graficos de diagnostico (2x2) ---\n")
 
-# Los 4 graficos clasicos de diagnostico con par(mfrow=c(2,2))
+# Los 4 graficos clasicos de diagnostico
 par(mfrow = c(2, 2), mar = c(4, 4, 3, 1))
 
 # 1. Residuals vs Fitted
@@ -515,17 +493,18 @@ plot(modelo, which = 5,
      col = color_principal, pch = 20,
      cex.main = 1.1, col.main = color_principal)
 
-# Restaurar par(mfrow)
+# Restauramos par(mfrow)
 par(mfrow = c(1, 1))
 
-# =============================================================================
-# 10. PREDICCION (Opcional)
-# =============================================================================
 
-cat("\n--- PREDICCION ---\n")
+# -------------------------------------------------
+# 10. PREDICCION (ejemplo)
+# -------------------------------------------------
 
-# Crear nuevo dato para prediccion
-# IMPORTANTE: Usar los levels del factor OpSys_Consolidado
+cat("\n--- Prediccion ---\n")
+
+# Nuevo dato para prediccion
+# Importante: usar los levels del factor OpSys_Consolidado
 nuevo <- data.frame(
   Ram_GB = 16,
   CPU_GHz = 2.8,
@@ -542,9 +521,10 @@ predict(modelo, newdata = nuevo)
 cat("\nPrediccion por intervalo (95%):\n")
 predict(modelo, newdata = nuevo, interval = "prediction", level = 0.95)
 
-# =============================================================================
-# 11. RESUMEN DE RESULTADOS PARA EL DOCUMENTO
-# =============================================================================
+
+# -------------------------------------------------
+# 11. RESUMEN DE RESULTADOS
+# -------------------------------------------------
 
 cat("\n")
 cat("=" ,rep("=", 70), "\n", sep="")
@@ -572,21 +552,21 @@ cat("\n--- Interpretacion de Coeficientes Principales ---\n")
 # Interpretacion de RAM
 if("Ram_GB" %in% rownames(summary_table$coefficients)) {
   coef_ram <- summary_table$coefficients["Ram_GB", 1]
-  cat(paste("Por cada GB adicional de RAM, el precio aumenta en promedio", 
+  cat(paste("Por cada GB adicional de RAM, el precio aumenta en promedio",
             round(coef_ram, 2), "EUR.\n"))
 }
 
 # Interpretacion de CPU
 if("CPU_GHz" %in% rownames(summary_table$coefficients)) {
   coef_cpu <- summary_table$coefficients["CPU_GHz", 1]
-  cat(paste("Por cada GHz adicional de CPU, el precio aumenta en promedio", 
+  cat(paste("Por cada GHz adicional de CPU, el precio aumenta en promedio",
             round(coef_cpu, 2), "EUR.\n"))
 }
 
 # Interpretacion de Inches
 if("Inches" %in% rownames(summary_table$coefficients)) {
   coef_inches <- summary_table$coefficients["Inches", 1]
-  cat(paste("Por cada pulgada adicional, el precio aumenta en promedio", 
+  cat(paste("Por cada pulgada adicional, el precio aumenta en promedio",
             round(coef_inches, 2), "EUR.\n"))
 }
 
