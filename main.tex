@@ -329,14 +329,14 @@ Donde:
 \toprule
 \textbf{Variable} & \textbf{Coeficiente} & \textbf{Error Est.} & \textbf{t} & \textbf{p-valor} \\
 \midrule
-(Intercepto) & 256.224 & 159.955 & 1.602 & 0.109 \\
-RAM (GB) & 81.097 & 2.581 & 31.418 & \textless{}2e-16 *** \\
-CPU (GHz) & 212.524 & 24.319 & 8.739 & \textless{}2e-16 *** \\
-Pulgadas & -20.165 & 11.075 & -1.821 & 0.069 . \\
+(Intercepto) & 42.920 & 292.168 & 0.147 & 0.883 \\
+RAM (GB) & 81.075 & 2.581 & 31.414 & \textless{}2e-16 *** \\
+CPU (GHz) & 208.313 & 24.493 & 8.505 & \textless{}2e-16 *** \\
+Pulgadas & -23.088 & 11.150 & -2.071 & 0.039 * \\
 \bottomrule
 \end{tabular}
 \\[0.3cm]
-\small Significancia: *** p\textless{}0.001, ** p\textless{}0.01, * p\textless{}0.05, . p\textless{}0.1
+\small Significancia: *** p\textless{}0.001, ** p\textless{}0.01, * p\textless{}0.05
 \end{table}
 
 \begin{table}[H]
@@ -346,21 +346,24 @@ Pulgadas & -20.165 & 11.075 & -1.821 & 0.069 . \\
 \toprule
 \textbf{Variable} & \textbf{Coeficiente} & \textbf{Error Est.} & \textbf{t} & \textbf{p-valor} \\
 \midrule
-TypeNameGaming & -48.918 & 53.601 & -0.913 & 0.362 \\
-TypeNameNetbook & -233.976 & 88.046 & -2.657 & 0.008 ** \\
-TypeNameNotebook & -289.965 & 42.820 & -6.772 & \textless{}2e-16 *** \\
-TypeNameUltrabook & 133.461 & 45.441 & 2.937 & 0.003 ** \\
-TypeNameWorkstation & 649.459 & 85.047 & 7.636 & \textless{}2e-16 *** \\
+TypeNameGaming & -46.892 & 53.627 & -0.874 & 0.382 \\
+TypeNameNetbook & -247.928 & 88.427 & -2.804 & 0.005 ** \\
+TypeNameNotebook & -293.233 & 42.865 & -6.841 & \textless{}2e-16 *** \\
+TypeNameUltrabook & 120.528 & 45.988 & 2.621 & 0.009 ** \\
+TypeNameWorkstation & 650.140 & 85.032 & 7.646 & \textless{}2e-16 *** \\
 \midrule
-OpSysConsolidadoLinux & -39.843 & 94.076 & -0.424 & 0.672 \\
-OpSysConsolidadoNo OS & -91.840 & 93.216 & -0.985 & 0.325 \\
-OpSysConsolidadoOtros & 220.355 & 105.629 & 2.086 & 0.037 * \\
-OpSysConsolidadoWindows 10 & 150.111 & 80.268 & 1.870 & 0.062 . \\
-OpSysConsolidadoWindows 7 & 556.216 & 98.622 & 5.640 & \textless{}2e-16 *** \\
+OpSysChrome OS & 263.411 & 282.896 & 0.931 & 0.352 \\
+OpSysLinux & 231.796 & 279.931 & 0.828 & 0.408 \\
+OpSysMac OS X & 401.450 & 306.282 & 1.311 & 0.190 \\
+OpSysmacOS & 617.621 & 295.898 & 2.087 & 0.037 * \\
+OpSysNo OS & 179.496 & 279.594 & 0.642 & 0.521 \\
+OpSysWindows 10 & 420.911 & 274.979 & 1.531 & 0.126 \\
+OpSysWindows 10 S & 502.645 & 306.600 & 1.639 & 0.101 \\
+OpSysWindows 7 & 827.967 & 280.866 & 2.948 & 0.003 ** \\
 \bottomrule
 \end{tabular}
 \\[0.3cm]
-\small Las categorías de referencia son: TypeName = ``2 in 1 Convertible'', OpSysConsolidado = ``Chrome OS''
+\small Las categorías de referencia son: TypeName = ``2 in 1 Convertible'', OpSys = ``Android''
 \end{table}
 
 \begin{table}[H]
@@ -370,28 +373,29 @@ OpSysConsolidadoWindows 7 & 556.216 & 98.622 & 5.640 & \textless{}2e-16 *** \\
 \toprule
 \textbf{Métrica} & \textbf{Valor} \\
 \midrule
-R-cuadrado & 0.705 \\
-R-cuadrado Ajustado & 0.702 \\
-F-statistic & 237.2 \\
+R-cuadrado & 0.706 \\
+R-cuadrado Ajustado & 0.703 \\
+F-statistic & 193.3 \\
 p-valor (F) & \textless{}2.2e-16 \\
-Error estándar residual & 381.4 \\
-Grados de libertad (modelo) & 13 \\
-Grados de libertad (residuos) & 1,289 \\
+Error estándar residual & 381.2 \\
+Grados de libertad (modelo) & 16 \\
+Grados de libertad (residuos) & 1,286 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-El resultado del modelo es satisfactorio, pues explica el 70.5\% de la variabilidad del precio de una laptop, y los valores de nuestro estadístico F y P-Valor nos indican que nuestro modelo tiene una validez estadística del análisis con un error estándar de estimación de 381.4 EUR.
+El resultado del modelo es satisfactorio, pues explica aproximadamente el 70.6\% de la variabilidad del precio de una laptop, y los valores de nuestro estadístico F y P-Valor nos indican que nuestro modelo tiene una validez estadística del análisis con un error estándar de estimación de 381.2 EUR.
 
 \subsection{Modelo}
 El modelo planteado quedaría de la siguiente manera:
 \begin{equation}
 \begin{aligned}
-\widehat{\text{Precio}}_i = & \ 256.224 + 81.097 \cdot \text{RAM}_i + 212.524 \cdot \text{CPU}_i - 20.165 \cdot \text{Pulgadas}_i \\
-& - 48.918 \cdot \text{Gaming}_i - 233.976 \cdot \text{Netbook}_i - 289.965 \cdot \text{Notebook}_i \\
-& + 133.461 \cdot \text{Ultrabook}_i + 649.459 \cdot \text{Workstation}_i \\
-& - 39.843 \cdot \text{Linux}_i - 91.840 \cdot \text{No OS}_i + 220.355 \cdot \text{Otros}_i \\
-& + 150.111 \cdot \text{Windows 10}_i + 556.216 \cdot \text{Windows 7}_i
+\widehat{\text{Precio}}_i = & \ 42.920 + 81.075 \cdot \text{RAM}_i + 208.313 \cdot \text{CPU}_i - 23.088 \cdot \text{Pulgadas}_i \\
+& - 46.892 \cdot \text{Gaming}_i - 247.928 \cdot \text{Netbook}_i - 293.233 \cdot \text{Notebook}_i \\
+& + 120.528 \cdot \text{Ultrabook}_i + 650.140 \cdot \text{Workstation}_i \\
+& + 263.411 \cdot \text{Chrome OS}_i + 231.796 \cdot \text{Linux}_i + 401.450 \cdot \text{Mac OS X}_i \\
+& + 617.621 \cdot \text{macOS}_i + 179.496 \cdot \text{No OS}_i + 420.911 \cdot \text{Windows 10}_i \\
+& + 502.645 \cdot \text{Windows 10 S}_i + 827.967 \cdot \text{Windows 7}_i
 \end{aligned}
 \end{equation}
 
@@ -399,15 +403,15 @@ El modelo planteado quedaría de la siguiente manera:
 \subsection{Interpretación de Coeficientes}
 
 \begin{itemize}
-    \item \textbf{RAM (GB):} Por cada aumento de 1 GB en la memoria RAM, el precio de la laptop aumenta en promedio 81.10 EUR, manteniendo constantes las demás variables.
+    \item \textbf{RAM (GB):} Por cada aumento de 1 GB en la memoria RAM, el precio de la laptop aumenta en promedio 81.08 EUR, manteniendo constantes las demás variables.
     
-    \item \textbf{CPU (GHz):} Por cada aumento de 1 GHz en la frecuencia del procesador, el precio aumenta en promedio 212.52 EUR. Esto indica que el procesador es uno de los componentes más determinantes del precio.
+    \item \textbf{CPU (GHz):} Por cada aumento de 1 GHz en la frecuencia del procesador, el precio aumenta en promedio 208.31 EUR. Esto indica que el procesador es uno de los componentes más determinantes del precio.
     
-    \item \textbf{Pulgadas:} Por cada pulgada adicional en el tamaño de pantalla, el precio \textbf{disminuye} en promedio 20.17 EUR. Este resultado contraintuitivo puede explicarse por el hecho de que las laptops con pantallas más grandes tienden a ser notebooks básicas, mientras que las más caras (Ultrabooks, Workstations) suelen tener pantallas más compactas pero de mayor resolución.
+    \item \textbf{Pulgadas:} Por cada pulgada adicional en el tamaño de pantalla, el precio \textbf{disminuye} en promedio 23.09 EUR. Este resultado contraintuitivo puede explicarse por el hecho de que las laptops con pantallas más grandes tienden a ser notebooks básicas, mientras que las más caras (Ultrabooks, Workstations) suelen tener pantallas más compactas pero de mayor resolución.
     
-    \item \textbf{Tipo de Laptop:} Las Workstation tienen un precio promedio 649.46 EUR mayor que las ``2 in 1 Convertible'' (categoría de referencia), mientras que los Notebook son 289.97 EUR más baratos. Los Netbook son 233.98 EUR más baratos.
+    \item \textbf{Tipo de Laptop:} Las Workstation tienen un precio promedio 650.14 EUR mayor que las ``2 in 1 Convertible'' (categoría de referencia), mientras que los Notebook son 293.23 EUR más baratos. Los Netbook son 247.93 EUR más baratos.
     
-    \item \textbf{Sistema Operativo:} Windows 7 tiene un precio promedio 556.22 EUR mayor que Chrome OS (categoría de referencia). La categoría ``Otros'' (que agrupa Android, Mac OS X, macOS y Windows 10 S) es 220.36 EUR más cara.
+    \item \textbf{Sistema Operativo:} Windows 7 tiene un precio promedio 827.97 EUR mayor que Android (categoría de referencia). Mac OS es 617.62 EUR más caro. Sin embargo, la mayoría de las categorías de SO no son estadísticamente significativas individualmente (solo macOS p=0.037 y Windows 7 p=0.003).
 \end{itemize}
     
     
@@ -424,31 +428,34 @@ El modelo planteado quedaría de la siguiente manera:
     \toprule
     \textbf{Variable} & \textbf{2.5 \%} & \textbf{97.5 \%} \\
     \midrule
-    (Intercept) & -57.576 & 570.024 \\
-    Ram\_GB & 76.034 & 86.161 \\
-    CPU\_GHz & 164.815 & 260.233 \\
-    Inches & -41.892 & 1.562 \\
+    (Intercept) & -530.259 & 616.098 \\
+    Ram\_GB & 76.012 & 86.138 \\
+    CPU\_GHz & 160.262 & 256.364 \\
+    Inches & -44.963 & -1.214 \\
     \midrule
-    TypeNameGaming & -154.073 & 56.237 \\
-    TypeNameNetbook & -406.705 & -61.247 \\
-    TypeNameNotebook & -373.969 & -205.961 \\
-    TypeNameUltrabook & 44.315 & 222.607 \\
-    TypeNameWorkstation & 482.613 & 816.305 \\
+    TypeNameGaming & -152.098 & 58.314 \\
+    TypeNameNetbook & -421.405 & -74.451 \\
+    TypeNameNotebook & -377.326 & -209.141 \\
+    TypeNameUltrabook & 30.309 & 210.747 \\
+    TypeNameWorkstation & 483.324 & 816.957 \\
     \midrule
-    OpSysConsolidadoLinux & -224.401 & 144.716 \\
-    OpSysConsolidadoNo OS & -274.711 & 91.031 \\
-    OpSysConsolidadoOtros & 13.131 & 427.578 \\
-    OpSysConsolidadoWindows 10 & -7.359 & 307.582 \\
-    OpSysConsolidadoWindows 7 & 362.738 & 749.694 \\
+    OpSysChrome OS & -291.577 & 818.399 \\
+    OpSysLinux & -317.376 & 780.968 \\
+    OpSysMac OS X & -199.417 & 1002.317 \\
+    OpSysmacOS & 37.126 & 1198.117 \\
+    OpSysNo OS & -369.014 & 728.006 \\
+    OpSysWindows 10 & -118.545 & 960.367 \\
+    OpSysWindows 10 S & -98.846 & 1104.135 \\
+    OpSysWindows 7 & 276.962 & 1378.973 \\
     \bottomrule
     \end{tabular}
     \\[0.3cm]
-    \small Las categorías de referencia son: TypeName = ``2 in 1 Convertible'', OpSysConsolidado = ``Chrome OS''
+    \small Las categorías de referencia son: TypeName = ``2 in 1 Convertible'', OpSys = ``Android''
     \end{table}
 
     En el cuadro 6 se pueden observar los intervalos de confianza, los cuales nos permiten evaluar 
 la precisión y significancia de los coeficientes que se estimaron en el modelo de regresión. Los 
-intervalos de confianza de las variables cuantitativas RAM y CPU no incluyen al 0, lo que indica que estas variables tienen un efecto consistente sobre la variable dependiente. En el caso de Pulgadas, el intervalo incluye el 0, lo que sugiere que su efecto no es estadísticamente significativo al 95\% de confianza. Respecto a las variables cualitativas, algunas categorías como Gaming, Linux y No OS tienen intervalos que incluyen el 0, indicando que no son indicativos consistentes del precio de una laptop. 
+intervalos de confianza de las variables cuantitativas RAM y CPU no incluyen al 0, lo que indica que estas variables tienen un efecto consistente sobre la variable dependiente. En el caso de Pulgadas, el intervalo no incluye el 0, lo que sugiere que su efecto es estadísticamente significativo al 95\% de confianza, aunque su magnitud sea pequeña. Respecto a las variables cualitativas, algunas categorías como Gaming, Chrome OS, Linux, Mac OS X, No OS, Windows 10 y Windows 10 S tienen intervalos que incluyen el 0, indicando que no son indicativos consistentes del precio de una laptop. 
 
     Algo importante a tener en cuenta es que en el intervalo de confianza del intercepto se incluye el 0, lo que significa que no podemos afirmar con certeza que el intercepto sea diferente de cero. Sin embargo, el intercepto no tiene interpretación práctica en este contexto, ya que una laptop con RAM=0, CPU=0GHz y pantalla de 0 pulgadas no existe en la realidad.
 
@@ -465,13 +472,13 @@ intervalos de confianza de las variables cuantitativas RAM y CPU no incluyen al 
 \midrule
 H0 & Los residuos son independientes \\
 H1 & Los residuos son dependientes \\
-Estadístico DW & 2.0338 \\
-p-valor & 0.547 \\
+Estadístico DW & 2.0272 \\
+p-valor & 0.633 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Interpretación: Como el p-valor (0.547) es mayor que 0.05, no se rechaza H0. Los residuos son independientes. El valor del estadístico Durbin-Watson (2.0338) está cercano a 2, lo que confirma la ausencia de autocorrelación.
+Interpretación: Como el p-valor (0.633) es mayor que 0.05, no se rechaza H0. Los residuos son independientes. El valor del estadístico Durbin-Watson (2.0272) está cercano a 2, lo que confirma la ausencia de autocorrelación.
 
 \subsection{2. Normalidad de Residuos (Shapiro-Wilk)}
 
@@ -483,7 +490,7 @@ Interpretación: Como el p-valor (0.547) es mayor que 0.05, no se rechaza H0. Lo
 \midrule
 H0 & Los residuos se distribuyen normalmente \\
 H1 & Los residuos NO se distribuyen normalmente \\
-Estadístico W & 0.92465 \\
+Estadístico W & 0.92379 \\
 p-valor & \textless{}2.2e-16 \\
 \bottomrule
 \end{tabular}
@@ -513,8 +520,8 @@ Interpretación: Como el p-valor es muy pequeño (\textless{}2.2e-16), se rechaz
 \midrule
 H0 & Los residuos son homocedásticos \\
 H1 & Los residuos son heterocedásticos \\
-Estadístico BP & 201.16 \\
-df & 13 \\
+Estadístico BP & 201.21 \\
+df & 16 \\
 p-valor & \textless{}2.2e-16 \\
 \bottomrule
 \end{tabular}
@@ -543,10 +550,10 @@ Interpretación: Como el p-valor es muy pequeño (\textless{}2.2e-16), se rechaz
 \textbf{Variable} & \textbf{VIF} & \textbf{Estado} & \textbf{Interpretación} \\
 \midrule
 RAM (GB) & 1.54 & Aceptable & Sin multicolinealidad \\
-CPU (GHz) & 1.36 & Aceptable & Sin multicolinealidad \\
-Pulgadas & 2.23 & Aceptable & Sin multicolinealidad \\
-TypeName (conjunto) & 3.63 & Aceptable & Sin multicolinealidad \\
-OpSysConsolidado (conjunto) & 1.49 & Aceptable & Sin multicolinealidad \\
+CPU (GHz) & 1.38 & Aceptable & Sin multicolinealidad \\
+Pulgadas & 2.27 & Aceptable & Sin multicolinealidad \\
+TypeName (conjunto) & 3.79 & Aceptable & Sin multicolinealidad \\
+OpSys (conjunto) & 1.60 & Aceptable & Sin multicolinealidad \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -583,24 +590,23 @@ Interpretación: Los valores de VIF son todos menores a 5, lo que indica que \te
 \section{Conclusiones específicas}
 
 \begin{enumerate}[leftmargin=1.5cm]
-    \item El modelo de regresión lineal múltiple desarrollado explica aproximadamente el 70.5\% de la variabilidad en el precio de las laptops (R² = 0.705), lo que indica un buen ajuste del modelo.
+    \item El modelo de regresión lineal múltiple desarrollado explica aproximadamente el 70.6\% de la variabilidad en el precio de las laptops (R² = 0.706), lo que indica un buen ajuste del modelo.
     
-    \item La frecuencia del CPU es el factor cuantitativo más influyente en el precio de una laptop. Por cada aumento de 1 GHz en la frecuencia del procesador, el precio aumenta en promedio 212.52 EUR. La memoria RAM también es importante: por cada GB adicional, el precio aumenta 81.10 EUR.
+    \item La frecuencia del CPU es el factor cuantitativo más influyente en el precio de una laptop. Por cada aumento de 1 GHz en la frecuencia del procesador, el precio aumenta en promedio 208.31 EUR. La memoria RAM también es importante: por cada GB adicional, el precio aumenta 81.08 EUR.
     
-    \item El tamaño de pantalla muestra un efecto negativo en el precio (-20.17 EUR por pulgada), lo que sugiere que las laptops más caras tienden a ser más compactas pero con especificaciones superiores en otros aspectos.
+    \item El tamaño de pantalla muestra un efecto negativo en el precio (-23.09 EUR por pulgada), lo que sugiere que las laptops más caras tienden a ser más compactas pero con especificaciones superiores en otros aspectos.
     
-    \item Las categorías de tipo de laptop y sistema operativo muestran diferencias significativas en el precio, siendo las Workstation las de mayor precio promedio (649.46 EUR más que las ``2 in 1 Convertible'').
+    \item Las categorías de tipo de laptop y sistema operativo muestran diferencias significativas en el precio, siendo las Workstation las de mayor precio promedio (650.14 EUR más que las ``2 in 1 Convertible'').
     
-    \item El supuesto de independencia se cumple (Durbin-Watson = 2.0338, p = 0.547) y no hay multicolinealidad (VIF \textless{} 5).
+    \item El supuesto de independencia se cumple (Durbin-Watson = 2.0272, p = 0.633) y no hay multicolinealidad (VIF \textless{} 5).
     
-
 \end{enumerate}
 
 \subsection{Conclusión general}
 
 En conclusión, se encontró que los factores que más afectan el precio de un ordenador portátil son la frecuencia de la CPU y la memoria RAM, ya que demuestran una fuerte relación lineal con el costo final del portátil, siendo los más importantes en la valoración comercial del hardware. Además, mediante el análisis de las variables cualitativas y el comportamiento de los datos atípicos presentados en las gráficas, se concluye que las desviaciones extremas corresponden a propias características del mercado como pueden ser equipos empresariales de alta gama o modelos de portátiles de muy alta gama, donde el costo se ve influenciado no solamente por las especificaciones del sistema sino también por elementos de diseño, exclusividad o licencias de sistemas operativos específicos como Windows 7. 
 
-Por otro lado, el modelo de regresión lineal múltiple presentado demostró una buena capacidad predictiva al explicar aproximadamente el 70.5\% de la variabilidad de los precios. Si bien algunos supuestos estadísticos, tales como la normalidad de los residuos y la homocedasticidad, no se cumplieron perfectamente debido a la dispersión propia en los segmentos de gama alta, el modelo refleja de manera válida y adecuada las tendencias generales del conjunto de datos que se usó. Asimismo, este modelo puede utilizarse en el mundo corporativo y en la gestión de tecnologías de la información para la toma de decisiones informadas que permitan optimizar las estrategias de adquisición de hardware.
+Por otro lado, el modelo de regresión lineal múltiple presentado demostró una buena capacidad predictiva al explicar aproximadamente el 70.6\% de la variabilidad de los precios. Si bien algunos supuestos estadísticos, tales como la normalidad de los residuos y la homocedasticidad, no se cumplieron perfectamente debido a la dispersión propia en los segmentos de gama alta, el modelo refleja de manera válida y adecuada las tendencias generales del conjunto de datos que se usó. Asimismo, este modelo puede utilizarse en el mundo corporativo y en la gestión de tecnologías de la información para la toma de decisiones informadas que permitan optimizar las estrategias de adquisición de hardware.
 
 
 \subsection{Recomendaciones}
@@ -641,63 +647,64 @@ URL: https://www.kaggle.com/datasets/muhammetvarl/laptop-price
 \begin{verbatim}
 Call:
 lm(formula = Price_euros ~ Ram_GB + CPU_GHz + Inches + TypeName + 
-    OpSys_Consolidado, data = datos)
+    OpSys, data = datos)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--1898.50 -218.95  -48.19  161.42  2879.00 
+-1895.37 -218.45  -46.23  159.84  2882.97 
 
 Coefficients:
-                       Estimate Std. Error t value Pr(>|t|)    
-(Intercept)            256.224    159.955   1.602 0.109430    
-Ram_GB                  81.097      2.581  31.418  < 2e-16 ***
-CPU_GHz                212.524     24.319   8.739  < 2e-16 ***
-Inches                 -20.165     11.075  -1.821 0.068882 .  
-TypeNameGaming         -48.918     53.601  -0.913 0.361606    
-TypeNameNetbook       -233.976     88.046  -2.657 0.007971 ** 
-TypeNameNotebook      -289.965     42.820  -6.772 1.93e-11 ***
-TypeNameUltrabook      133.461     45.441   2.937 0.003373 ** 
-TypeNameWorkstation    649.459     85.047   7.636 4.33e-14 ***
-OpSys_ConsolidadoLinux  -39.843     94.076  -0.424 0.671988    
-OpSys_ConsolidadoNo OS -91.840     93.216  -0.985 0.324691    
-OpSys_ConsolidadoOtros 220.355    105.629   2.086 0.037164 *  
-OpSys_ConsolidadoWindows 10
-                       150.111     80.268   1.870 0.061687 .  
-OpSys_ConsolidadoWindows 7
-                       556.216     98.622   5.640 2.09e-08 ***
+                    Estimate Std. Error t value Pr(>|t|)    
+(Intercept)          42.920    292.168   0.147 0.883233    
+Ram_GB               81.075      2.581  31.414  < 2e-16 ***
+CPU_GHz             208.313     24.493   8.505  < 2e-16 ***
+Inches              -23.088     11.150  -2.071 0.038590 *  
+TypeNameGaming      -46.892     53.627  -0.874 0.382057    
+TypeNameNetbook    -247.928     88.427  -2.804 0.005132 ** 
+TypeNameNotebook   -293.233     42.865  -6.841 1.21e-11 ***
+TypeNameUltrabook   120.528     45.988   2.621 0.008873 ** 
+TypeNameWorkstation 650.140     85.032   7.646 4.04e-14 ***
+OpSysChrome OS      263.411    282.896   0.931 0.351971    
+OpSysLinux          231.796    279.931   0.828 0.407796    
+OpSysMac OS X       401.450    306.282   1.311 0.190192    
+OpSysmacOS          617.621    295.898   2.087 0.037063 *  
+OpSysNo OS          179.496    279.594   0.642 0.520985    
+OpSysWindows 10     420.911    274.979   1.531 0.126089    
+OpSysWindows 10 S   502.645    306.600   1.639 0.101366    
+OpSysWindows 7      827.967    280.866   2.948 0.003257 ** 
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 381.4 on 1289 degrees of freedom
-Multiple R-squared:  0.7052,    Adjusted R-squared:  0.7022 
-F-statistic: 237.2 on 13 and 1289 DF,  p-value: < 2.2e-16
+Residual standard error: 381.2 on 1286 degrees of freedom
+Multiple R-squared:  0.7063,    Adjusted R-squared:  0.7027 
+F-statistic: 193.3 on 16 and 1286 DF,  p-value: < 2.2e-16
 \end{verbatim}
 
 \subsection{Anexo C: Resumen de las Pruebas de Supuestos}
 
 \begin{verbatim}
 Prueba de Shapiro-Wilk:
-  W = 0.92465, p-value < 2.2e-16
+  W = 0.92379, p-value < 2.2e-16
   Resultado: NO NORMAL
 
 Prueba de Jarque-Bera:
-  X-squared = 2349.7, df = 2, p-value < 2.2e-16
+  X-squared = 2411.5, df = 2, p-value < 2.2e-16
   Resultado: NO NORMAL
 
 Prueba de Durbin-Watson:
-  DW = 2.0338, p-value = 0.547
+  DW = 2.0272, p-value = 0.6331
   Resultado: INDEPENDIENTES
 
 Prueba de Breusch-Pagan:
-  BP = 201.16, df = 13, p-value < 2.2e-16
+  BP = 201.21, df = 16, p-value < 2.2e-16
   Resultado: HETEROCEDASTICO
 
 VIF (Multicolinealidad):
   Ram_GB: 1.54 (OK)
-  CPU_GHz: 1.36 (OK)
-  Inches: 2.23 (OK)
-  TypeName: 3.63 (OK)
-  OpSys_Consolidado: 1.49 (OK)
+  CPU_GHz: 1.38 (OK)
+  Inches: 2.27 (OK)
+  TypeName: 3.79 (OK)
+  OpSys: 1.60 (OK)
 \end{verbatim}
 
 \end{document}
