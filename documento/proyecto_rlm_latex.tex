@@ -100,10 +100,10 @@
         
         {\large\textbf{Integrantes:}}\\[0.5cm]
         \begin{tabular}{rl}
-            Dubal Aguilar Torres \u0026 (200XXXXXX) \\
-            Alejandro Chaves Ramos \u0026 (200XXXXXX) \\
-            Juan Caceres Figueroa \u0026 (200XXXXXX) \\
-            Miguel Carrizosa \u0026 (200XXXXXX) \\
+            Dubal Aguilar Torres & (200XXXXXX) \\
+            Alejandro Chaves Ramos & (200XXXXXX) \\
+            Juan Caceres Figueroa & (200XXXXXX) \\
+            Miguel Carrizosa & (200XXXXXX) \\
         \end{tabular}
         
         \vfill
@@ -218,12 +218,12 @@ Para este analisis, se utilizaron todos los registros disponibles (1,303 laptops
 \caption{Resumen del Dataset}
 \begin{tabular}{lc}
 \toprule
-\textbf{Caracteristica} \u0026 \textbf{Valor} \\
+\textbf{Caracteristica} & \textbf{Valor} \\
 \midrule
-Total de laptops \u0026 1,303 \\
-Variables numericas \u0026 3 (RAM, CPU GHz, Pulgadas) \\
-Variables cualitativas \u0026 2 (Tipo, SO) \\
-Variable dependiente \u0026 Precio en euros \\
+Total de laptops & 1,303 \\
+Variables numericas & 3 (RAM, CPU GHz, Pulgadas) \\
+Variables cualitativas & 2 (Tipo, SO) \\
+Variable dependiente & Precio en euros \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -237,12 +237,12 @@ La matriz de correlacion de Pearson permite identificar las relaciones lineales 
 \caption{Matriz de Correlacion de Pearson}
 \begin{tabular}{lcccc}
 \toprule
- \u0026 \textbf{Precio} \u0026 \textbf{RAM (GB)} \u0026 \textbf{CPU (GHz)} \u0026 \textbf{Pulgadas} \\
+ & \textbf{Precio} & \textbf{RAM (GB)} & \textbf{CPU (GHz)} & \textbf{Pulgadas} \\
 \midrule
-Precio \u0026 1.0000 \u0026 0.7430 \u0026 0.4303 \u0026 0.0682 \\
-RAM (GB) \u0026 0.7430 \u0026 1.0000 \u0026 0.3680 \u0026 0.2380 \\
-CPU (GHz) \u0026 0.4303 \u0026 0.3680 \u0026 1.0000 \u0026 0.3079 \\
-Pulgadas \u0026 0.0682 \u0026 0.2380 \u0026 0.3079 \u0026 1.0000 \\
+Precio & 1.0000 & 0.7430 & 0.4303 & 0.0682 \\
+RAM (GB) & 0.7430 & 1.0000 & 0.3680 & 0.2380 \\
+CPU (GHz) & 0.4303 & 0.3680 & 1.0000 & 0.3079 \\
+Pulgadas & 0.0682 & 0.2380 & 0.3079 & 1.0000 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -338,12 +338,12 @@ Donde:
 \caption{Resultados del Modelo RLM - Coeficientes Numericos}
 \begin{tabular}{lcccc}
 \toprule
-\textbf{Variable} \u0026 \textbf{Coeficiente} \u0026 \textbf{Error Est.} \u0026 \textbf{t} \u0026 \textbf{p-valor} \\
+\textbf{Variable} & \textbf{Coeficiente} & \textbf{Error Est.} & \textbf{t} & \textbf{p-valor} \\
 \midrule
-(Intercepto) \u0026 42.920 \u0026 292.168 \u0026 0.147 \u0026 0.883 \\
-RAM (GB) \u0026 81.075 \u0026 2.581 \u0026 31.414 \u0026 \textless{}2e-16 *** \\
-CPU (GHz) \u0026 208.313 \u0026 24.493 \u0026 8.505 \u0026 \textless{}2e-16 *** \\
-Pulgadas \u0026 -23.088 \u0026 11.150 \u0026 -2.071 \u0026 0.039 * \\
+(Intercepto) & 42.920 & 292.168 & 0.147 & 0.883 \\
+RAM (GB) & 81.075 & 2.581 & 31.414 & \textless{}2e-16 *** \\
+CPU (GHz) & 208.313 & 24.493 & 8.505 & \textless{}2e-16 *** \\
+Pulgadas & -23.088 & 11.150 & -2.071 & 0.039 * \\
 \bottomrule
 \end{tabular}
 \\[0.3cm]
@@ -355,22 +355,22 @@ Pulgadas \u0026 -23.088 \u0026 11.150 \u0026 -2.071 \u0026 0.039 * \\
 \caption{Resultados del Modelo RLM - Variables Cualitativas}
 \begin{tabular}{lcccc}
 \toprule
-\textbf{Variable} \u0026 \textbf{Coeficiente} \u0026 \textbf{Error Est.} \u0026 \textbf{t} \u0026 \textbf{p-valor} \\
+\textbf{Variable} & \textbf{Coeficiente} & \textbf{Error Est.} & \textbf{t} & \textbf{p-valor} \\
 \midrule
-TypeNameGaming \u0026 -46.892 \u0026 53.627 \u0026 -0.874 \u0026 0.382 \\
-TypeNameNetbook \u0026 -247.928 \u0026 88.427 \u0026 -2.804 \u0026 0.005 ** \\
-TypeNameNotebook \u0026 -293.233 \u0026 42.865 \u0026 -6.841 \u0026 \textless{}2e-16 *** \\
-TypeNameUltrabook \u0026 120.528 \u0026 45.988 \u0026 2.621 \u0026 0.009 ** \\
-TypeNameWorkstation \u0026 650.140 \u0026 85.032 \u0026 7.646 \u0026 \textless{}2e-16 *** \\
+TypeNameGaming & -46.892 & 53.627 & -0.874 & 0.382 \\
+TypeNameNetbook & -247.928 & 88.427 & -2.804 & 0.005 ** \\
+TypeNameNotebook & -293.233 & 42.865 & -6.841 & \textless{}2e-16 *** \\
+TypeNameUltrabook & 120.528 & 45.988 & 2.621 & 0.009 ** \\
+TypeNameWorkstation & 650.140 & 85.032 & 7.646 & \textless{}2e-16 *** \\
 \midrule
-OpSysChrome OS \u0026 263.411 \u0026 282.896 \u0026 0.931 \u0026 0.352 \\
-OpSysLinux \u0026 231.796 \u0026 279.931 \u0026 0.828 \u0026 0.408 \\
-OpSysMac OS X \u0026 401.450 \u0026 306.282 \u0026 1.311 \u0026 0.190 \\
-OpSysmacOS \u0026 617.621 \u0026 295.898 \u0026 2.087 \u0026 0.037 * \\
-OpSysNo OS \u0026 179.496 \u0026 279.594 \u0026 0.642 \u0026 0.521 \\
-OpSysWindows 10 \u0026 420.911 \u0026 274.979 \u0026 1.531 \u0026 0.126 \\
-OpSysWindows 10 S \u0026 502.645 \u0026 306.600 \u0026 1.639 \u0026 0.101 \\
-OpSysWindows 7 \u0026 827.967 \u0026 280.866 \u0026 2.948 \u0026 0.003 ** \\
+OpSysChrome OS & 263.411 & 282.896 & 0.931 & 0.352 \\
+OpSysLinux & 231.796 & 279.931 & 0.828 & 0.408 \\
+OpSysMac OS X & 401.450 & 306.282 & 1.311 & 0.190 \\
+OpSysmacOS & 617.621 & 295.898 & 2.087 & 0.037 * \\
+OpSysNo OS & 179.496 & 279.594 & 0.642 & 0.521 \\
+OpSysWindows 10 & 420.911 & 274.979 & 1.531 & 0.126 \\
+OpSysWindows 10 S & 502.645 & 306.600 & 1.639 & 0.101 \\
+OpSysWindows 7 & 827.967 & 280.866 & 2.948 & 0.003 ** \\
 \bottomrule
 \end{tabular}
 \\[0.3cm]
@@ -382,15 +382,15 @@ OpSysWindows 7 \u0026 827.967 \u0026 280.866 \u0026 2.948 \u0026 0.003 ** \\
 \caption{Bondad de Ajuste}
 \begin{tabular}{lc}
 \toprule
-\textbf{Metrica} \u0026 \textbf{Valor} \\
+\textbf{Metrica} & \textbf{Valor} \\
 \midrule
-R2 \u0026 0.706 \\
-R2 Ajustado \u0026 0.703 \\
-F-statistic \u0026 193.3 \\
-p-valor (F) \u0026 \textless{}2.2e-16 \\
-Error estandar residual \u0026 381.2 \\
-Grados de libertad (modelo) \u0026 16 \\
-Grados de libertad (residuos) \u0026 1,286 \\
+R2 & 0.706 \\
+R2 Ajustado & 0.703 \\
+F-statistic & 193.3 \\
+p-valor (F) & \textless{}2.2e-16 \\
+Error estandar residual & 381.2 \\
+Grados de libertad (modelo) & 16 \\
+Grados de libertad (residuos) & 1,286 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -420,12 +420,12 @@ Grados de libertad (residuos) \u0026 1,286 \\
 \centering
 \begin{tabular}{lc}
 \toprule
-\textbf{Prueba} \u0026 \textbf{Resultado} \\
+\textbf{Prueba} & \textbf{Resultado} \\
 \midrule
-H0 \u0026 Los residuos son independientes \\
-H1 \u0026 Los residuos son dependientes \\
-Estadistico DW \u0026 2.0272 \\
-p-valor \u0026 0.6331 \\
+H0 & Los residuos son independientes \\
+H1 & Los residuos son dependientes \\
+Estadistico DW & 2.0272 \\
+p-valor & 0.6331 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -438,12 +438,12 @@ Interpretacion: Como el p-valor (0.6331) es mayor que 0.05, no se rechaza H0. Lo
 \centering
 \begin{tabular}{lc}
 \toprule
-\textbf{Prueba} \u0026 \textbf{Resultado} \\
+\textbf{Prueba} & \textbf{Resultado} \\
 \midrule
-H0 \u0026 Los residuos se distribuyen normalmente \\
-H1 \u0026 Los residuos NO se distribuyen normalmente \\
-Estadistico W \u0026 0.92379 \\
-p-valor \u0026 \textless{}2.2e-16 \\
+H0 & Los residuos se distribuyen normalmente \\
+H1 & Los residuos NO se distribuyen normalmente \\
+Estadistico W & 0.92379 \\
+p-valor & \textless{}2.2e-16 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -488,13 +488,13 @@ Interpretacion: Como el p-valor es muy pequeno (\textless{}2.2e-16), se rechaza 
 \centering
 \begin{tabular}{lc}
 \toprule
-\textbf{Prueba} \u0026 \textbf{Resultado} \\
+\textbf{Prueba} & \textbf{Resultado} \\
 \midrule
-H0 \u0026 Los residuos son homocedasticos \\
-H1 \u0026 Los residuos son heterocedasticos \\
-Estadistico BP \u0026 201.21 \\
-df \u0026 16 \\
-p-valor \u0026 \textless{}2.2e-16 \\
+H0 & Los residuos son homocedasticos \\
+H1 & Los residuos son heterocedasticos \\
+Estadistico BP & 201.21 \\
+df & 16 \\
+p-valor & \textless{}2.2e-16 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -525,13 +525,13 @@ Interpretacion: Como el p-valor es muy pequeno (\textless{}2.2e-16), se rechaza 
 \caption{Factor de Inflacion de Varianza (VIF)}
 \begin{tabular}{lccl}
 \toprule
-\textbf{Variable} \u0026 \textbf{VIF} \u0026 \textbf{Estado} \u0026 \textbf{Interpretacion} \\
+\textbf{Variable} & \textbf{VIF} & \textbf{Estado} & \textbf{Interpretacion} \\
 \midrule
-RAM (GB) \u0026 1.54 \u0026 Aceptable \u0026 Sin multicolinealidad \\
-CPU (GHz) \u0026 1.38 \u0026 Aceptable \u0026 Sin multicolinealidad \\
-Pulgadas \u0026 2.27 \u0026 Aceptable \u0026 Sin multicolinealidad \\
-TypeName (conjunto) \u0026 3.79 \u0026 Aceptable \u0026 Sin multicolinealidad \\
-OpSys (conjunto) \u0026 1.60 \u0026 Aceptable \u0026 Sin multicolinealidad \\
+RAM (GB) & 1.54 & Aceptable & Sin multicolinealidad \\
+CPU (GHz) & 1.38 & Aceptable & Sin multicolinealidad \\
+Pulgadas & 2.27 & Aceptable & Sin multicolinealidad \\
+TypeName (conjunto) & 3.79 & Aceptable & Sin multicolinealidad \\
+OpSys (conjunto) & 1.60 & Aceptable & Sin multicolinealidad \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -573,11 +573,11 @@ Utilizando el modelo ajustado, se realizo una prediccion para una laptop con las
 \caption{Resultados de la Prediccion}
 \begin{tabular}{lc}
 \toprule
-\textbf{Tipo de Prediccion} \u0026 \textbf{Valor (EUR)} \\
+\textbf{Tipo de Prediccion} & \textbf{Valor (EUR)} \\
 \midrule
-Prediccion puntual \u0026 1,937.24 \\
-Intervalo de prediccion (95\% inferior) \u0026 1,187.38 \\
-Intervalo de prediccion (95\% superior) \u0026 2,687.10 \\
+Prediccion puntual & 1,937.24 \\
+Intervalo de prediccion (95\% inferior) & 1,187.38 \\
+Intervalo de prediccion (95\% superior) & 2,687.10 \\
 \bottomrule
 \end{tabular}
 \end{table}
