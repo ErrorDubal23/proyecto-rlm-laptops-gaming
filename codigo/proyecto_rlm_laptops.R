@@ -192,15 +192,11 @@ cor.test(datos$Inches, datos$Price_euros, method = "pearson")
 
 cat("\n--- Generando graficos de correlacion ---\n")
 
-# --- Matriz de dispersion con rectas de regresion rojas ---
-# Usamos ggpairs para que cada panel muestre la recta roja como los plots individuales
-ggpairs(vars_num_modelo,
-        columnLabels = c("Precio (EUR)", "RAM (GB)", "CPU (GHz)", "Pulgadas"),
-        lower = list(continuous = wrap("smooth", method = "lm", colour = "red", se = TRUE)),
-        upper = list(continuous = wrap("cor", size = 6)),
-        diag = list(continuous = wrap("barDiag", fill = color_principal))) +
-  ggtitle("Matriz de Dispersion - Variables del Modelo") +
-  theme_minimal()
+# --- Matriz de dispersion ---
+pairs(vars_num_modelo,
+      main = "Matriz de Dispersion - Variables del Modelo",
+      pch = 19, col = color_principal, gap = 0.5,
+      cex.main = 1.2, col.main = color_principal)
 
 # --- Scatter plots individuales con recta de regresion roja ---
 
@@ -360,16 +356,24 @@ ggplot(data = datos, aes(x = CPU_GHz, y = modelo$residuals)) +
 # --- Normalidad ---
 cat("\n--- Normalidad de residuos ---\n")
 
-# Q-Q Plot de residuos
+# Q-Q Plot de residuos con linea recta roja
 qq_data <- data.frame(
   teorico = qqnorm(modelo$residuals, plot.it = FALSE)$x,
   muestra = qqnorm(modelo$residuals, plot.it = FALSE)$y
 )
 
+# Calculamos la linea de referencia (cuantiles teoricos vs muestra)
+qq_line <- data.frame(
+  x = range(qq_data$teorico),
+  y = quantile(modelo$residuals, c(0.25, 0.75), names = FALSE)
+)
+slope <- diff(qq_line$y) / diff(qq_line$x)
+intercept <- qq_line$y[1] - slope * qq_line$x[1]
+
 ggplot(qq_data, aes(x = teorico, y = muestra)) +
   geom_point(color = color_principal, alpha = 0.5, size = 2) +
-  geom_abline(intercept = 0, slope = 1, color = color_acento,
-              linetype = "dashed", size = 1.2) +
+  geom_abline(intercept = intercept, slope = slope, color = "red",
+              linetype = "solid", size = 1.2) +
   labs(title = "Q-Q Plot de Residuos",
        subtitle = "Prueba de Normalidad",
        x = "Cuantiles Teoricos", y = "Cuantiles Muestra") +
