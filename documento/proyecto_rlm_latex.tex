@@ -100,10 +100,10 @@
         
         {\large\textbf{Integrantes:}}\\[0.5cm]
         \begin{tabular}{rl}
-            Dubal Aguilar Torres & (200XXXXXX) \\
-            Alejandro Chaves Ramos & (200XXXXXX) \\
-            Juan Caceres Figueroa & (200XXXXXX) \\
-            Miguel Carrizosa & (200XXXXXX) \\
+            Dubal Aguilar Torres \u0026 (200XXXXXX) \\
+            Alejandro Chaves Ramos \u0026 (200XXXXXX) \\
+            Juan Caceres Figueroa \u0026 (200XXXXXX) \\
+            Miguel Carrizosa \u0026 (200XXXXXX) \\
         \end{tabular}
         
         \vfill
@@ -218,12 +218,12 @@ Para este analisis, se utilizaron todos los registros disponibles (1,303 laptops
 \caption{Resumen del Dataset}
 \begin{tabular}{lc}
 \toprule
-\textbf{Caracteristica} & \textbf{Valor} \\
+\textbf{Caracteristica} \u0026 \textbf{Valor} \\
 \midrule
-Total de laptops & 1,303 \\
-Variables numericas & 3 (RAM, CPU GHz, Pulgadas) \\
-Variables cualitativas & 2 (Tipo, SO) \\
-Variable dependiente & Precio en euros \\
+Total de laptops \u0026 1,303 \\
+Variables numericas \u0026 3 (RAM, CPU GHz, Pulgadas) \\
+Variables cualitativas \u0026 2 (Tipo, SO) \\
+Variable dependiente \u0026 Precio en euros \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -237,12 +237,12 @@ La matriz de correlacion de Pearson permite identificar las relaciones lineales 
 \caption{Matriz de Correlacion de Pearson}
 \begin{tabular}{lcccc}
 \toprule
- & \textbf{Precio} & \textbf{RAM (GB)} & \textbf{CPU (GHz)} & \textbf{Pulgadas} \\
+ \u0026 \textbf{Precio} \u0026 \textbf{RAM (GB)} \u0026 \textbf{CPU (GHz)} \u0026 \textbf{Pulgadas} \\
 \midrule
-Precio & 1.000 & 0.743 & 0.430 & 0.068 \\
-RAM (GB) & 0.743 & 1.000 & 0.210 & 0.150 \\
-CPU (GHz) & 0.430 & 0.210 & 1.000 & 0.050 \\
-Pulgadas & 0.068 & 0.150 & 0.050 & 1.000 \\
+Precio \u0026 1.0000 \u0026 0.7430 \u0026 0.4303 \u0026 0.0682 \\
+RAM (GB) \u0026 0.7430 \u0026 1.0000 \u0026 0.3680 \u0026 0.2380 \\
+CPU (GHz) \u0026 0.4303 \u0026 0.3680 \u0026 1.0000 \u0026 0.3079 \\
+Pulgadas \u0026 0.0682 \u0026 0.2380 \u0026 0.3079 \u0026 1.0000 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -255,7 +255,7 @@ Interpretacion:
     
     \item La correlacion entre Precio y Pulgadas es \textbf{0.068}, lo que indica una relacion muy debil. El tamano de pantalla por si solo no es un determinante fuerte del precio.
     
-    \item La correlacion entre RAM y CPU (GHz) es \textbf{0.210}, lo que sugiere una relacion debil entre estas variables independientes, indicando ausencia de multicolinealidad severa.
+    \item La correlacion entre RAM y CPU (GHz) es \textbf{0.368}, lo que sugiere una relacion debil entre estas variables independientes, indicando ausencia de multicolinealidad severa.
 \end{itemize}
 
 % ESPACIO PARA FIGURA 1: MATRIZ DE CORRELACION
@@ -285,7 +285,7 @@ Para analizar la relacion entre las variables cualitativas y el precio, se utili
         \vspace{3cm}
         {\large\textbf{Figura 2}}\\[0.5cm]
         {\normalsize Relacion entre Tipo de Laptop y Precio}\\[0.3cm]
-        {\small Insertar imagen: figura5\_tipo\_vs\_precio.png}
+        {\small Insertar imagen: figura2\_tipo\_vs\_precio.png}
         \vspace{3cm}
     }}
     \caption{Diagrama de caja que muestra la distribucion del precio segun el tipo de laptop (Ultrabook, Notebook, Gaming, Workstation, etc.).}
@@ -300,7 +300,7 @@ Para analizar la relacion entre las variables cualitativas y el precio, se utili
         \vspace{3cm}
         {\large\textbf{Figura 3}}\\[0.5cm]
         {\normalsize Relacion entre Sistema Operativo y Precio}\\[0.3cm]
-        {\small Insertar imagen: figura6\_opsys\_vs\_precio.png}
+        {\small Insertar imagen: figura3\_opsys\_vs\_precio.png}
         \vspace{3cm}
     }}
     \caption{Diagrama de caja que muestra la distribucion del precio segun el sistema operativo (Windows, macOS, Linux, etc.).}
@@ -335,15 +335,15 @@ Donde:
 
 \begin{table}[H]
 \centering
-\caption{Resultados del Modelo RLM}
+\caption{Resultados del Modelo RLM - Coeficientes Numericos}
 \begin{tabular}{lcccc}
 \toprule
-\textbf{Variable} & \textbf{Coeficiente} & \textbf{Error Est.} & \textbf{t} & \textbf{p-valor} \\
+\textbf{Variable} \u0026 \textbf{Coeficiente} \u0026 \textbf{Error Est.} \u0026 \textbf{t} \u0026 \textbf{p-valor} \\
 \midrule
-Intercepto & -1000.0 & 500.0 & -2.00 & 0.046 * \\
-RAM (GB) & 45.0 & 3.0 & 15.0 & \textless{}0.001 *** \\
-CPU (GHz) & 200.0 & 25.0 & 8.0 & \textless{}0.001 *** \\
-Pulgadas & 30.0 & 15.0 & 2.0 & 0.045 * \\
+(Intercepto) \u0026 42.920 \u0026 292.168 \u0026 0.147 \u0026 0.883 \\
+RAM (GB) \u0026 81.075 \u0026 2.581 \u0026 31.414 \u0026 \textless{}2e-16 *** \\
+CPU (GHz) \u0026 208.313 \u0026 24.493 \u0026 8.505 \u0026 \textless{}2e-16 *** \\
+Pulgadas \u0026 -23.088 \u0026 11.150 \u0026 -2.071 \u0026 0.039 * \\
 \bottomrule
 \end{tabular}
 \\[0.3cm]
@@ -352,15 +352,45 @@ Pulgadas & 30.0 & 15.0 & 2.0 & 0.045 * \\
 
 \begin{table}[H]
 \centering
+\caption{Resultados del Modelo RLM - Variables Cualitativas}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Variable} \u0026 \textbf{Coeficiente} \u0026 \textbf{Error Est.} \u0026 \textbf{t} \u0026 \textbf{p-valor} \\
+\midrule
+TypeNameGaming \u0026 -46.892 \u0026 53.627 \u0026 -0.874 \u0026 0.382 \\
+TypeNameNetbook \u0026 -247.928 \u0026 88.427 \u0026 -2.804 \u0026 0.005 ** \\
+TypeNameNotebook \u0026 -293.233 \u0026 42.865 \u0026 -6.841 \u0026 \textless{}2e-16 *** \\
+TypeNameUltrabook \u0026 120.528 \u0026 45.988 \u0026 2.621 \u0026 0.009 ** \\
+TypeNameWorkstation \u0026 650.140 \u0026 85.032 \u0026 7.646 \u0026 \textless{}2e-16 *** \\
+\midrule
+OpSysChrome OS \u0026 263.411 \u0026 282.896 \u0026 0.931 \u0026 0.352 \\
+OpSysLinux \u0026 231.796 \u0026 279.931 \u0026 0.828 \u0026 0.408 \\
+OpSysMac OS X \u0026 401.450 \u0026 306.282 \u0026 1.311 \u0026 0.190 \\
+OpSysmacOS \u0026 617.621 \u0026 295.898 \u0026 2.087 \u0026 0.037 * \\
+OpSysNo OS \u0026 179.496 \u0026 279.594 \u0026 0.642 \u0026 0.521 \\
+OpSysWindows 10 \u0026 420.911 \u0026 274.979 \u0026 1.531 \u0026 0.126 \\
+OpSysWindows 10 S \u0026 502.645 \u0026 306.600 \u0026 1.639 \u0026 0.101 \\
+OpSysWindows 7 \u0026 827.967 \u0026 280.866 \u0026 2.948 \u0026 0.003 ** \\
+\bottomrule
+\end{tabular}
+\\[0.3cm]
+\small Las categorias de referencia son: TypeName = ``2 in 1 Convertible'', OpSys = ``Android''
+\end{table}
+
+\begin{table}[H]
+\centering
 \caption{Bondad de Ajuste}
 \begin{tabular}{lc}
 \toprule
-\textbf{Metrica} & \textbf{Valor} \\
+\textbf{Metrica} \u0026 \textbf{Valor} \\
 \midrule
-R2 & 0.700 \\
-R2 Ajustado & 0.695 \\
-Estadistico F & 280.0 \\
-p-valor (F) & \textless{}0.001 \\
+R2 \u0026 0.706 \\
+R2 Ajustado \u0026 0.703 \\
+F-statistic \u0026 193.3 \\
+p-valor (F) \u0026 \textless{}2.2e-16 \\
+Error estandar residual \u0026 381.2 \\
+Grados de libertad (modelo) \u0026 16 \\
+Grados de libertad (residuos) \u0026 1,286 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -368,13 +398,15 @@ p-valor (F) & \textless{}0.001 \\
 \subsection{Interpretacion de Coeficientes}
 
 \begin{itemize}
-    \item \textbf{RAM (GB):} Por cada aumento de 1 GB en la memoria RAM, el precio de la laptop aumenta en promedio 45 EUR, manteniendo constantes las demas variables.
+    \item \textbf{RAM (GB):} Por cada aumento de 1 GB en la memoria RAM, el precio de la laptop aumenta en promedio 81.08 EUR, manteniendo constantes las demas variables.
     
-    \item \textbf{CPU (GHz):} Por cada aumento de 1 GHz en la frecuencia del procesador, el precio aumenta en promedio 200 EUR. Esto indica que el procesador es uno de los componentes mas determinantes del precio.
+    \item \textbf{CPU (GHz):} Por cada aumento de 1 GHz en la frecuencia del procesador, el precio aumenta en promedio 208.31 EUR. Esto indica que el procesador es uno de los componentes mas determinantes del precio.
     
-    \item \textbf{Pulgadas:} Por cada pulgada adicional en el tamano de pantalla, el precio aumenta en promedio 30 EUR.
+    \item \textbf{Pulgadas:} Por cada pulgada adicional en el tamano de pantalla, el precio \textbf{disminuye} en promedio 23.09 EUR. Este resultado contraintuitivo puede explicarse por el hecho de que las laptops con pantallas mas grandes tienden a ser notebooks basicas, mientras que las mas caras (Ultrabooks, Workstations) suelen tener pantallas mas compactas pero de mayor resolucion.
     
-    \item \textbf{Tipo y SO:} Las categorias de tipo de laptop y sistema operativo muestran diferencias significativas en el precio (ver tabla completa en Anexo C).
+    \item \textbf{Tipo de Laptop:} Las Workstation tienen un precio promedio 650.14 EUR mayor que las ``2 in 1 Convertible'' (categoria de referencia), mientras que los Notebook son 293.23 EUR mas baratos. Los Netbook son 247.93 EUR mas baratos.
+    
+    \item \textbf{Sistema Operativo:} Windows 7 tiene un precio promedio 827.97 EUR mayor que Android (categoria de referencia), y macOS es 617.62 EUR mas caro.
 \end{itemize}
 
 % =============================================================================
@@ -388,17 +420,17 @@ p-valor (F) & \textless{}0.001 \\
 \centering
 \begin{tabular}{lc}
 \toprule
-\textbf{Prueba} & \textbf{Resultado} \\
+\textbf{Prueba} \u0026 \textbf{Resultado} \\
 \midrule
-H0 & Los residuos son independientes \\
-H1 & Los residuos son dependientes \\
-Estadistico DW & 1.96 \\
-p-valor & 0.450 \\
+H0 \u0026 Los residuos son independientes \\
+H1 \u0026 Los residuos son dependientes \\
+Estadistico DW \u0026 2.0272 \\
+p-valor \u0026 0.6331 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Interpretacion: Como el p-valor (0.450) es mayor que 0.05, no se rechaza H0. Los residuos son independientes. El valor del estadistico Durbin-Watson (1.96) esta cercano a 2, lo que confirma la ausencia de autocorrelacion.
+Interpretacion: Como el p-valor (0.6331) es mayor que 0.05, no se rechaza H0. Los residuos son independientes. El valor del estadistico Durbin-Watson (2.0272) esta cercano a 2, lo que confirma la ausencia de autocorrelacion.
 
 \subsection{2. Normalidad de Residuos (Shapiro-Wilk)}
 
@@ -406,17 +438,19 @@ Interpretacion: Como el p-valor (0.450) es mayor que 0.05, no se rechaza H0. Los
 \centering
 \begin{tabular}{lc}
 \toprule
-\textbf{Prueba} & \textbf{Resultado} \\
+\textbf{Prueba} \u0026 \textbf{Resultado} \\
 \midrule
-H0 & Los residuos se distribuyen normalmente \\
-H1 & Los residuos NO se distribuyen normalmente \\
-Estadistico W & 0.995 \\
-p-valor & 0.150 \\
+H0 \u0026 Los residuos se distribuyen normalmente \\
+H1 \u0026 Los residuos NO se distribuyen normalmente \\
+Estadistico W \u0026 0.92379 \\
+p-valor \u0026 \textless{}2.2e-16 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Interpretacion: Como el p-valor (0.150) es mayor que 0.05, no se rechaza H0. Los residuos siguen una distribucion normal.
+Interpretacion: Como el p-valor es muy pequeno (\textless{}2.2e-16), se rechaza H0. \textbf{Los residuos NO siguen una distribucion normal.} Este resultado puede atribuirse a la asimetria de la variable precio (skewness = 1.52), que presenta una cola larga hacia la derecha debido a laptops de muy alto precio.
+
+\textbf{Nota:} Para corregir este problema, se podrian utilizar errores estandar robustos (metodo Huber-White) o aplicar una transformacion logaritmica. Sin embargo, dado que el enunciado del curso solicita usar el precio directamente, se mantienen los resultados con la advertencia correspondiente.
 
 % ESPACIO PARA FIGURA 4: Q-Q PLOT
 \begin{figure}[H]
@@ -426,10 +460,10 @@ Interpretacion: Como el p-valor (0.150) es mayor que 0.05, no se rechaza H0. Los
         \vspace{3cm}
         {\large\textbf{Figura 4}}\\[0.5cm]
         {\normalsize Q-Q Plot de Residuos}\\[0.3cm]
-        {\small Insertar imagen: figura7\_qqplot\_residuos.png}
+        {\small Insertar imagen: figura4\_qqplot\_residuos.png}
         \vspace{3cm}
     }}
-    \caption{Grafico Q-Q que compara los cuantiles de los residuos con los cuantiles teoricos de una distribucion normal.}
+    \caption{Grafico Q-Q que compara los cuantiles de los residuos con los cuantiles teoricos de una distribucion normal. Se observa desviacion en las colas.}
     \label{fig:qqplot}
 \end{figure}
 
@@ -441,7 +475,7 @@ Interpretacion: Como el p-valor (0.150) es mayor que 0.05, no se rechaza H0. Los
         \vspace{3cm}
         {\large\textbf{Figura 5}}\\[0.5cm]
         {\normalsize Histograma de Residuos}\\[0.3cm]
-        {\small Insertar imagen: figura8\_histograma\_residuos.png}
+        {\small Insertar imagen: figura5\_histograma\_residuos.png}
         \vspace{3cm}
     }}
     \caption{Histograma de los residuos del modelo con la curva de densidad normal superpuesta.}
@@ -454,17 +488,20 @@ Interpretacion: Como el p-valor (0.150) es mayor que 0.05, no se rechaza H0. Los
 \centering
 \begin{tabular}{lc}
 \toprule
-\textbf{Prueba} & \textbf{Resultado} \\
+\textbf{Prueba} \u0026 \textbf{Resultado} \\
 \midrule
-H0 & Los residuos son homocedasticos \\
-H1 & Los residuos son heterocedasticos \\
-Estadistico LM & 15.50 \\
-p-valor & 0.050 \\
+H0 \u0026 Los residuos son homocedasticos \\
+H1 \u0026 Los residuos son heterocedasticos \\
+Estadistico BP \u0026 201.21 \\
+df \u0026 16 \\
+p-valor \u0026 \textless{}2.2e-16 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Interpretacion: Como el p-valor (0.050) esta en el limite, se considera que no hay evidencia fuerte de heterocedasticidad. Los residuos cumplen con el supuesto de homocedasticidad.
+Interpretacion: Como el p-valor es muy pequeno (\textless{}2.2e-16), se rechaza H0. \textbf{Los residuos son heterocedasticos.} Esto indica que la varianza de los residuos no es constante a lo largo de los valores ajustados. Este resultado es comun en datos donde el rango de la variable dependiente es amplio (precios desde 174 hasta 6,099 EUR).
+
+\textbf{Nota:} Se recomienda utilizar errores estandar robustos (sandwich) para corregir la heterocedasticidad y obtener inferencias validas.
 
 % ESPACIO PARA FIGURA 6: RESIDUOS VS VALORES AJUSTADOS
 \begin{figure}[H]
@@ -474,10 +511,10 @@ Interpretacion: Como el p-valor (0.050) esta en el limite, se considera que no h
         \vspace{3cm}
         {\large\textbf{Figura 6}}\\[0.5cm]
         {\normalsize Residuos vs Valores Ajustados}\\[0.3cm]
-        {\small Insertar imagen: figura9\_residuos\_vs\_fitted.png}
+        {\small Insertar imagen: figura6\_residuos\_vs\_fitted.png}
         \vspace{3cm}
     }}
-    \caption{Grafico de dispersion de residuos contra valores ajustados para diagnosticar homocedasticidad.}
+    \caption{Grafico de dispersion de residuos contra valores ajustados para diagnosticar homocedasticidad. Se observa un patron de embudo que sugiere heterocedasticidad.}
     \label{fig:residuos}
 \end{figure}
 
@@ -488,16 +525,18 @@ Interpretacion: Como el p-valor (0.050) esta en el limite, se considera que no h
 \caption{Factor de Inflacion de Varianza (VIF)}
 \begin{tabular}{lccl}
 \toprule
-\textbf{Variable} & \textbf{VIF} & \textbf{Estado} & \textbf{Interpretacion} \\
+\textbf{Variable} \u0026 \textbf{VIF} \u0026 \textbf{Estado} \u0026 \textbf{Interpretacion} \\
 \midrule
-RAM (GB) & 2.50 & Aceptable & Sin multicolinealidad \\
-CPU (GHz) & 2.20 & Aceptable & Sin multicolinealidad \\
-Pulgadas & 1.80 & Aceptable & Sin multicolinealidad \\
+RAM (GB) \u0026 1.54 \u0026 Aceptable \u0026 Sin multicolinealidad \\
+CPU (GHz) \u0026 1.38 \u0026 Aceptable \u0026 Sin multicolinealidad \\
+Pulgadas \u0026 2.27 \u0026 Aceptable \u0026 Sin multicolinealidad \\
+TypeName (conjunto) \u0026 3.79 \u0026 Aceptable \u0026 Sin multicolinealidad \\
+OpSys (conjunto) \u0026 1.60 \u0026 Aceptable \u0026 Sin multicolinealidad \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Interpretacion: Los valores de VIF son menores a 5, lo que indica que no hay multicolinealidad en el modelo.
+Interpretacion: Los valores de VIF son todos menores a 5, lo que indica que \textbf{no hay multicolinealidad problematica} en el modelo. Las variables numericas tienen VIF muy bajos (menores a 2.5), lo que confirma que las correlaciones entre variables independientes son aceptables.
 
 % ESPACIO PARA FIGURA 7: GRAFICOS DE DIAGNOSTICO COMPLETOS
 \begin{figure}[H]
@@ -507,7 +546,7 @@ Interpretacion: Los valores de VIF son menores a 5, lo que indica que no hay mul
         \vspace{4cm}
         {\large\textbf{Figura 7}}\\[0.5cm]
         {\normalsize Graficos de Diagnostico del Modelo}\\[0.3cm]
-        {\small Insertar imagen: figura10\_diagnostico\_completo.png}
+        {\small Insertar imagen: figura7\_diagnostico\_completo.png}
         \vspace{4cm}
     }}
     \caption{Conjunto de graficos de diagnostico: residuos vs fitted, Q-Q plot, scale-location y residuos vs leverage.}
@@ -515,22 +554,55 @@ Interpretacion: Los valores de VIF son menores a 5, lo que indica que no hay mul
 \end{figure}
 
 % =============================================================================
-% 7. CONCLUSIONES
+% 7. PREDICCION
+% =============================================================================
+\section{Prediccion (Opcional)}
+
+Utilizando el modelo ajustado, se realizo una prediccion para una laptop con las siguientes caracteristicas:
+
+\begin{itemize}
+    \item RAM: 16 GB
+    \item CPU: 2.8 GHz
+    \item Pantalla: 15.6 pulgadas
+    \item Tipo: Gaming
+    \item Sistema Operativo: Windows 10
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{Resultados de la Prediccion}
+\begin{tabular}{lc}
+\toprule
+\textbf{Tipo de Prediccion} \u0026 \textbf{Valor (EUR)} \\
+\midrule
+Prediccion puntual \u0026 1,937.24 \\
+Intervalo de prediccion (95\% inferior) \u0026 1,187.38 \\
+Intervalo de prediccion (95\% superior) \u0026 2,687.10 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+El intervalo de prediccion es relativamente amplio (1,187 a 2,687 EUR), lo que refleja la variabilidad inherente en los precios de laptops y la heterocedasticidad del modelo.
+
+% =============================================================================
+% 8. CONCLUSIONES
 % =============================================================================
 \section{Conclusiones}
 
 \begin{enumerate}[leftmargin=1.5cm]
-    \item El modelo de regresion lineal multiple desarrollado explica aproximadamente el 70.0\% de la variabilidad en el precio de las laptops (R2 = 0.700), lo que indica un buen ajuste del modelo.
+    \item El modelo de regresion lineal multiple desarrollado explica aproximadamente el 70.6\% de la variabilidad en el precio de las laptops (R2 = 0.706), lo que indica un buen ajuste del modelo.
     
-    \item La memoria RAM es uno de los factores tecnicos mas influyentes en el precio de una laptop. Por cada aumento de 1 GB en RAM, el precio aumenta en promedio 45 EUR.
+    \item La memoria RAM es uno de los factores tecnicos mas influyentes en el precio de una laptop. Por cada aumento de 1 GB en RAM, el precio aumenta en promedio 81.08 EUR.
     
-    \item La frecuencia del procesador (CPU) tiene el mayor impacto en el precio. Por cada GHz adicional, el precio aumenta en promedio 200 EUR, lo que indica que el procesador es el componente mas determinante.
+    \item La frecuencia del procesador (CPU) tiene un impacto significativo en el precio. Por cada GHz adicional, el precio aumenta en promedio 208.31 EUR, lo que indica que el procesador es un componente determinante.
     
-    \item El tamano de pantalla tiene un impacto menor pero significativo en el precio. Por cada pulgada adicional, el precio aumenta en promedio 30 EUR.
+    \item El tamano de pantalla muestra un efecto negativo en el precio (-23.09 EUR por pulgada), lo que sugiere que las laptops mas caras tienden a ser mas compactas pero con especificaciones superiores en otros aspectos.
     
-    \item Las categorias de tipo de laptop y sistema operativo muestran diferencias significativas en el precio, siendo las laptops Gaming y Workstation las de mayor precio promedio.
+    \item Las categorias de tipo de laptop y sistema operativo muestran diferencias significativas en el precio, siendo las Workstation las de mayor precio promedio (650.14 EUR mas que las ``2 in 1 Convertible'').
     
-    \item Todos los supuestos del modelo se cumplen satisfactoriamente: normalidad (Shapiro-Wilk p = 0.150), independencia (Durbin-Watson = 1.96), homocedasticidad (Breusch-Pagan p = 0.050) y multicolinealidad (VIF \textless{} 5).
+    \item El supuesto de independencia se cumple (Durbin-Watson = 2.0272, p = 0.6331) y no hay multicolinealidad (VIF \textless{} 5).
+    
+    \item Los supuestos de normalidad y homocedasticidad \textbf{no se cumplen completamente}. Se recomienda interpretar los resultados con cautela y considerar el uso de errores estandar robustos para inferencia.
 \end{enumerate}
 
 \subsection{Recomendaciones}
@@ -538,7 +610,9 @@ Interpretacion: Los valores de VIF son menores a 5, lo que indica que no hay mul
 \begin{itemize}[leftmargin=1.5cm]
     \item Para consumidores: Priorizar la cantidad de RAM y la frecuencia del CPU al seleccionar una laptop, ya que son los factores que mas impactan el precio y el rendimiento.
     
-    \item Para futuros analisis: Ampliar el dataset para incluir mas variables como tipo de almacenamiento (SSD vs HDD), marca de GPU, y resolucion de pantalla.
+    \item Para futuros analisis: Considerar transformaciones de la variable dependiente o usar modelos robustos para manejar la heterocedasticidad y no normalidad de los residuos.
+    
+    \item Se sugiere incluir mas variables como tipo de almacenamiento (SSD vs HDD), marca de GPU, y resolucion de pantalla para mejorar el poder explicativo del modelo.
 \end{itemize}
 
 \subsection{Aprendizajes del Curso}
@@ -550,10 +624,11 @@ Este proyecto permitio aplicar de manera integral los conceptos aprendidos en el
     \item El manejo de datos reales que requieren limpieza y preparacion previa.
     \item La interpretacion practica de coeficientes en contextos reales de ingenieria de sistemas.
     \item La aplicacion de pruebas estadisticas para validar los supuestos de regresion.
+    \item La necesidad de reconocer limitaciones del modelo y proponer mejoras.
 \end{itemize}
 
 % =============================================================================
-% 8. ANEXOS
+% 9. ANEXOS
 % =============================================================================
 \newpage
 \section{Anexos}
@@ -584,9 +659,11 @@ cor()               # Correlacion de Pearson
 lm()                # Modelo lineal
 dwtest()            # Durbin-Watson
 shapiro.test()      # Shapiro-Wilk
+jarque.bera.test()  # Jarque-Bera
 bptest()            # Breusch-Pagan
 vif()               # Factor de inflacion de varianza
 predict()           # Predicciones
+confint()           # Intervalos de confianza
 \end{verbatim}
 
 \subsection{Anexo C: Resultados Completos del Modelo}
@@ -598,20 +675,60 @@ lm(formula = Price_euros ~ Ram_GB + CPU_GHz + Inches + TypeName + OpSys,
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--2500.0  -200.0   -10.0   180.0  3500.0 
+-1895.4  -218.5   -46.2   159.8  2883.0 
 
 Coefficients:
-            Estimate Std. Error t value Pr(>|t|)    
-(Intercept)  -1000.0    500.0   -2.00   0.046 *  
-Ram_GB          45.0      3.0   15.00   <2e-16 ***
-CPU_GHz        200.0     25.0    8.00   <2e-16 ***
-Inches          30.0     15.0    2.00   0.045 *  
+                    Estimate Std. Error t value Pr(>|t|)    
+(Intercept)          42.920    292.168   0.147 0.883233    
+Ram_GB               81.075      2.581  31.414  < 2e-16 ***
+CPU_GHz             208.313     24.493   8.505  < 2e-16 ***
+Inches              -23.088     11.150  -2.071 0.038590 *  
+TypeNameGaming      -46.892     53.627  -0.874 0.382057    
+TypeNameNetbook    -247.928     88.427  -2.804 0.005132 ** 
+TypeNameNotebook   -293.233     42.865  -6.841 1.21e-11 ***
+TypeNameUltrabook   120.528     45.988   2.621 0.008873 ** 
+TypeNameWorkstation 650.140     85.032   7.646 4.04e-14 ***
+OpSysChrome OS      263.411    282.896   0.931 0.351971    
+OpSysLinux          231.796    279.931   0.828 0.407796    
+OpSysMac OS X       401.450    306.282   1.311 0.190192    
+OpSysmacOS          617.621    295.898   2.087 0.037063 *  
+OpSysNo OS          179.496    279.594   0.642 0.520985    
+OpSysWindows 10     420.911    274.979   1.531 0.126089    
+OpSysWindows 10 S   502.645    306.600   1.639 0.101366    
+OpSysWindows 7      827.967    280.866   2.948 0.003257 ** 
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 350.0 on 1295 degrees of freedom
-Multiple R-squared:  0.700,    Adjusted R-squared:  0.695 
-F-statistic: 280.0 on 5 and 1295 DF,  p-value: < 2.2e-16
+Residual standard error: 381.2 on 1286 degrees of freedom
+Multiple R-squared:  0.7063,    Adjusted R-squared:  0.7027 
+F-statistic: 193.3 on 16 and 1286 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\subsection{Anexo D: Resumen de las Pruebas de Supuestos}
+
+\begin{verbatim}
+Prueba de Shapiro-Wilk:
+  W = 0.92379, p-value < 2.2e-16
+  Resultado: NO NORMAL
+
+Prueba de Jarque-Bera:
+  X-squared = 2411.5, df = 2, p-value < 2.2e-16
+  Resultado: NO NORMAL
+
+Prueba de Durbin-Watson:
+  DW = 2.0272, p-value = 0.6331
+  Resultado: INDEPENDIENTES
+
+Prueba de Breusch-Pagan:
+  BP = 201.21, df = 16, p-value < 2.2e-16
+  Resultado: HETEROCEDASTICO
+
+VIF (Multicolinealidad):
+  Ram_GB: 1.54 (OK)
+  CPU_GHz: 1.38 (OK)
+  Inches: 2.27 (OK)
+  TypeName: 3.79 (OK)
+  OpSys: 1.60 (OK)
 \end{verbatim}
 
 % =============================================================================
