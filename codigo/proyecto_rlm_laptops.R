@@ -21,10 +21,6 @@ for (p in paquetes) {
 }
 
 
-# -------------------------------------------------
-# CONFIGURACION DE PALETA DE COLORES
-# -------------------------------------------------
-
 color_principal   <- "#0047AB"    # Azul oscuro profundo
 color_secundario  <- "#4682B4"    # Azul acero
 color_acento      <- "#B22222"    # Rojo ladrillo para outliers
@@ -73,12 +69,12 @@ datos$Res_Height <- as.numeric(str_extract(datos$ScreenResolution, "(?<=x)\\d+")
 
 # Marca del CPU
 datos$CPU_Brand <- ifelse(grepl("Intel", datos$Cpu), "Intel",
-                   ifelse(grepl("AMD", datos$Cpu), "AMD", "Other"))
+                          ifelse(grepl("AMD", datos$Cpu), "AMD", "Other"))
 
 # Marca de la GPU
 datos$GPU_Brand <- ifelse(grepl("Nvidia|NVIDIA", datos$Gpu), "Nvidia",
-                   ifelse(grepl("Intel", datos$Gpu), "Intel",
-                   ifelse(grepl("AMD", datos$Gpu), "AMD", "Other")))
+                          ifelse(grepl("Intel", datos$Gpu), "Intel",
+                                 ifelse(grepl("AMD", datos$Gpu), "AMD", "Other")))
 
 # Consolidamos categorias de OpSys con menos de 15 observaciones
 # para evitar inestabilidad en el modelo
@@ -356,48 +352,81 @@ ggplot(data = datos, aes(x = CPU_GHz, y = modelo$residuals)) +
 # --- Normalidad ---
 cat("\n--- Normalidad de residuos ---\n")
 
-# Q-Q Plot de residuos con linea recta roja
+# Q-Q Plot de residuos con linea de referencia correcta
+
+qq <- qqnorm(modelo$residuals, plot.it = FALSE)
+
 qq_data <- data.frame(
-  teorico = qqnorm(modelo$residuals, plot.it = FALSE)$x,
-  muestra = qqnorm(modelo$residuals, plot.it = FALSE)$y
+  teorico = qq$x,
+  muestra = qq$y
 )
 
-# Calculamos la linea de referencia (cuantiles teoricos vs muestra)
-qq_line <- data.frame(
-  x = range(qq_data$teorico),
-  y = quantile(modelo$residuals, c(0.25, 0.75), names = FALSE)
-)
-slope <- diff(qq_line$y) / diff(qq_line$x)
-intercept <- qq_line$y[1] - slope * qq_line$x[1]
+# Cuantiles teoricos normales (25% y 75%)
+xq <- qnorm(c(0.25, 0.75))
+
+# Cuantiles muestrales de los residuos
+yq <- quantile(modelo$residuals, c(0.25, 0.75), names = FALSE)
+
+# Pendiente e intercepto correctos
+slope <- diff(yq) / diff(xq)
+intercept <- yq[1] - slope * xq[1]
 
 ggplot(qq_data, aes(x = teorico, y = muestra)) +
   geom_point(color = color_principal, alpha = 0.5, size = 2) +
-  geom_abline(intercept = intercept, slope = slope, color = "red",
-              linetype = "solid", size = 1.2) +
-  labs(title = "Q-Q Plot de Residuos",
-       subtitle = "Prueba de Normalidad",
-       x = "Cuantiles Teoricos", y = "Cuantiles Muestra") +
+  geom_abline(
+    intercept = intercept,
+    slope = slope,
+    color = "red",
+    linetype = "solid",
+    size = 1.2
+  ) +
+  labs(
+    title = "Q-Q Plot de Residuos",
+    subtitle = "Prueba de Normalidad",
+    x = "Cuantiles Teoricos",
+    y = "Cuantiles Muestra"
+  ) +
   theme_bw() +
   theme(
-    plot.title = element_text(color = color_principal, size = 14, face = "bold"),
-    plot.subtitle = element_text(color = color_secundario, size = 11),
-    axis.title = element_text(color = color_texto, size = 12)
+    plot.title = element_text(
+      color = color_principal,
+      size = 14,
+      face = "bold"
+    ),
+    plot.subtitle = element_text(
+      color = color_secundario,
+      size = 11
+    ),
+    axis.title = element_text(
+      color = color_texto,
+      size = 12
+    )
   )
 
 # Prueba de Shapiro-Wilk
 # Nota: shapiro.test() solo acepta maximo N = 5000
 # Tomamos muestra aleatoria si N > 5000
+
 if(length(modelo$residuals) > 5000) {
+
   set.seed(123)
+
   residuos_muestra <- sample(modelo$residuals, 5000)
+
 } else {
+
   residuos_muestra <- modelo$residuals
+
 }
+
 cat("\n--- Prueba Shapiro-Wilk ---\n")
+
 shapiro.test(residuos_muestra)
 
 # Prueba de Jarque-Bera
+
 cat("\n--- Prueba Jarque-Bera ---\n")
+
 jarque.bera.test(modelo$residuals)
 
 # --- Independencia ---
