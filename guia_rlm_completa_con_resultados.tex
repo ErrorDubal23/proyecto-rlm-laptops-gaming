@@ -1,0 +1,647 @@
+\documentclass[12pt,a4paper]{article}
+
+% =============================================================================
+% PAQUETES
+% =============================================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% =============================================================================
+% CONFIGURACIÓN DE PÁGINA
+% =============================================================================
+\geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+
+% =============================================================================
+% COLORES
+% =============================================================================
+\definecolor{azuloscuro}{RGB}{0, 51, 102}
+\definecolor{azulclaro}{RGB}{70, 130, 180}
+\definecolor{rojoacento}{RGB}{178, 34, 34}
+\definecolor{verdeok}{RGB}{0, 128, 0}
+\definecolor{codebg}{RGB}{248,248,248}
+\definecolor{codeframe}{RGB}{220,220,220}
+\definecolor{codecomment}{RGB}{0,128,0}
+\definecolor{codestring}{RGB}{163,21,21}
+\definecolor{codekeyword}{RGB}{0,0,255}
+
+\lstset{
+    language=R,
+    backgroundcolor=\color{codebg},
+    frame=single,
+    rulecolor=\color{codeframe},
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{codekeyword}\bfseries,
+    commentstyle=\color{codecomment}\itshape,
+    stringstyle=\color{codestring},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    numbersep=8pt,
+    breaklines=true,
+    breakatwhitespace=true,
+    showstringspaces=false,
+    tabsize=2,
+    captionpos=b,
+    xleftmargin=15pt,
+    xrightmargin=5pt,
+    aboveskip=10pt,
+    belowskip=10pt
+}
+
+% =============================================================================
+% ENCABEZADOS Y TÍTULOS
+% =============================================================================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{azuloscuro}{\small Análisis de Datos en Ingeniería I}}
+\fancyhead[R]{\textcolor{azuloscuro}{\small Guía Didáctica --- Código R y RLM}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.3pt}
+
+\titleformat{\section}{\normalfont\Large\bfseries\color{azuloscuro}}{\thesection.}{0.5em}{}[\titlerule]
+\titleformat{\subsection}{\normalfont\large\bfseries\color{azulclaro}}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries\color{azuloscuro}}{\thesubsubsection}{0.5em}{}
+
+\setstretch{1.5}
+
+% =============================================================================
+% INICIO DEL DOCUMENTO
+% =============================================================================
+\begin{document}
+
+% PORTADA
+\begin{titlepage}
+    \begin{tikzpicture}[remember picture, overlay]
+        \fill[azuloscuro] (current page.north west) rectangle ([yshift=-3cm]current page.north east);
+        \fill[azuloscuro] (current page.south west) rectangle ([yshift=2cm]current page.south east);
+    \end{tikzpicture}
+    \vspace*{4cm}
+    \begin{center}
+        {\Huge\bfseries\textcolor{azuloscuro}{GUÍA DIDÁCTICA}}\\[0.5cm]
+        {\LARGE\bfseries\textcolor{azulclaro}{Análisis de Datos en Ingeniería I}}\\[1cm]
+        \rule{0.8\textwidth}{1.5pt}\\[0.8cm]
+        {\Large\textbf{Explicación Profunda del Código R}}\\[0.3cm]
+        {\Large\textbf{y Resultados Reales del Proyecto}}\\[1.5cm]
+        \rule{0.6\textwidth}{0.5pt}\\[1cm]
+        {\large\textbf{Regresión Lineal Múltiple}}\\[0.3cm]
+        {\large\textbf{Predicción de Precios de Laptops}}\\[1.5cm]
+        {\large\textbf{Integrantes:}}\\[0.5cm]
+        \begin{tabular}{rl}
+            Dubal Aguilar Torres & (200207378) \\
+            Alejandro Chaves Ramos & (200116116) \\
+            Juan Cáceres Figueroa & (200079919) \\
+            Miguel Carrizosa Morales & (200208123) \\
+        \end{tabular}
+        \vfill
+        {\large\textbf{Docente:}}\\[0.3cm]
+        PhD. Luis Ángel Anillo Arrieta\\[1cm]
+        {\large Ingeniería de Sistemas}\\[0.3cm]
+        {\large Universidad del Norte}\\[0.3cm]
+        {\large Barranquilla, Colombia}\\[0.5cm]
+        {\large 25 de mayo de 2026}
+    \end{center}
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+
+% =============================================================================
+% 1. INTRODUCCIÓN
+% =============================================================================
+\section{Introducción}
+
+Esta guía tiene un objetivo puramente didáctico: que entiendas a profundidad qué hace cada línea del código R del proyecto, por qué se hace, y qué significa estadísticamente. Incluye los \textbf{resultados reales} ejecutados con el dataset de 1,303 laptops.
+
+\subsection{Dataset utilizado}
+
+\begin{itemize}
+    \item \textbf{Fuente:} Laptop Price Prediction Dataset (Kaggle)
+    \item \textbf{Registros totales:} 1,303 laptops
+    \item \textbf{Registros tras limpieza:} 1,303 (no hubo datos faltantes en las variables del modelo)
+    \item \textbf{Variables:} 13 columnas originales; se crearon variables adicionales tras limpieza
+\end{itemize}
+
+\subsection{Modelo ejecutado}
+
+El modelo ajustado es:
+\[
+\text{Price\_euros}_i = \beta_0 + \beta_1 \cdot \text{RAM}_i + \beta_2 \cdot \text{CPU\_GHz}_i + \beta_3 \cdot \text{Inches}_i + \beta_{\text{TypeName}} + \beta_{\text{OpSys}} + \varepsilon_i
+\]
+
+Con $N = 1{,}303$ observaciones y $k = 16$ predictores (incluyendo dummies).
+
+% =============================================================================
+% 2. LIBRERIAS
+% =============================================================================
+\section{Librerías: El Toolbox Estadístico}
+
+\begin{table}[H]
+\centering
+\caption{Librerías de R y su propósito}
+\begin{tabular}{lp{9cm}}
+\toprule
+\textbf{Librería} & \textbf{Para qué sirve} \\
+\midrule
+\texttt{readr} & Lectura eficiente de CSV. Maneja codificaciones UTF-8 \\
+\texttt{dplyr} & Manipulación de datos (filtrar, seleccionar, resumir) \\
+\texttt{stringr} & Trabajo con texto: extrae números de strings como ``8GB'' \\
+\texttt{MASS} & Funciones avanzadas de estadística \\
+\texttt{ggplot2} & Visualización con capas (geometrías, estéticas, temas) \\
+\texttt{lmtest} & Pruebas de diagnóstico: Durbin-Watson, Breusch-Pagan \\
+\texttt{nortest} & Pruebas de normalidad alternativas \\
+\texttt{ggfortify} & Diagnósticos automáticos con \texttt{ggplot2} \\
+\texttt{gridExtra} & Organiza múltiples gráficos en una ventana \\
+\texttt{car} & \texttt{vif()} para detectar multicolinealidad \\
+\texttt{knitr/rmarkdown} & Generación de informes dinámicos \\
+\texttt{tseries} & \texttt{jarque.bera.test} para normalidad de residuos \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =============================================================================
+% 3. CARGA DE DATOS
+% =============================================================================
+\section{Carga de Datos}
+
+\begin{lstlisting}[caption={Lectura del dataset}]
+datos <- read_csv("Desktop/Final/laptop_price.csv",
+                  locale = locale(encoding = "UTF-8"))
+\end{lstlisting}
+
+\textbf{Qué hace:} Lee el CSV con 1,303 laptops. El argumento \texttt{locale(encoding = "UTF-8")} es crucial: nombres de marcas y sistemas operativos contienen caracteres especiales (tildes, etc.) que sin esta configuración saldrían como basura.
+
+% =============================================================================
+% 4. LIMPIEZA Y PREPARACIÓN
+% =============================================================================
+\section{Limpieza y Preparación: De Texto a Números}
+
+Este paso es \textbf{crítico}. El dataset viene con texto como ``8GB'', ``2.3kg'', ``2.5GHz''. Hay que extraer los números.
+
+\subsection{Extracción de variables numéricas}
+
+\begin{lstlisting}[caption={Limpiando datos}]
+datos$Ram_GB <- as.numeric(gsub("GB", "", datos$Ram))
+datos$Weight_kg <- as.numeric(gsub("kg", "", datos$Weight))
+datos$CPU_GHz <- as.numeric(str_extract(datos$Cpu, "\\d+\\.?\\d*(?=GHz)"))
+\end{lstlisting}
+
+\textbf{Ejemplos:}
+\begin{itemize}
+    \item \texttt{"16GB"} $\xrightarrow{\text{gsub}}$ \texttt{"16"} $\xrightarrow{\text{as.numeric}}$ 16
+    \item En \texttt{"Intel Core i7 2.50GHz"}, \texttt{str\_extract} extrae ``2.50'' usando la expresión regular: \texttt{\\d+} (uno o más dígitos), \texttt{\\.?} (punto decimal opcional), \texttt{\\d*} (dígitos extra), \texttt{(?=GHz)} (sólo si después viene GHz).
+\end{itemize}
+
+\subsection{Variables cualitativas (factores)}
+
+\begin{lstlisting}[caption={Creando factores}]
+datos$CPU_Brand <- ifelse(grepl("Intel", datos$Cpu), "Intel",
+                          ifelse(grepl("AMD", datos$Cpu), "AMD", "Other"))
+datos$CPU_Brand <- factor(datos$CPU_Brand)
+datos$GPU_Brand <- factor(datos$GPU_Brand)
+datos$TypeName <- factor(datos$TypeName)
+datos$OpSys <- factor(datos$OpSys)
+\end{lstlisting}
+
+\textbf{¿Por qué \texttt{factor}?} R no puede meter texto directo en una regresión. Al convertir a \texttt{factor}, R crea automáticamente \textbf{variables dummy} (0/1) para cada categoría excepto la de referencia.
+
+\subsection{Filtrado de datos faltantes}
+
+\begin{lstlisting}
+datos <- datos[complete.cases(
+  datos$Price_euros, datos$Ram_GB, datos$CPU_GHz,
+  datos$Inches, datos$TypeName, datos$OpSys), ]
+\end{lstlisting}
+
+\textbf{Resultado:} 1,303 observaciones completas. No se perdieron datos.
+
+% =============================================================================
+% 5. ESTADISTICA DESCRIPTIVA
+% =============================================================================
+\section{Estadística Descriptiva}
+
+\begin{table}[H]
+\centering
+\caption{Resumen descriptivo de variables numéricas ($N=1{,}303$)}
+\begin{tabular}{lrrrrrr}
+\toprule
+\textbf{Variable} & \textbf{Media} & \textbf{Desv.Std} & \textbf{Mín} & \textbf{Q1} & \textbf{Mediana} & \textbf{Q3} & \textbf{Máx} \\
+\midrule
+Price\_euros & 1{,}123.69 & 699.01 & 174 & 599 & 977 & 1{,}488 & 6{,}099 \\
+Ram\_GB & 8.38 & 5.08 & 2 & 4 & 8 & 8 & 64 \\
+CPU\_GHz & 2.30 & 0.51 & 0.90 & 2.00 & 2.50 & 2.70 & 3.60 \\
+Inches & 15.02 & 1.43 & 10.1 & 14.0 & 15.6 & 15.6 & 18.4 \\
+Weight\_kg & 2.04 & 0.67 & 0.69 & 1.50 & 2.04 & 2.30 & 4.70 \\
+Res\_Width & 1{,}894.78 & 494.64 & 1{,}366 & 1{,}600 & 1{,}920 & 1{,}920 & 3{,}840 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Observaciones:} El precio es muy disperso (std = 699), con laptops desde 174 EUR hasta 6{,}099 EUR (Razer Blade Pro). La RAM está concentrada en 4--8 GB.
+
+% =============================================================================
+% 6. CORRELACION DE PEARSON
+% =============================================================================
+\section{Correlación de Pearson}
+
+\subsection{Matriz de correlación}
+
+\begin{table}[H]
+\centering
+\caption{Matriz de correlación de Pearson}
+\begin{tabular}{lrrrrrr}
+\toprule
+ & \textbf{Precio} & \textbf{RAM} & \textbf{CPU} & \textbf{Inches} & \textbf{Peso} & \textbf{ResW} \\
+\midrule
+Price\_euros & 1.0000 & 0.7430 & 0.4303 & 0.0682 & 0.2104 & 0.5565 \\
+Ram\_GB & 0.7430 & 1.0000 & 0.3680 & 0.2380 & 0.3839 & 0.4331 \\
+CPU\_GHz & 0.4303 & 0.3680 & 1.0000 & 0.3079 & 0.3204 & 0.1835 \\
+Inches & 0.0682 & 0.2380 & 0.3079 & 1.0000 & 0.8276 & -0.0712 \\
+Weight\_kg & 0.2104 & 0.3839 & 0.3204 & 0.8276 & 1.0000 & -0.0329 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Pruebas de correlación ($H_0: \rho = 0$)}
+
+\begin{table}[H]
+\centering
+\caption{Pruebas de significancia de la correlación}
+\begin{tabular}{lrrr}
+\toprule
+\textbf{Par de variables} & \textbf{r} & \textbf{p-valor} & \textbf{Interpretación} \\
+\midrule
+RAM vs Precio & 0.7430 & $<10^{-228}$ & Correlación fuerte y altamente significativa \\
+CPU\_GHz vs Precio & 0.4303 & $<10^{-59}$ & Correlación moderada, altamente significativa \\
+Inches vs Precio & 0.0682 & 0.0138 & Correlación débil, apenas significativa \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Conclusión:} La RAM es la variable numérica más correlacionada con el precio. El tamaño de pantalla (Inches) tiene correlación muy débil con el precio.
+
+% =============================================================================
+% 7. MODELO RLM: RESULTADOS REALES
+% =============================================================================
+\section{Modelo de Regresión Lineal Múltiple: Resultados Reales}
+
+\subsection{Bondad de ajuste}
+
+\begin{table}[H]
+\centering
+\caption{Métricas del modelo}
+\begin{tabular}{ll}
+\toprule
+\textbf{Métrica} & \textbf{Valor} \\
+\midrule
+$R^2$ (R-squared) & 0.706 \\
+$R^2$ ajustado & 0.703 \\
+F-estadístico & 193.3 \\
+p-valor (F) & $<0.001$ \\
+Número de observaciones & 1{,}303 \\
+Grados de libertad (residuos) & 1{,}286 \\
+Grados de libertad (modelo) & 16 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interpretación:} El modelo explica el \textbf{70.6\%} de la variabilidad del precio. Es un buen ajuste. El F-estadístico con p $<$ 0.001 indica que el modelo es \textbf{globalmente significativo} (al menos una variable aporta).
+
+\subsection{Coeficientes del modelo}
+
+\begin{table}[H]
+\centering
+\caption{Coeficientes estimados (significativos en negrita)}
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Variable} & \textbf{Coef.} & \textbf{Error Std} & \textbf{t} & \textbf{p-valor} \\
+\midrule
+Intercepto & 42.92 & 292.17 & 0.147 & 0.883 \\
+TypeName Gaming & $-46.89$ & 53.63 & $-0.874$ & 0.382 \\
+TypeName Netbook & \textbf{$-247.93$} & 88.43 & $-2.804$ & \textbf{0.005} \\
+TypeName Notebook & \textbf{$-293.23$} & 42.87 & $-6.841$ & \textbf{$<$0.001} \\
+TypeName Ultrabook & \textbf{120.53} & 45.99 & 2.621 & \textbf{0.009} \\
+TypeName Workstation & \textbf{650.14} & 85.03 & 7.646 & \textbf{$<$0.001} \\
+OpSys Chrome OS & 263.41 & 282.90 & 0.931 & 0.352 \\
+OpSys Linux & 231.80 & 279.93 & 0.828 & 0.408 \\
+OpSys Mac OS X & 401.45 & 306.28 & 1.311 & 0.190 \\
+OpSys No OS & 179.50 & 279.59 & 0.642 & 0.521 \\
+OpSys Windows 10 & 420.91 & 274.98 & 1.531 & 0.126 \\
+OpSys Windows 10 S & 502.64 & 306.60 & 1.639 & 0.101 \\
+OpSys Windows 7 & \textbf{827.97} & 280.87 & 2.948 & \textbf{0.003} \\
+OpSys macOS & \textbf{617.62} & 295.90 & 2.087 & \textbf{0.037} \\
+\textbf{Ram\_GB} & \textbf{81.08} & 2.58 & 31.414 & \textbf{$<$0.001} \\
+\textbf{CPU\_GHz} & \textbf{208.31} & 24.49 & 8.505 & \textbf{$<$0.001} \\
+\textbf{Inches} & \textbf{$-23.09$} & 11.15 & $-2.071$ & \textbf{0.039} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Categorías de referencia:}
+\begin{itemize}
+    \item TypeName: \textbf{``2 in 1 Convertible''} (la primera alfabéticamente)
+    \item OpSys: \textbf{``Android''} (la primera alfabéticamente)
+\end{itemize}
+
+\subsection{Interpretación de coeficientes}
+
+\subsubsection{Variables numéricas}
+
+\begin{itemize}
+    \item \textbf{RAM ($\beta = 81.08$):} Por cada GB adicional de RAM, el precio aumenta en promedio \textbf{81.08 euros}, manteniendo constantes CPU, pulgadas, tipo y sistema operativo.
+    
+    \item \textbf{CPU\_GHz ($\beta = 208.31$):} Por cada GHz adicional de frecuencia del procesador, el precio sube en promedio \textbf{208.31 euros} (ceteris paribus).
+    
+    \item \textbf{Inches ($\beta = -23.09$):} Cada pulgada adicional de pantalla reduce el precio en promedio \textbf{23.09 euros}. Esto es contra-intuitivo pero tiene explicación: las laptops más grandes tienden a ser económicas (Chromebooks, notebooks básicas), mientras que las ultrabooks premium son más pequeñas y caras.
+\end{itemize}
+
+\subsubsection{Variables cualitativas (dummy)}
+
+\textbf{Con respecto a ``2 in 1 Convertible'' (referencia):}
+\begin{itemize}
+    \item Un \textbf{Netbook} cuesta 247.93 euros \textbf{menos} que un ``2 in 1 Convertible'' equivalente.
+    \item Un \textbf{Notebook} cuesta 293.23 euros \textbf{menos}.
+    \item Un \textbf{Ultrabook} cuesta 120.53 euros \textbf{más}.
+    \item Una \textbf{Workstation} cuesta 650.14 euros \textbf{más}.
+    \item Un \textbf{Gaming} no es significativamente diferente del ``2 in 1 Convertible'' (p = 0.382).
+\end{itemize}
+
+\textbf{Con respecto a ``Android'' (referencia de sistema operativo):}
+\begin{itemize}
+    \item Windows 7 y macOS son significativamente más caros que Android (p = 0.003 y p = 0.037 respectivamente).
+    \item Windows 10 no es significativamente diferente de Android (p = 0.126).
+\end{itemize}
+
+% =============================================================================
+% 8. VALIDACION DE SUPUESTOS
+% =============================================================================
+\section{Validación de Supuestos: Resultados Reales}
+
+\subsection{1. Linealidad}
+
+Se verifica con gráficos de residuos vs cada variable independiente. Si la línea suavizada se mantiene cerca del cero horizontal, el supuesto se cumple.
+
+\textbf{Veredicto:} La linealidad parece razonable en los gráficos exploratorios.
+
+\subsection{2. Normalidad de residuos}
+
+\begin{table}[H]
+\centering
+\caption{Pruebas de normalidad de residuos}
+\begin{tabular}{lrrr}
+\toprule
+\textbf{Prueba} & \textbf{Estadístico} & \textbf{p-valor} & \textbf{Conclusión} \\
+\midrule
+Shapiro-Wilk & $W = 0.9238$ & $<0.001$ & \textcolor{rojoacento}{NO Normalidad} \\
+Jarque-Bera & $JB = 2411.46$ & $<0.001$ & \textcolor{rojoacento}{NO Normalidad} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interpretación:} Los residuos \textbf{no siguen una distribución normal}. Esto se debe a que el precio tiene colas largas (asimetría positiva: pocos laptops muy caros como Razer a 6,099 EUR).
+
+\textbf{¿Qué hacer?} 
+\begin{enumerate}
+    \item Transformar la variable dependiente con logaritmo: $Y' = \ln(Y)$.
+    \item Usar errores estándar robustos (White/HC3) que no dependen de normalidad.
+    \item Aceptar que con $N = 1{,}303$, el Teorema Central del Límite aplica y los p-valores de los coeficientes siguen siendo aproximadamente válidos.
+\end{enumerate}
+
+\subsection{3. Independencia de residuos}
+
+\begin{table}[H]
+\centering
+\caption{Prueba de independencia}
+\begin{tabular}{lrr}
+\toprule
+\textbf{Prueba} & \textbf{Estadístico} & \textbf{Conclusión} \\
+\midrule
+Durbin-Watson & $DW = 2.027$ & \textcolor{verdeok}{Independencia cumplida} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interpretación:} $DW \approx 2$ indica ausencia de autocorrelación. Los residuos son independientes.
+
+\subsection{4. Homocedasticidad}
+
+\begin{table}[H]
+\centering
+\caption{Prueba de homocedasticidad}
+\begin{tabular}{lrrr}
+\toprule
+\textbf{Prueba} & \textbf{Estadístico} & \textbf{p-valor} & \textbf{Conclusión} \\
+\midrule
+Breusch-Pagan & $LM = 201.21$ & $<0.001$ & \textcolor{rojoacento}{HETEROCEDASTICIDAD} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interpretación:} Existe heterocedasticidad. La varianza del error \textbf{no es constante} para todos los niveles de las variables. Esto es común en datos de precios: las laptops caras tienen mayor variabilidad de precio que las baratas.
+
+\textbf{¿Qué hacer?}
+\begin{enumerate}
+    \item Transformar $Y$ con logaritmo.
+    \item Usar errores estándar robustos (HC3).
+    \item No ignorarlo: los p-valores actuales \textbf{podrían estar ligeramente sesgados}.
+\end{enumerate}
+
+\subsection{5. Multicolinealidad (VIF)}
+
+\begin{table}[H]
+\centering
+\caption{Factor de Inflación de Varianza (VIF)}
+\begin{tabular}{lrr}
+\toprule
+\textbf{Variable} & \textbf{VIF} & \textbf{Alerta} \\
+\midrule
+Ram\_GB & 1.54 & \textcolor{verdeok}{OK} \\
+CPU\_GHz & 1.38 & \textcolor{verdeok}{OK} \\
+Inches & 2.27 & \textcolor{verdeok}{OK} \\
+TypeName Gaming & 3.42 & \textcolor{verdeok}{OK} \\
+TypeName Netbook & 1.32 & \textcolor{verdeok}{OK} \\
+TypeName Notebook & 4.06 & \textcolor{verdeok}{OK} \\
+TypeName Ultrabook & 2.42 & \textcolor{verdeok}{OK} \\
+TypeName Workstation & 1.41 & \textcolor{verdeok}{OK} \\
+OpSys Chrome OS & 14.57 & \textcolor{rojoacento}{\textbf{ALTO}} \\
+OpSys Linux & 31.85 & \textcolor{rojoacento}{\textbf{MUY ALTO}} \\
+OpSys Mac OS X & 5.13 & \textcolor{verdeok}{Moderado} \\
+OpSys No OS & 33.71 & \textcolor{rojoacento}{\textbf{MUY ALTO}} \\
+OpSys Windows 10 & 98.91 & \textcolor{rojoacento}{\textbf{SEVERO}} \\
+OpSys Windows 10 S & 5.14 & \textcolor{verdeok}{Moderado} \\
+OpSys Windows 7 & 23.59 & \textcolor{rojoacento}{\textbf{MUY ALTO}} \\
+OpSys macOS & 7.76 & \textcolor{rojoacento}{\textbf{ALTO}} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{¿Por qué pasa esto?} La variable OpSys tiene \textbf{demasiadas categorías} con pocas observaciones en algunas (ej. Android solo 1 laptop, Chrome OS pocas). Esto genera colinealidad artificial: si sabemos que NO es Windows 10, es más probable que sea Linux, etc. Los VIF altos significan que los errores estándar de los coeficientes de OpSys están \textbf{inflados} y menos confiables.
+
+\textbf{¿Qué hacer?}
+\begin{enumerate}
+    \item \textbf{Recategorizar} OpSys en 3-4 grupos: Windows, macOS, Linux/No OS, Chrome OS.
+    \item Eliminar categorías con muy pocas observaciones.
+    \item Usar errores estándar robustos para mitigar el efecto.
+\end{enumerate}
+
+% =============================================================================
+% 9. INTERVALOS DE CONFIANZA
+% =============================================================================
+\section{Intervalos de Confianza al 95\%}
+
+\begin{table}[H]
+\centering
+\caption{Intervalos de confianza para coeficientes significativos}
+\begin{tabular}{lrr}
+\toprule
+\textbf{Variable} & \textbf{Límite inferior} & \textbf{Límite superior} \\
+\midrule
+Netbook & $-421.40$ & $-74.45$ \\
+Notebook & $-377.33$ & $-209.14$ \\
+Ultrabook & 30.31 & 210.75 \\
+Workstation & 483.32 & 816.96 \\
+Windows 7 & 276.96 & 1{,}378.97 \\
+macOS & 37.13 & 1{,}198.12 \\
+Ram\_GB & 76.01 & 86.14 \\
+CPU\_GHz & 160.26 & 256.36 \\
+Inches & $-44.96$ & $-1.21$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Nota:} Si un intervalo incluye el cero, el coeficiente NO es significativo (consistente con p-valor $>$ 0.05).
+
+% =============================================================================
+% 10. PREDICCION
+% =============================================================================
+\section{Predicción con el Modelo}
+
+Se predice el precio para una laptop con estas características:
+\begin{itemize}
+    \item RAM = 16 GB
+    \item CPU = 2.8 GHz
+    \item Pantalla = 15.6 pulgadas
+    \item Tipo = Gaming
+    \item Sistema operativo = Windows 10
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{Predicción}
+\begin{tabular}{lr}
+\toprule
+\textbf{Concepto} & \textbf{Valor (EUR)} \\
+\midrule
+Predicción puntual & 1{,}937.24 \\
+Límite inferior (95\%) & 1{,}881.05 \\
+Límite superior (95\%) & 1{,}993.43 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interpretación:} Se predice que una laptop con esas características costaría aproximadamente \textbf{1,937 EUR}, con un intervalo de confianza al 95\% entre 1,881 y 1,993 EUR.
+
+% =============================================================================
+% 11. PROBLEMAS Y RECOMENDACIONES
+% =============================================================================
+\section{Problemas Detectados y Recomendaciones}
+
+\subsection{Problemas}
+
+\begin{enumerate}
+    \item \textbf{No normalidad de residuos:} Los residuos tienen colas pesadas (kurtosis = 9.26, asimetría = 1.15).
+    
+    \item \textbf{Heterocedasticidad:} La varianza del error no es constante (Breusch-Pagan p $<$ 0.001).
+    
+    \item \textbf{Multicolinealidad severa en OpSys:} VIF de Windows 10 = 98.91 (severo). Esto ocurre porque OpSys tiene demasiadas categorías con distribución desigual.
+\end{enumerate}
+
+\subsection{Recomendaciones para mejorar el modelo}
+
+\begin{enumerate}
+    \item \textbf{Transformar el precio con logaritmo:} $Y' = \ln(\text{Price\_euros})$. Esto suele corregir la asimetría y estabilizar la varianza, resolviendo normalidad y heterocedasticidad simultáneamente.
+    
+    \item \textbf{Recategorizar OpSys:} Agrupar en 4 categorías: Windows, macOS, Linux/No OS, Chrome OS/Android. Esto reducirá drásticamente los VIF.
+    
+    \item \textbf{Usar errores estándar robustos:} Con \texttt{lmtest + sandwich} o \texttt{estimatr::lm\_robust} para que los p-valores sean válidos a pesar de heterocedasticidad.
+    
+    \item \textbf{Considerar incluir más variables:} Marca (Company), GPU\_Brand, peso, resolución de pantalla.
+\end{enumerate}
+
+% =============================================================================
+% 12. CONCLUSIONES DEL ANÁLISIS
+% =============================================================================
+\section{Conclusiones del Análisis}
+
+\begin{enumerate}
+    \item \textbf{La RAM es el factor más importante:} Con un coeficiente de 81.08 EUR por GB y p-valor $< 10^{-228}$, es la variable numérica con mayor impacto sobre el precio.
+    
+    \item \textbf{El tipo de laptop importa mucho:} Workstations cuestan 650 EUR más que ``2 in 1 Convertible'', Notebooks 293 EUR menos. El tipo de equipo captura diferencias de mercado importantes.
+    
+    \item \textbf{El sistema operativo tiene problemas de multicolinealidad:} Los VIF altos sugieren que las categorías de OpSys están demasiado fragmentadas. Una recategorización mejoraría el modelo.
+    
+    \item \textbf{Los supuestos no se cumplen perfectamente:} La no normalidad y la heterocedasticidad indican que el modelo podría mejorarse con una transformación logarítmica del precio.
+    
+    \item \textbf{El $R^2 = 0.706$ es bueno pero hay margen:} Con 1,303 observaciones, un 70\% de varianza explicada es sólido, pero variables como marca, GPU y almacenamiento podrían elevarlo más.
+\end{enumerate}
+
+% =============================================================================
+% 13. CHECKLIST PARA LA PRESENTACIÓN
+% =============================================================================
+\section{Checklist para la Presentación}
+
+Antes de exponer, domina estas respuestas:
+
+\begin{enumerate}
+    \item ¿De dónde salen los datos? ¿Cuántas observaciones tienes? \textbf{R:} Kaggle, 1,303 laptops.
+    
+    \item ¿Qué hace \texttt{str\_extract} y por qué fue necesario? \textbf{R:} Extrae números de texto usando expresiones regulares; porque las columnas vienen como ``8GB'', ``2.5GHz''.
+    
+    \item ¿Por qué convertiste \texttt{TypeName} y \texttt{OpSys} a \texttt{factor}? \textbf{R:} Para que R cree variables dummy automáticamente y las incluya en la regresión.
+    
+    \item ¿Cuál es la interpretación del coeficiente de RAM? \textbf{R:} Por cada GB adicional, el precio aumenta 81.08 EUR en promedio, ceteris paribus.
+    
+    \item ¿Qué significa que un coeficiente tenga p-valor $<$ 0.05? \textbf{R:} Que es estadísticamente significativo; es improbable que ese efecto sea cero en la población.
+    
+    \item ¿Qué es el $R^2$ ajustado y por qué es más honesto? \textbf{R:} Penaliza agregar variables inútiles; sube solo si la nueva variable realmente aporta.
+    
+    \item ¿Cuáles son los 5 supuestos de la RLM? \textbf{R:} Linealidad, normalidad de residuos, independencia, homocedasticidad, no multicolinealidad.
+    
+    \item ¿Qué muestra el Q-Q plot y qué significa si los puntos se desvían? \textbf{R:} Compara cuantiles de tus residuos vs. una normal. Si se desvían, los residuos no son normales.
+    
+    \item ¿Qué es la heterocedasticidad y cómo se corrige? \textbf{R:} Varianza del error no constante. Se corrige con transformación log o errores estándar robustos.
+    
+    \item ¿Qué es el VIF y cuál es el umbral de alarma? \textbf{R:} Factor de inflación de varianza. VIF $>$ 10 es severo; entre 5 y 10 es moderado.
+    
+    \item ¿Por qué los VIF de OpSys están tan altos? \textbf{R:} Porque hay demasiadas categorías con pocas observaciones, generando colinealidad artificial.
+    
+    \item ¿Cómo se interpreta el coeficiente de una variable dummy? \textbf{R:} Es la diferencia de precio promedio respecto a la categoría de referencia, manteniendo todo lo demás constante.
+    
+    \item Si te piden predecir un nuevo equipo, ¿qué precaución tienes? \textbf{R:} Las variables cualitativas deben ser \texttt{factor} con los mismos niveles que el dataset de entrenamiento.
+\end{enumerate}
+
+% =============================================================================
+% FIN
+% =============================================================================
+\end{document}

@@ -1,0 +1,857 @@
+\documentclass[12pt,a4paper]{article}
+
+% =============================================================================
+% PAQUETES
+% =============================================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% =============================================================================
+% CONFIGURACIÓN DE PÁGINA
+% =============================================================================
+\geometry{
+    left=2.5cm,
+    right=2.5cm,
+    top=2.5cm,
+    bottom=2.5cm
+}
+
+% =============================================================================
+% COLORES INSTITUCIONALES Y PARA CÓDIGO
+% =============================================================================
+\definecolor{azuloscuro}{RGB}{0, 51, 102}
+\definecolor{azulclaro}{RGB}{70, 130, 180}
+\definecolor{grisclaro}{RGB}{245, 245, 245}
+\definecolor{rojoacento}{RGB}{178, 34, 34}
+\definecolor{codebg}{RGB}{248,248,248}
+\definecolor{codeframe}{RGB}{220,220,220}
+\definecolor{codecomment}{RGB}{0,128,0}
+\definecolor{codestring}{RGB}{163,21,21}
+\definecolor{codekeyword}{RGB}{0,0,255}
+
+\lstset{
+    language=R,
+    backgroundcolor=\color{codebg},
+    frame=single,
+    rulecolor=\color{codeframe},
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{codekeyword}\bfseries,
+    commentstyle=\color{codecomment}\itshape,
+    stringstyle=\color{codestring},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    numbersep=8pt,
+    breaklines=true,
+    breakatwhitespace=true,
+    showstringspaces=false,
+    tabsize=2,
+    captionpos=b,
+    xleftmargin=15pt,
+    xrightmargin=5pt,
+    aboveskip=10pt,
+    belowskip=10pt
+}
+
+% =============================================================================
+% CONFIGURACIÓN DE ENCABEZADOS
+% =============================================================================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{azuloscuro}{\small Análisis de Datos en Ingeniería I}}
+\fancyhead[R]{\textcolor{azuloscuro}{\small Guía Didáctica --- Código R y RLM}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.3pt}
+
+% =============================================================================
+% CONFIGURACIÓN DE TÍTULOS
+% =============================================================================
+\titleformat{\section}
+    {\normalfont\Large\bfseries\color{azuloscuro}}
+    {\thesection.}{0.5em}{}[\titlerule]
+    
+\titleformat{\subsection}
+    {\normalfont\large\bfseries\color{azulclaro}}
+    {\thesubsection}{0.5em}{}
+
+\titleformat{\subsubsection}
+    {\normalfont\normalsize\bfseries\color{azuloscuro}}
+    {\thesubsubsection}{0.5em}{}
+
+% =============================================================================
+% ESPACIADO
+% =============================================================================
+\setstretch{1.5}
+
+% =============================================================================
+% INICIO DEL DOCUMENTO
+% =============================================================================
+\begin{document}
+
+% =============================================================================
+% PORTADA
+% =============================================================================
+\begin{titlepage}
+    \begin{tikzpicture}[remember picture, overlay]
+        \fill[azuloscuro] (current page.north west) rectangle ([yshift=-3cm]current page.north east);
+        \fill[azuloscuro] (current page.south west) rectangle ([yshift=2cm]current page.south east);
+    \end{tikzpicture}
+    
+    \vspace*{4cm}
+    
+    \begin{center}
+        {\Huge\bfseries\textcolor{azuloscuro}{GUÍA DIDÁCTICA}}\\[0.5cm]
+        {\LARGE\bfseries\textcolor{azulclaro}{Análisis de Datos en Ingeniería I}}\\[1cm]
+        
+        \rule{0.8\textwidth}{1.5pt}\\[0.8cm]
+        
+        {\Large\textbf{Explicación Profunda del Código R}}\\[0.3cm]
+        {\Large\textbf{y del Modelo de Regresión Lineal Múltiple}}\\[1.5cm]
+        
+        \rule{0.6\textwidth}{0.5pt}\\[1cm]
+        
+        {\large\textbf{Proyecto Final --- Predicción de Precios de Laptops}}\\[1.5cm]
+        
+        {\large\textbf{Integrantes:}}\\[0.5cm]
+        \begin{tabular}{rl}
+            Dubal Aguilar Torres & \\
+            Alejandro Chaves Ramos & \\
+            Juan Cáceres Figueroa & \\
+            Miguel Carrizosa & \\
+        \end{tabular}
+        
+        \vfill
+        
+        {\large\textbf{Docente:}}\\[0.3cm]
+        PhD. Luis Ángel Anillo Arrieta\\[1cm]
+        
+        {\large Ingeniería de Sistemas}\\[0.3cm]
+        {\large Universidad del Norte}\\[0.3cm]
+        {\large Barranquilla, Colombia}\\[0.5cm]
+        {\large 2026}
+        
+    \end{center}
+\end{titlepage}
+
+% =============================================================================
+% ÍNDICE
+% =============================================================================
+\newpage
+\tableofcontents
+\newpage
+
+% =============================================================================
+% 1. INTRODUCCIÓN Y PROPOSITO DE ESTA GUÍA
+% =============================================================================
+\section{Introducción y Propósito de esta Guía}
+
+Esta guía tiene un objetivo puramente didáctico: que entiendas a profundidad qué hace cada línea del código R del proyecto, por qué se hace, y qué significa estadísticamente. No es un documento formal de entrega (ese ya lo tienes), sino un manual de estudio para que defiendas el proyecto con seguridad.
+
+\subsection{Nota importante: discrepancia entre el código y el documento anterior}
+
+Al revisar los archivos, se detectó una diferencia clave:
+
+\begin{itemize}
+    \item \textbf{El código R} (\texttt{proyecto\_rlm\_laptops.R}) trabaja con el \textbf{dataset completo} de 1,303 laptops (todas las categorías: Gaming, Ultrabook, Notebook, etc.), usa el \textbf{precio directo en euros} (sin transformación logarítmica) como variable dependiente, e incluye las variables \textbf{RAM}, \textbf{CPU\_GHz}, \textbf{Inches}, \textbf{TypeName} y \textbf{OpSys}.
+    
+    \item \textbf{El LaTeX anterior} (\texttt{proyecto\_rlm\_latex.tex}) describe un modelo filtrado \textbf{solo para laptops Gaming} (205 equipos), usa \textbf{logaritmo del precio} como dependiente, e incluye variables distintas: \textbf{RAM}, \textbf{Peso}, \textbf{CPU\_Brand} e \textbf{GPU\_Brand}.
+\end{itemize}
+
+\textbf{Recomendación para la presentación:} decide cuál de los dos modelos vas a defender. Si vas a usar el código R tal cual, defiende el modelo completo con precio en euros (sin log) y las variables que ahí aparecen. Si el docente espera el modelo gaming con log, el código R debe ajustarse. En esta guía explicamos el código R tal como está escrito, porque es lo que puedes ejecutar y mostrar.
+
+% =============================================================================
+% 2. LIBRERIAS: EL TOOLBOX ESTADISTICO
+% =============================================================================
+\section{Librerías: El Toolbox Estadístico}
+
+Al inicio del código se cargan varios paquetes. Veamos para qué sirve cada uno y por qué lo necesitas.
+
+\begin{table}[H]
+\centering
+\caption{Librerías de R utilizadas y su propósito}
+\begin{tabular}{lp{9cm}}
+\toprule
+\textbf{Librería} & \textbf{Para qué sirve} \\
+\midrule
+\texttt{readr} & Lectura eficiente de archivos CSV. Maneja codificaciones y tipos de datos mejor que \texttt{read.csv} base. \\
+\texttt{dplyr} & Manipulación de datos: filtrar, seleccionar, resumir, crear nuevas variables. Gramática clara y legible. \\
+\texttt{stringr} & Trabajo con texto (\textit{strings}). Extrae números de textos como \texttt{"8GB"} o \texttt{"2.5GHz"}. \\
+\texttt{MASS} & Contiene funciones avanzadas de estadística; aquí se usa indirectamente por dependencias. \\
+\texttt{ggplot2} & El estándar dorado para visualización en R. Crea gráficos elegantes con capas (geometrías, estéticas, temas). \\
+\texttt{lmtest} & Pruebas de diagnóstico para modelos lineales: Durbin-Watson (independencia), Breusch-Pagan (homocedasticidad). \\
+\texttt{nortest} & Pruebas de normalidad alternativas (aunque en el código principal se usa \texttt{shapiro.test} base). \\
+\texttt{ggfortify} & Permite usar \texttt{autoplot} con modelos \texttt{lm} para diagnósticos automáticos con \texttt{ggplot2}. \\
+\texttt{gridExtra} & Organiza múltiples gráficos en una sola ventana (layout). \\
+\texttt{car} & \textit{Companion to Applied Regression}. Contiene la función \texttt{vif()} para detectar multicolinealidad. \\
+\texttt{tseries} & Series temporales; aquí se usa \texttt{jarque.bera.test} para normalidad de residuos. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{¿Por qué se instalan condicionalmente?} El bucle \texttt{for} al inicio revisa si cada paquete existe; si no, lo instala. Esto hace que el script sea portable: funciona en cualquier computadora sin importar qué paquetes tenga previamente.
+
+% =============================================================================
+% 3. CARGA DE DATOS
+% =============================================================================
+\section{Carga de Datos: El Origen de Todo}
+
+\begin{lstlisting}[caption={Lectura del dataset}]
+datos <- read_csv("Desktop/Final/laptop_price.csv",
+                  locale = locale(encoding = "UTF-8"))
+\end{lstlisting}
+
+\textbf{Qué hace:} Lee el archivo CSV con las especificaciones de 1,303 laptops.
+
+\textbf{Por qué importa:} El argumento \texttt{locale(encoding = "UTF-8")} es crucial porque los nombres de marcas, sistemas operativos y especificaciones pueden contener caracteres especiales (tildes, símbolos, etc.). Sin esto, podrías ver basura como \texttt{\"Intel Core i7\"} en vez del texto legible.
+
+\textbf{Qué revisamos después:}
+\begin{itemize}
+    \item \texttt{head(datos)}: muestra las primeras 6 filas. Sirve para verificar que se cargó bien.
+    \item \texttt{names(datos)}: lista las variables (columnas) disponibles.
+    \item \texttt{str(datos)}: muestra la \textit{estructura} --- tipo de cada variable (numérico, texto, factor) y primeros valores.
+\end{itemize}
+
+% =============================================================================
+% 4. LIMPIEZA Y PREPARACION: DE TEXTO A NUMEROS
+% =============================================================================
+\section{Limpieza y Preparación: De Texto a Números}
+
+Este es uno de los pasos \textbf{más importantes} y el que más errores causa en proyectos reales. El dataset original no viene con números limpios; viene con texto como \texttt{"8GB"}, \texttt{"2.3kg"}, \texttt{"2.5GHz"}. Hay que \textbf{extraer los números}.
+
+\subsection{Extracción de RAM}
+
+\begin{lstlisting}[caption={Limpiando la RAM}]
+datos$Ram_GB <- as.numeric(gsub("GB", "", datos$Ram))
+\end{lstlisting}
+
+\textbf{Qué hace:} La función \texttt{gsub("GB", "", datos$Ram)} busca el texto \texttt{"GB"} en cada celda y lo reemplaza por nada (lo elimina). Luego \texttt{as.numeric()} convierte el resultado en número.
+
+\textbf{Ejemplo:} Si una celda dice \texttt{"16GB"}, el proceso es:
+\[
+\text{"16GB"} \xrightarrow{\text{gsub}} \text{"16"} \xrightarrow{\text{as.numeric}} 16
+\]
+
+\subsection{Extracción del peso}
+
+\begin{lstlisting}
+datos$Weight_kg <- as.numeric(gsub("kg", "", datos$Weight))
+\end{lstlisting}
+
+Igual lógica: quita \texttt{"kg"} y convierte a número.
+
+\subsection{Extracción de la frecuencia del CPU con Regex}
+
+\begin{lstlisting}[caption={Extrayendo GHz con expresiones regulares}]
+datos$CPU_GHz <- as.numeric(str_extract(datos$Cpu, 
+                             "\\d+\\.?\\d*(?=GHz)"))
+\end{lstlisting}
+
+\textbf{Qué hace:} \texttt{str\_extract} busca un \textbf{patrón} dentro del texto. El patrón es una expresión regular:
+\begin{itemize}
+    \item \texttt{\\d+}: uno o más dígitos.
+    \item \texttt{\\.?}: opcionalmente un punto decimal.
+    \item \texttt{\\d*}: cero o más dígitos después del punto.
+    \item \texttt{(?=GHz)}: \textit{lookahead} --- solo coincide si después viene \texttt{GHz}, pero no incluye \texttt{GHz} en el resultado.
+\end{itemize}
+
+\textbf{Ejemplo:} En \texttt{"Intel Core i7 2.50GHz"}, extrae \texttt{"2.50"}.
+
+\subsection{Resolución de pantalla}
+
+\begin{lstlisting}
+datos$Res_Width  <- as.numeric(str_extract(datos$ScreenResolution, 
+                                           "\\d+(?=x)"))
+datos$Res_Height <- as.numeric(str_extract(datos$ScreenResolution, 
+                                           "(?<=x)\\d+"))
+\end{lstlisting}
+
+Aquí se extraen los dos números de una resolución tipo \texttt{"1920x1080"}:
+\begin{itemize}
+    \item \texttt{\\d+(?=x)}: dígitos que están \textbf{antes} de \texttt{x} (ancho).
+    \item \texttt{(?<=x)\\d+}: dígitos que están \textbf{después} de \texttt{x} (alto).
+\end{itemize}
+
+\subsection{Variables cualitativas (factores)}
+
+\begin{lstlisting}[caption={Creando factores para CPU y GPU}]
+datos$CPU_Brand <- ifelse(grepl("Intel", datos$Cpu), "Intel",
+                          ifelse(grepl("AMD", datos$Cpu), "AMD", "Other"))
+                           
+datos$GPU_Brand <- ifelse(grepl("Nvidia|NVIDIA", datos$Gpu), "Nvidia",
+                          ifelse(grepl("Intel", datos$Gpu), "Intel",
+                                 ifelse(grepl("AMD", datos$Gpu), "AMD", "Other")))
+                                 
+datos$CPU_Brand <- factor(datos$CPU_Brand)
+datos$GPU_Brand <- factor(datos$GPU_Brand)
+\end{lstlisting}
+
+\textbf{Qué hace:} 
+\begin{enumerate}
+    \item Usa \texttt{grepl} para buscar palabras clave dentro de textos largos.
+    \item Crea una nueva variable categórica con las marcas.
+    \item Convierte esa variable a \texttt{factor}.
+\end{enumerate}
+
+\textbf{¿Por qué \texttt{factor} es vital?} En R, cuando incluyes una variable de texto en una regresión, R no sabe qué hacer. Al convertirla a \texttt{factor}, R automáticamente crea \textbf{variables dummy} (0/1) para cada categoría (excepto una, que es la categoría de referencia). Esto permite incluir variables cualitativas en el modelo lineal.
+
+\subsection{Eliminación de datos faltantes}
+
+\begin{lstlisting}[caption={Filtrando filas completas}]
+datos <- datos[complete.cases(
+  datos$Price_euros,
+  datos$Ram_GB,
+  datos$CPU_GHz,
+  datos$Inches,
+  datos$TypeName,
+  datos$OpSys
+), ]
+\end{lstlisting}
+
+\textbf{Qué hace:} \texttt{complete.cases()} devuelve \texttt{TRUE} para las filas que \textbf{no tienen NA} en ninguna de las variables listadas. Se descartan las demás.
+
+\textbf{¿Por qué?} El modelo de regresión lineal \texttt{lm()} elimina automáticamente las filas con \texttt{NA}, pero es mejor hacerlo explícitamente para saber exactamente cuántos datos se usan.
+
+% =============================================================================
+% 5. ESTADISTICA DESCRIPTIVA
+% =============================================================================
+\section{Estadística Descriptiva: Conociendo los Datos}
+
+\begin{lstlisting}[caption={Resumen descriptivo}]
+cuantitativas <- data.frame(
+  Price_euros = datos$Price_euros,
+  Ram_GB      = datos$Ram_GB,
+  CPU_GHz     = datos$CPU_GHz,
+  Inches      = datos$Inches,
+  Weight_kg   = datos$Weight_kg,
+  Res_Width   = datos$Res_Width
+)
+
+summary(cuantitativas)
+\end{lstlisting}
+
+\textbf{Qué hace:} \texttt{summary()} calcula los seis estadísticos clásicos para cada variable numérica:
+\begin{itemize}
+    \item Mínimo y Máximo
+    \item Primer cuartil (Q1, percentil 25)
+    \item Mediana (Q2, percentil 50)
+    \item Media (promedio aritmético)
+    \item Tercer cuartil (Q3, percentil 75)
+\end{itemize}
+
+\textbf{Para qué sirve:} Detectar valores atípicos, ver el rango, entender la escala de cada variable y decidir si necesitas transformaciones (logaritmo, estandarización). Por ejemplo, si el precio va de 200 a 4,000 euros, notas que la escala es amplia.
+
+% =============================================================================
+% 6. CORRELACION DE PEARSON
+% =============================================================================
+\section{Correlación de Pearson: ¿Se Mueven Juntas?}
+
+\subsection{La matriz de correlación}
+
+\begin{lstlisting}[caption={Matriz de correlaciones}]
+cormat <- cor(cuantitativas, method = "pearson", use = "complete.obs")
+\end{lstlisting}
+
+\textbf{Qué calcula:} El coeficiente de correlación de Pearson ($r$) entre \textbf{todos los pares} de variables numéricas. Es una matriz simétrica donde la diagonal es 1 (una variable consigo misma).
+
+\textbf{Fórmula matemática:}
+\[
+r_{XY} = \frac{\sum_{i=1}^{n}(X_i - \bar{X})(Y_i - \bar{Y})}{\sqrt{\sum_{i=1}^{n}(X_i - \bar{X})^2 \cdot \sum_{i=1}^{n}(Y_i - \bar{Y})^2}}
+\]
+
+\textbf{Interpretación de $r$:}
+\begin{itemize}
+    \item $r = 1$: correlación positiva perfecta.
+    \item $r = -1$: correlación negativa perfecta.
+    \item $r = 0$: \textbf{no hay correlación lineal} (pero podría haber otra relación, como cuadrática).
+    \item $|r| > 0.7$: fuerte; $|r|$ entre 0.3 y 0.7: moderada; $|r| < 0.3$: débil.
+\end{itemize}
+
+\subsection{Prueba de hipótesis para la correlación}
+
+\begin{lstlisting}[caption={Prueba de correlación}]
+cor.test(datos$Ram_GB, datos$Price_euros, method = "pearson")
+\end{lstlisting}
+
+\textbf{Hipótesis:}
+\begin{itemize}
+    \item $H_0$: $\rho = 0$ (no existe correlación lineal en la población).
+    \item $H_1$: $\rho \neq 0$ (existe correlación lineal en la población).
+\end{itemize}
+
+\textbf{Qué devuelve:} El valor $t$ de Student, los grados de libertad, el intervalo de confianza para $\rho$, y el p-valor. Si p-valor $< 0.05$, \textbf{rechazamos} $H_0$ y concluimos que sí hay correlación significativa.
+
+% =============================================================================
+% 7. VISUALIZACION: GRAFICOS EXPLORATORIOS
+% =============================================================================
+\section{Visualización: Gráficos Exploratorios con \texttt{ggplot2}}
+
+\texttt{ggplot2} trabaja por capas. Cada gráfico tiene:
+\begin{enumerate}
+    \item \textbf{Datos} (\texttt{data = ...})
+    \item \textbf{Estética} (\texttt{aes = ...}): qué variable va en X, cuál en Y, colores, tamaños.
+    \item \textbf{Geometrías} (\texttt{geom\_...}): puntos, líneas, boxplots, histogramas.
+    \item \textbf{Temas} (\texttt{theme\_...}): apariencia general.
+\end{enumerate}
+
+\subsection{Matriz de dispersión (\texttt{pairs})}
+
+\begin{lstlisting}
+pairs(cuantitativas[, c("Price_euros", "Ram_GB", "CPU_GHz", "Inches")],
+      main = "Matriz de Dispersion", pch = 19, 
+      col = color_principal)
+\end{lstlisting}
+
+\textbf{Qué muestra:} Todos los scatter plots cruzados entre las variables seleccionadas. Sirve para detectar relaciones lineales, no lineales, agrupaciones y valores atípicos de forma rápida.
+
+\subsection{Scatter plots con recta de regresión}
+
+\begin{lstlisting}[caption={Scatter plot RAM vs Precio}]
+ggplot(datos, aes(x = Ram_GB, y = Price_euros)) +
+  geom_point(color = color_principal, size = 2, alpha = 0.4) +
+  geom_smooth(method = "lm", color = "red", se = TRUE, 
+              fill = "#FFCCCC", size = 1.2) +
+  labs(title = "Relacion: RAM vs Precio",
+       subtitle = paste("r =", round(cor(...), 4)),
+       x = "RAM (GB)", y = "Precio (EUR)") +
+  theme_bw()
+\end{lstlisting}
+
+\textbf{Explicación capa por capa:}
+\begin{itemize}
+    \item \texttt{geom\_point}: dibuja los puntos. \texttt{alpha = 0.4} los hace semitransparentes para ver la densidad donde se amontonan.
+    \item \texttt{geom\_smooth(method = "lm")}: ajusta una recta de regresión lineal \textbf{simple} (solo con esa X) y la dibuja en rojo.
+    \item \texttt{se = TRUE}: muestra la banda de confianza al 95\% alrededor de la recta.
+    \item \texttt{theme\_bw()}: tema blanco y negro, más limpio para papers.
+\end{itemize}
+
+\subsection{Diagramas de caja (Boxplots) para variables cualitativas}
+
+\begin{lstlisting}[caption={Boxplot Tipo de Laptop vs Precio}]
+ggplot(datos, aes(x = TypeName, y = Price_euros, fill = TypeName)) +
+  geom_boxplot(notch = TRUE, outlier.colour = color_acento) +
+  theme_bw()
+\end{lstlisting}
+
+\textbf{Qué muestra un boxplot:}
+\begin{itemize}
+    \item La caja representa el rango intercuartílico (Q1 a Q3).
+    \item La línea dentro de la caja es la mediana.
+    \item Los \textit{bigotes} se extienden hasta 1.5 veces el IQR.
+    \item Los puntos fuera de los bigotes son \textbf{outliers} (valores atípicos).
+    \item \texttt{notch = TRUE}: añade muescas; si las muescas de dos boxplots no se traslapan, sus medianas son significativamente diferentes.
+\end{itemize}
+
+% =============================================================================
+% 8. EL MODELO DE REGRESION LINEAL MULTIPLE
+% =============================================================================
+\section{El Modelo de Regresión Lineal Múltiple (RLM)}
+
+\subsection{La ecuación del modelo}
+
+El modelo estimado en el código es:
+\[
+\text{Price\_euros}_i = \beta_0 + \beta_1 \cdot \text{RAM}_i + \beta_2 \cdot \text{CPU\_GHz}_i + \beta_3 \cdot \text{Inches}_i + \beta_{\text{TypeName}} + \beta_{\text{OpSys}} + \varepsilon_i
+\]
+
+Donde:
+\begin{itemize}
+    \item $\beta_0$: intercepto (precio base cuando todas las numéricas son cero y las cualitativas están en su categoría de referencia).
+    \item $\beta_1, \beta_2, \beta_3$: cambio promedio en el precio por cada unidad adicional de RAM, GHz o pulgadas, manteniendo todo lo demás constante.
+    \item $\beta_{\text{TypeName}}$: coeficientes dummy que capturan diferencias de precio según el tipo de laptop (Gaming, Ultrabook, etc.).
+    \item $\beta_{\text{OpSys}}$: coeficientes dummy para el sistema operativo.
+    \item $\varepsilon_i$: error aleatorio (lo que el modelo no explica).
+\end{itemize}
+
+\subsection{Estimación en R}
+
+\begin{lstlisting}[caption={Ajuste del modelo RLM}]
+modelo <- lm(Price_euros ~ Ram_GB + CPU_GHz + Inches + 
+             TypeName + OpSys, data = datos)
+summary(modelo)
+\end{lstlisting}
+
+\textbf{Qué hace \texttt{lm()}:} Ajusta el modelo por \textbf{Mínimos Cuadrados Ordinarios (MCO / OLS)}. Busca los valores $\hat{\beta}$ que minimizan la suma de los residuos al cuadrado:
+\[
+\min_{\beta} \sum_{i=1}^{n} \varepsilon_i^2 = \min_{\beta} \sum_{i=1}^{n} (Y_i - \hat{Y}_i)^2
+\]
+
+\textbf{Qué devuelve \texttt{summary()}:}
+\begin{itemize}
+    \item \textbf{Coefficients}: estimación, error estándar, valor $t$ y p-valor de cada coeficiente.
+    \item \textbf{Residual standard error}: desviación típica de los residuos.
+    \item \textbf{Multiple R-squared}: proporción de varianza de $Y$ explicada por el modelo.
+    \item \textbf{Adjusted R-squared}: $R^2$ penalizado por el número de variables (sube solo si la nueva variable aporta).
+    \item \textbf{F-statistic}: prueba global de significancia del modelo.
+\end{itemize}
+
+\subsection{Intervalos de confianza}
+
+\begin{lstlisting}
+confint(modelo)
+\end{lstlisting}
+
+\textbf{Qué hace:} Calcula intervalos de confianza al 95\% para cada coeficiente. Si el intervalo \textbf{no incluye el cero}, el coeficiente es significativo (consistente con el p-valor).
+
+% =============================================================================
+% 9. VALIDACION DE SUPUESTOS: EL CORAZON DE LA RLM
+% =============================================================================
+\section{Validación de Supuestos: El Corazón de la RLM}
+
+La RLM por MCO requiere ciertos supuestos. Si no se cumplen, los p-valores y los intervalos de confianza \textbf{no son confiables}. Por eso este paso no es opcional.
+
+% -----------------------------------------------------------------------------
+\subsection{Supuesto 1: Linealidad}
+% -----------------------------------------------------------------------------
+
+\textbf{¿Qué significa?} La relación entre cada $X$ y $Y$ debe ser aproximadamente lineal.
+
+\textbf{Cómo se verifica en el código:}
+\begin{lstlisting}[caption={Gráficos de residuos vs variables para linealidad}]
+ggplot(data = datos, aes(x = Ram_GB, y = modelo$residuals)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(se = FALSE) +
+  geom_hline(yintercept = 0, linetype = "dashed")
+\end{lstlisting}
+
+\textbf{Interpretación del gráfico:} Si la línea suavizada (\texttt{geom\_smooth}) se mantiene \textbf{cerca del cero horizontal} sin formar curvas claras (U invertida, parábola), el supuesto de linealidad se cumple. Si ves una U, necesitas transformar la variable (por ejemplo, $X^2$ o $\log(X)$).
+
+% -----------------------------------------------------------------------------
+\subsection{Supuesto 2: Normalidad de los residuos}
+% -----------------------------------------------------------------------------
+
+\textbf{¿Qué significa?} Los errores $\varepsilon_i$ deben distribuirse normalmente: $\varepsilon_i \sim N(0, \sigma^2)$.
+
+\textbf{Importante:} No es que $Y$ sea normal, sino \textbf{los errores}. Esto es clave para que los p-valores de los coeficientes sean válidos.
+
+\subsubsection{Q-Q Plot (gráfico cuantil-cuantil)}
+
+\begin{lstlisting}[caption={Q-Q Plot manual corregido}]
+qq <- qqnorm(modelo$residuals, plot.it = FALSE)
+
+qq_data <- data.frame(teorico = qq$x, muestra = qq$y)
+
+# Cuantiles teoricos normales (25% y 75%)
+xq <- qnorm(c(0.25, 0.75))
+# Cuantiles muestrales de los residuos
+yq <- quantile(modelo$residuals, c(0.25, 0.75), names = FALSE)
+
+# Pendiente e intercepto correctos
+slope <- diff(yq) / diff(xq)
+intercept <- yq[1] - slope * xq[1]
+
+ggplot(qq_data, aes(x = teorico, y = muestra)) +
+  geom_point() +
+  geom_abline(intercept = intercept, slope = slope, color = "red")
+\end{lstlisting}
+
+\textbf{Explicación profunda:}
+\begin{itemize}
+    \item Un Q-Q plot compara los cuantiles (percentiles) de \textbf{tus residuos} contra los cuantiles de una \textbf{distribución normal teórica}.
+    \item Si los puntos siguen aproximadamente la línea roja, los residuos son normales.
+    \item \textbf{La línea roja NO es $y=x$.} Se calcula usando los cuantiles reales de tus datos (25\% y 75\%) para que la línea pase por el centro de la nube de puntos. Esta es la versión \textbf{corregida} del código.
+    \item Desviaciones en las colas (arriba/abajo) indican asimetría o colas pesadas.
+\end{itemize}
+
+\subsubsection{Prueba de Shapiro-Wilk}
+
+\begin{lstlisting}
+shapiro.test(residuos_muestra)
+\end{lstlisting}
+
+\textbf{Hipótesis:}
+\begin{itemize}
+    \item $H_0$: los residuos siguen una distribución normal.
+    \item $H_1$: los residuos \textbf{no} siguen una distribución normal.
+\end{itemize}
+
+\textbf{Limitación:} Solo funciona con $N \leq 5000$. Si tienes más datos, R obliga a tomar una muestra aleatoria. Por eso el código incluye:
+\begin{lstlisting}
+if(length(modelo$residuals) > 5000) {
+  set.seed(123)
+  residuos_muestra <- sample(modelo$residuals, 5000)
+} else {
+  residuos_muestra <- modelo$residuals
+}
+\end{lstlisting}
+
+\textbf{set.seed(123)} garantiza que si repites el análisis, obtengas la misma muestra y el mismo resultado.
+
+\subsubsection{Prueba de Jarque-Bera}
+
+\begin{lstlisting}
+jarque.bera.test(modelo$residuals)
+\end{lstlisting}
+
+\textbf{Qué prueba:} Compara la \textbf{asimetría} (skewness) y la \textbf{curtosis} de los residuos contra los valores teóricos de una normal (asimetría = 0, curtosis = 3). Es más robusta para muestras grandes que Shapiro-Wilk.
+
+% -----------------------------------------------------------------------------
+\subsection{Supuesto 3: Independencia de los residuos}
+% -----------------------------------------------------------------------------
+
+\textbf{¿Qué significa?} Los errores de una observación no deben estar correlacionados con los errores de otra. No debe haber \textbf{autocorrelación}.
+
+\textbf{¿Por qué importa?} Si los errores están correlacionados (por ejemplo, en series temporales), los errores estándar de los coeficientes están \textbf{subestimados}, haciendo que todo parezca significativo cuando no lo es.
+
+\subsubsection{Gráfico de residuos vs valores ajustados}
+
+\begin{lstlisting}
+ggplot(residuos_df, aes(x = fitted, y = residuos)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(se = FALSE) +
+  geom_hline(yintercept = 0, linetype = "dashed")
+\end{lstlisting}
+
+Si ves un patrón de abanico o una forma sistemática (por ejemplo, una U), sospecha de falta de independencia o de heterocedasticidad.
+
+\subsubsection{Prueba de Durbin-Watson}
+
+\begin{lstlisting}
+dwtest(modelo, alternative = "two.sided")
+\end{lstlisting}
+
+\textbf{Hipótesis:}
+\begin{itemize}
+    \item $H_0$: los residuos son independientes (no hay autocorrelación).
+    \item $H_1$: los residuos son dependientes (hay autocorrelación).
+\end{itemize}
+
+\textbf{El estadístico DW:} Toma valores entre 0 y 4.
+\begin{itemize}
+    \item DW $\approx 2$: \textbf{perfecta independencia} (ideal).
+    \item DW $< 2$: autocorrelación \textbf{positiva} (un error positivo tiende a seguir a otro positivo).
+    \item DW $> 2$: autocorrelación \textbf{negativa}.
+\end{itemize}
+
+En el contexto de datos de laptops (sin orden temporal explícito), esta prueba es menos crítica, pero se incluye por rigor metodológico.
+
+% -----------------------------------------------------------------------------
+\subsection{Supuesto 4: Homocedasticidad}
+% -----------------------------------------------------------------------------
+
+\textbf{¿Qué significa?} La varianza del error debe ser \textbf{constante} para todos los niveles de las variables independientes: $Var(\varepsilon_i) = \sigma^2$.
+
+\textbf{¿Qué es la heterocedasticidad?} Cuando la varianza de los errores \textbf{cambia} según el valor de $X$ o de $\hat{Y}$. Por ejemplo, en datos de precios, las laptops caras suelen tener más variabilidad de precio que las baratas.
+
+\subsubsection{Gráfico Scale-Location}
+
+\begin{lstlisting}[caption={Scale-Location para diagnosticar heterocedasticidad}]
+residuos_df$sqrt_std_resid <- sqrt(abs(rstandard(modelo)))
+
+ggplot(residuos_df, aes(x = fitted, y = sqrt_std_resid)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(se = FALSE)
+\end{lstlisting}
+
+\textbf{Qué muestra:} En el eje Y va la raíz cuadrada del valor absoluto de los residuos estandarizados. Si la línea suavizada es \textbf{aproximadamente horizontal}, hay homocedasticidad. Si sube o baja en forma de embudo, hay heterocedasticidad.
+
+\subsubsection{Prueba de Breusch-Pagan}
+
+\begin{lstlisting}
+bptest(modelo)
+\end{lstlisting}
+
+\textbf{Hipótesis:}
+\begin{itemize}
+    \item $H_0$: los residuos son \textbf{homocedásticos} (varianza constante).
+    \item $H_1$: los residuos son \textbf{heterocedásticos}.
+\end{itemize}
+
+Si p-valor $< 0.05$, se rechaza $H_0$ y se concluye que hay heterocedasticidad.
+
+\textbf{¿Qué hacer si hay heterocedasticidad?} 
+\begin{enumerate}
+    \item Transformar $Y$ (logaritmo, raíz cuadrada) para estabilizar la varianza.
+    \item Usar \textbf{errores estándar robustos} (White/HC3), que corrigen las inferencias sin cambiar los coeficientes.
+\end{enumerate}
+
+% -----------------------------------------------------------------------------
+\subsection{Supuesto 5: Ausencia de multicolinealidad}
+% -----------------------------------------------------------------------------
+
+\textbf{¿Qué significa?} Las variables independientes no deben estar \textbf{altamente correlacionadas entre sí}. Si dos $X$ miden casi lo mismo, el modelo no sabe a quién atribuirle el efecto.
+
+\textbf{Consecuencia:} Los coeficientes tienen errores estándar \textbf{muy grandes} (inestables), y pueden cambiar drásticamente al añadir o quitar otra variable.
+
+\subsubsection{Factor de Inflación de Varianza (VIF)}
+
+\begin{lstlisting}
+vif(modelo)
+\end{lstlisting}
+
+\textbf{Interpretación:}
+\begin{itemize}
+    \item \textbf{VIF = 1}: la variable no está correlacionada con ninguna otra $X$ (ideal).
+    \item \textbf{VIF entre 1 y 5}: multicolinealidad baja, aceptable.
+    \item \textbf{VIF entre 5 y 10}: multicolinealidad moderada, revisar.
+    \item \textbf{VIF $>$ 10}: multicolinealidad \textbf{severa}. Considerar eliminar la variable o combinar variables.
+\end{itemize}
+
+\textbf{Fórmula:} Para la variable $X_j$:
+\[
+VIF_j = \frac{1}{1 - R_j^2}
+\]
+donde $R_j^2$ es el coeficiente de determinación de la regresión de $X_j$ sobre \textbf{todas las demás} $X$.
+
+% =============================================================================
+% 10. GRAFICOS DE DIAGNOSTICO COMPLETOS
+% =============================================================================
+\section{Gráficos de Diagnóstico Completos}
+
+El código incluye los cuatro gráficos clásicos de diagnóstico en una sola ventana:
+
+\begin{lstlisting}[caption={Cuatro gráficos de diagnóstico}]
+par(mfrow = c(2, 2), mar = c(4, 4, 3, 1))
+
+plot(modelo, which = 1, main = "Residuos vs Valores Ajustados")
+plot(modelo, which = 2, main = "Q-Q Plot de Residuos")
+plot(modelo, which = 3, main = "Scale-Location")
+plot(modelo, which = 5, main = "Residuos vs Leverage")
+
+par(mfrow = c(1, 1))
+\end{lstlisting}
+
+\textbf{Explicación de cada gráfico base de R:}
+
+\begin{enumerate}
+    \item \textbf{Residuos vs Fitted:} Detecta no linealidad y heterocedasticidad.
+    \item \textbf{Normal Q-Q:} Normalidad de residuos (puntos sobre la línea = normal).
+    \item \textbf{Scale-Location:} Heterocedasticidad (línea horizontal = bien).
+    \item \textbf{Residuos vs Leverage:} Detecta puntos de \textbf{apalancamiento} (leverage) e \textbf{influencia}. Los puntos fuera de las líneas de Cook pueden distorsionar el modelo.
+\end{enumerate}
+
+\texttt{par(mfrow = c(2, 2))} divide la ventana gráfica en una matriz de 2x2. Al final se restaura a 1x1.
+
+% =============================================================================
+% 11. PREDICCION
+% =============================================================================
+\section{Predicción con el Modelo}
+
+\begin{lstlisting}[caption={Predicción para un nuevo equipo}]
+nuevo <- data.frame(
+  Ram_GB   = 16,
+  CPU_GHz  = 2.8,
+  Inches   = 15.6,
+  TypeName = factor("Gaming", levels = levels(datos$TypeName)),
+  OpSys    = factor("Windows 10", levels = levels(datos$OpSys))
+)
+
+predict(modelo, newdata = nuevo)
+predict(modelo, newdata = nuevo, interval = "prediction", level = 0.95)
+\end{lstlisting}
+
+\textbf{Qué hace:} Predice el precio para una laptop con esas características.
+
+\textbf{Importante:} Las variables cualitativas (\texttt{TypeName}, \texttt{OpSys}) deben ser \texttt{factor} con los \textbf{mismos niveles} que tenía el dataset original. Si pones \texttt{"Gaming"} pero en el entrenamiento estaba como \texttt{"Gaming "} (con espacio), R fallará.
+
+\textbf{Dos tipos de intervalo:}
+\begin{itemize}
+    \item \texttt{interval = "confidence"}: intervalo para la \textbf{media} esperada del precio (más estrecho).
+    \item \texttt{interval = "prediction"}: intervalo para un \textbf{valor individual} (más ancho, porque incluye el error individual).
+\end{itemize}
+
+% =============================================================================
+% 12. RESULTADOS E INTERPRETACIONES
+% =============================================================================
+\section{Resultados e Interpretaciones del Modelo}
+
+A continuación se presenta una interpretación genérica de lo que deberías esperar del \texttt{summary(modelo)} basado en el código. \textbf{Los números exactos dependerán de tu ejecución}.
+
+\subsection{Interpretación de coeficientes numéricos}
+
+\begin{itemize}
+    \item \textbf{RAM ($\beta_1$):} Si el coeficiente es, por ejemplo, 25.3, significa que por cada GB adicional de RAM, el precio aumenta en promedio 25.3 euros, manteniendo constantes CPU, pantalla, tipo y sistema operativo.
+    
+    \item \textbf{CPU\_GHz ($\beta_2$):} Si el coeficiente es 120.5, por cada GHz adicional de frecuencia del procesador, el precio sube 120.5 euros en promedio (ceteris paribus).
+    
+    \item \textbf{Inches ($\beta_3$):} Si el coeficiente es 30.0, cada pulgada adicional de pantalla aumenta el precio en 30 euros promedio.
+\end{itemize}
+
+\subsection{Interpretación de coeficientes cualitativos (dummy)}
+
+Las variables cualitativas se convierten automáticamente en dummies. R usa la \textbf{primera categoría alfabéticamente} como referencia.
+
+\textbf{Ejemplo con TypeName:}
+Supón que las categorías son: Gaming, Netbook, Notebook, Ultrabook, Workstation.
+\begin{itemize}
+    \item La referencia es \textbf{Gaming} (la primera alfabéticamente).
+    \item Si el coeficiente de \texttt{TypeNameUltrabook} es $-150$, significa que un Ultrabook cuesta \textbf{150 euros menos} que un Gaming equivalente, en promedio.
+\end{itemize}
+
+\textbf{Ejemplo con OpSys:}
+Si la referencia es \texttt{Chrome OS} y el coeficiente de \texttt{OpSysWindows 10} es $+200$, una laptop con Windows 10 cuesta 200 euros más que una equivalente con Chrome OS.
+
+\subsection{Bondad de ajuste}
+
+\begin{itemize}
+    \item \textbf{R-squared:} Proporción de la variabilidad del precio que el modelo logra explicar. Si es 0.65, el modelo explica el 65\% de por qué unas laptops cuestan más que otras; el 35\% restante se debe a factores no incluidos (marca, SSD, marca GPU, etc.).
+    
+    \item \textbf{Adjusted R-squared:} Similar al $R^2$ pero penaliza agregar variables inútiles. Si baja al añadir una variable, esa variable no aporta.
+    
+    \item \textbf{F-statistic:} Prueba global. $H_0$: todos los coeficientes (excepto el intercepto) son cero. Un p-valor $< 0.05$ indica que \textbf{al menos una} variable sirve para explicar el precio.
+\end{itemize}
+
+% =============================================================================
+% 13. CONCLUSIONES
+% =============================================================================
+\section{Conclusiones}
+
+\begin{enumerate}
+    \item \textbf{La limpieza de datos es el 80\% del trabajo real.} Extraer números de texto, manejar codificaciones y eliminar datos faltantes no es glamoroso, pero sin esto el modelo es basura.
+    
+    \item \textbf{La correlación no implica causalidad.} Que RAM y precio estén correlacionados no significa que "más RAM cause más precio" en el sentido físico; significa que en el mercado, los equipos con más RAM tienden a tener precios más altos (porque vienen con mejores especificaciones en general).
+    
+    \item \textbf{Los supuestos no son decorativos.} Si los residuos no son normales o hay heterocedasticidad, los p-valores que ves en el \texttt{summary} pueden ser engañosos. Siempre debes validar antes de interpretar.
+    
+    \item \textbf{Las variables cualitativas aportan mucho.} Incluir el tipo de laptop y el sistema operativo captura diferencias de mercado que variables puramente numéricas no pueden.
+    
+    \item \textbf{El modelo predictivo tiene limitaciones.} Un $R^2$ de 0.60-0.70 es bueno, pero significa que hay variables importantes que no se incluyeron: marca (Apple vs Acer), tarjeta gráfica dedicada, tipo de almacenamiento (SSD), resolución exacta, etc.
+\end{enumerate}
+
+% =============================================================================
+% 14. CHECKLIST PARA LA PRESENTACION
+% =============================================================================
+\section{Checklist para la Presentación}
+
+Antes de exponer, asegúrate de dominar estas respuestas:
+
+\begin{enumerate}
+    \item ¿De dónde salen los datos? ¿Cuántas observaciones tienes después de limpiar?
+    \item ¿Por qué usaste correlación de Pearson y no de Spearman?
+    \item ¿Qué hace \texttt{str\_extract} y por qué fue necesario?
+    \item ¿Por qué convertiste \texttt{TypeName} y \texttt{OpSys} a \texttt{factor}?
+    \item ¿Cuál es la interpretación del coeficiente de RAM?
+    \item ¿Qué significa que un coeficiente tenga p-valor $< 0.05$?
+    \item ¿Qué es el $R^2$ ajustado y por qué es más honesto que el $R^2$?
+    \item ¿Cuáles son los 5 supuestos de la RLM?
+    \item ¿Qué muestra el Q-Q plot y qué significa si los puntos se desvían de la línea?
+    \item ¿Qué es la heterocedasticidad y cómo se corrige?
+    \item ¿Qué es el VIF y cuál es el umbral de alarma?
+    \item ¿Por qué el Q-Q plot del código usa una línea calculada con cuantiles y no simplemente $y=x$?
+    \item Si te piden predecir un nuevo equipo, ¿qué precaución tienes con los factores?
+\end{enumerate}
+
+% =============================================================================
+% FIN
+% =============================================================================
+\end{document}
